@@ -13,8 +13,8 @@ Static site for Copper Mountain Air, LLC at Nogales International Airport (KOLS)
 | `tools/build.py` | Page templates, nav, SEO/JSON-LD, image slot map. Builds into `_site/`. |
 | `posts/` | Blog posts as Markdown with front matter. `_TEMPLATE.md` is the starting point. |
 | `assets/css`, `assets/js`, `assets/fonts` | Styles, small script (nav, reveal motion, contact form), self-hosted Archivo + Inter (SIL OFL). |
-| `assets/img/` | Named image slots (SVG placeholders today). See `assets/img/README.md` to swap in real photos/logo. |
-| `tools/make_art.py`, `tools/make_png.py` | Regenerate placeholder art, favicons and the OG image. |
+| `assets/img/` | Logo variants, favicons, share image, and optimized photos (`photos/`, AVIF/WebP/JPEG, no metadata). Originals stay outside the repo. See `assets/img/README.md`. |
+| `tools/optimize_images.py`, `tools/make_logo.py`, `tools/make_png.py`, `tools/make_art.py` | Rebuild photos, logo SVGs, favicons/OG image, and the remaining fuel placeholder. |
 
 Build locally: `pip install markdown && python3 tools/build.py` then open `_site/index.html`.
 Placeholders appear on the page as highlighted `[BRACKETS]` (e.g. `[PHONE]`, `[HOURS]`, fuel prices). Search `ph(` in `tools/build.py` to fill them.

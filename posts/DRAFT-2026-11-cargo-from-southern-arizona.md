@@ -4,7 +4,7 @@ slug: cargo-from-southern-arizona
 published: false   # Seth must approve, then set to true
 date: "[PUBLISH DATE]"
 description: "How Copper Mountain Air handles time-critical freight out of Nogales and Santa Cruz County, Arizona, by air and by ground, including on-demand expedited freight."
-image: cargo
+image: cargo-sign
 ---
 Nogales sits right on the U.S.–Mexico border, and when a shipment can't wait for the next scheduled truck, speed matters. Copper Mountain Air works time-critical freight out of Nogales International Airport (KOLS) by air and by ground.
 
@@ -25,4 +25,4 @@ Nogales sits right on the U.S.–Mexico border, and when a shipment can't wait f
 
 [Request a quote](../contact.html?topic=Cargo%20%2F%20freight) and we'll get back to you. Response time: [RESPONSE TIME].
 
-[ADD PHOTO: truck or loading at KOLS — slot `cargo.jpg`]
+[ADD PHOTO: truck or loading at KOLS — slot `cargo` (no truck photo yet)]

@@ -9,6 +9,8 @@ with sync_playwright() as pw:
     b = pw.chromium.launch()
     for name, path, w, h, full in shots:
         ctx = b.new_context(viewport={"width":w,"height":h}, device_scale_factor=1 if w>800 else 2, reduced_motion="reduce")
-        pg = ctx.new_page(); pg.goto(base + path, wait_until="networkidle"); pg.wait_for_timeout(300)
+        pg = ctx.new_page(); pg.goto(base + path, wait_until="networkidle")
+        pg.evaluate("async()=>{for(let y=0;y<document.body.scrollHeight;y+=400){window.scrollTo(0,y);await new Promise(r=>setTimeout(r,60))}window.scrollTo(0,0)}")
+        pg.wait_for_load_state("networkidle"); pg.wait_for_timeout(400)
         pg.screenshot(path=f"{out}/{name}.png", full_page=full); ctx.close(); print("shot", name)
     b.close()

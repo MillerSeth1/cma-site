@@ -67,7 +67,9 @@ slots = {
  "event": (1200, 630, DUSK, (600, 420, 260), [(ridge(1200,630,460,100,6),"#6d3c2b"),(ridge(1200,630,530,60,1),"#2a201d")], None, "PHOTO PLACEHOLDER · event.jpg"),
 }
 os.makedirs(OUT, exist_ok=True)
+KEEP = {"fuel"}  # only slots that still have no real photo
 for name, (w, h, sky, sun, ridges, extra, tag) in slots.items():
+    if name not in KEEP: continue
     if extra == "RUNWAY":
         extra = runway(w, h)
     elif extra is None:

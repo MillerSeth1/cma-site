@@ -16,7 +16,9 @@ Wings & Wheels brought [NUMBER OR "a great crowd"] of neighbors, pilots and car 
 - [CARS / VEHICLES ON DISPLAY]
 - [FOOD, MUSIC OR ACTIVITIES]
 
-[ADD PHOTO GALLERY: 3–6 event photos — slots `event-1.jpg`, `event-2.jpg`, …]
+{{gallery: ww-airplane, ww-car, ww-motorcycle}}
+
+[CONFIRM: names and permission for the people pictured before publishing]
 
 ## Thank you
 

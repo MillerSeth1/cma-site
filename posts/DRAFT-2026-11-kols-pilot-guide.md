@@ -52,6 +52,6 @@ Both **Jet A** and **100LL (Avgas)** are available on the field. For current pri
 - Fuel pricing: [FUEL PRICES OR "CALL FOR PRICE"]
 - After-hours call-out: [AFTER-HOURS POLICY]
 
-[ADD PHOTO: ramp or fuel truck at KOLS — slot `fuel.jpg`]
+{{figure: terminal | On the KOLS ramp in front of the Nogales International terminal.}}
 
 *Source: [AirNav — KOLS Nogales International Airport](https://www.airnav.com/airport/KOLS), FAA information effective 29 October 2026.*

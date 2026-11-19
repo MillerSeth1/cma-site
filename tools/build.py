@@ -13,22 +13,43 @@ PREVIEW = True                                          # True = noindex + previ
 CONTACT_TO = "seth.miller@coppermountainair.com"
 PAY_URL = "https://pay.coppermountainair.com"
 
-# Image slots: swap "x.svg" -> "x.jpg" after dropping a real photo in assets/img/
+# Image slots. Photos: responsive AVIF/WebP/JPEG made by tools/optimize_images.py into assets/img/photos/.
+# Slots still waiting on a real photo point at an SVG placeholder ("svg": file).
+MANIFEST = json.load(open(os.path.join(ROOT, "assets", "img", "photos", "manifest.json")))
 IMG = {
-  "hero":      ("hero.svg",      "Illustrated placeholder: desert mountains at dusk with an aircraft overhead"),
-  "fbo":       ("fbo.svg",       "Placeholder for a photo of the Copper Mountain Air FBO at KOLS"),
-  "fuel":      ("fuel.svg",      "Placeholder for a photo of aircraft fueling at KOLS"),
-  "cargo":     ("cargo.svg",     "Placeholder for a photo of cargo operations"),
-  "training":  ("training.svg",  "Placeholder for a flight training photo"),
-  "charter":   ("charter.svg",   "Placeholder for a charter aircraft photo"),
-  "about":     ("about.svg",     "Placeholder for a team or hangar photo"),
-  "kols-guide":("kols-guide.svg","Placeholder for an aerial photo of Runway 4/22 at KOLS"),
-  "event":     ("event.svg",     "Placeholder for a Wings & Wheels event photo"),
+  "hero":       "Twin-engine aircraft on the ramp at Nogales International Airport, with the Santa Cruz Valley mountains behind",
+  "ramp-band":  "Twin-engine aircraft on the taxiway centerline at Nogales International Airport",
+  "terminal":   "Aircraft on the KOLS ramp in front of the Nogales International Airport terminal",
+  "fbo":        "Aircraft inside a hangar at Nogales International Airport",
+  "cargo":      "Yellow CARGO direction sign beside the airfield at Nogales International Airport",
+  "cargo-sign": "Close-up of a yellow CARGO taxiway sign at Nogales International Airport",
+  "kols-guide": "Red runway 22-4 sign at Nogales International Airport",
+  "training":   "Yellow taxiway direction signs at Nogales International Airport",
+  "charter":    "The runway at Nogales International Airport at dusk",
+  "event":      "Classic car and its owner at Wings & Wheels at KOLS",
+  "community":  "Classic car and its owner at Wings & Wheels at KOLS",
+  "ww-airplane":"Wings & Wheels airplane award presentation at the KOLS terminal",
+  "ww-car":     "Wings & Wheels car show winner with a classic car",
+  "ww-motorcycle":"Wings & Wheels motorcycle winner",
+  "fuel":       {"svg": "fuel.svg", "alt": "Placeholder: fuel photo coming soon"},
 }
-def img(slot, p, cls="", eager=False):
-    f, alt = IMG[slot]
-    attrs = 'loading="eager" fetchpriority="high"' if eager else 'loading="lazy"'
-    return f'<img src="{p}assets/img/{f}" alt="{html.escape(alt)}" {attrs} decoding="async" width="1200" height="800"{f" class={cls!r}" if cls else ""}>'
+SIZES = {"full": "100vw", "half": "(min-width: 860px) 50vw, 100vw", "card": "(min-width: 1100px) 380px, (min-width: 700px) 50vw, 100vw",
+         "article": "(min-width: 800px) 760px, 100vw", "third": "(min-width: 700px) 33vw, 100vw"}
+def srcset(slot, p, ext):
+    m = MANIFEST[slot]
+    return ", ".join(f"{p}assets/img/photos/{slot}-{w}.{ext} {w}w" for w in m["widths"])
+def img(slot, p, cls="", eager=False, sizes="half"):
+    v = IMG[slot]
+    load = 'loading="eager" fetchpriority="high"' if eager else 'loading="lazy"'
+    c = f' class="{cls}"' if cls else ""
+    if isinstance(v, dict):
+        return f'<img src="{p}assets/img/{v["svg"]}" alt="{html.escape(v["alt"])}" {load} decoding="async" width="1200" height="800"{c}>'
+    m = MANIFEST[slot]; sz = SIZES.get(sizes, sizes)
+    mid = [w for w in m["widths"] if w >= 1200] or m["widths"][-1:]
+    return (f'<picture><source type="image/avif" srcset="{srcset(slot, p, "avif")}" sizes="{sz}">'
+            f'<source type="image/webp" srcset="{srcset(slot, p, "webp")}" sizes="{sz}">'
+            f'<img src="{p}assets/img/photos/{slot}-{mid[0]}.jpg" srcset="{srcset(slot, p, "jpg")}" sizes="{sz}" alt="{html.escape(v)}" '
+            f'{load} decoding="async" width="{m["w"]}" height="{m["h"]}"{c}></picture>')
 
 def ph(t): return f'<span class="ph">[{t}]</span>'
 
@@ -41,7 +62,7 @@ JSONLD_BIZ = {
   "name":"Copper Mountain Air, LLC","url":SITE_URL,
   "description":"Fuel (Jet A and 100LL), FBO services, and air and ground cargo at Nogales International Airport (KOLS) in Nogales, Arizona.",
   "telephone":"","email":CONTACT_TO,"openingHours":"","priceRange":"",
-  "logo":SITE_URL+"assets/img/logo.svg","image":SITE_URL+"assets/img/og-image.png",
+  "logo":SITE_URL+"assets/img/logo-stacked-dark.svg","image":SITE_URL+"assets/img/og-image.jpg",
   "address":{"@type":"PostalAddress","streetAddress":"","addressLocality":"Nogales","addressRegion":"AZ","postalCode":"85621","addressCountry":"US"},
   "geo":{"@type":"GeoCoordinates","latitude":31.4177222,"longitude":-110.8478889},
   "areaServed":[{"@type":"City","name":"Nogales, AZ"},{"@type":"AdministrativeArea","name":"Santa Cruz County, AZ"},{"@type":"State","name":"Arizona"}],
@@ -51,8 +72,9 @@ JSONLD_BIZ = {
 }
 
 def head(title, desc, path, p, extra_ld=None, og_type="website", og_img=None):
+    pre = (f'<link rel="preload" as="image" type="image/avif" imagesrcset="{srcset("hero", p, "avif")}" imagesizes="100vw" fetchpriority="high">\n') if path == "index.html" else ""
     url = SITE_URL + ("" if path == "index.html" else path)
-    og = SITE_URL + "assets/img/" + (og_img or "og-image.png")
+    og = SITE_URL + "assets/img/" + (og_img or "og-image.jpg")
     ld = [JSONLD_BIZ] + ([extra_ld] if extra_ld else [])
     robots = '<meta name="robots" content="noindex, nofollow">\n' if PREVIEW else ''
     return f"""<!doctype html>
@@ -83,7 +105,7 @@ def head(title, desc, path, p, extra_ld=None, og_type="website", og_img=None):
 <meta name="geo.placename" content="Nogales, Arizona">
 <link rel="preload" href="{p}assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="{p}assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="{p}assets/css/site.css">
+{pre}<link rel="stylesheet" href="{p}assets/css/site.css">
 <script>document.documentElement.className="js";</script>
 <script type="application/ld+json">{json.dumps(ld if len(ld)>1 else ld[0], ensure_ascii=False)}</script>
 </head>"""
@@ -100,7 +122,7 @@ def header(path, p):
 <a class="skip" href="#main">Skip to content</a>
 {bar}
 <header class="site-header"><div class="wrap">
-  <a class="brand" href="{p}index.html" aria-label="Copper Mountain Air home"><img src="{p}assets/img/logo.svg" alt="Copper Mountain Air" width="200" height="40"></a>
+  <a class="brand" href="{p}index.html" aria-label="Copper Mountain Air home"><img src="{p}assets/img/logo-light.svg" alt="Copper Mountain Air" width="305" height="40"></a>
   <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">Menu</button>
   <nav id="site-nav" class="site-nav" aria-label="Primary"><ul>{''.join(items)}</ul></nav>
 </div></header>
@@ -110,7 +132,7 @@ def footer(p):
     return f"""</main>
 <footer class="site-footer"><div class="wrap">
   <div class="cols">
-    <div><img src="{p}assets/img/logo.svg" alt="Copper Mountain Air" width="200" height="40" style="height:40px;width:auto;margin-bottom:1rem">
+    <div><img src="{p}assets/img/logo-stacked-light.svg" alt="Copper Mountain Air" width="138" height="120" loading="lazy" style="height:120px;width:auto;margin-bottom:1rem">
       <p>Fuel, FBO and cargo at Nogales International Airport (KOLS), serving Nogales and Santa Cruz County, Arizona.</p></div>
     <div><h3>Visit</h3><p>Copper Mountain Air, LLC<br>Nogales International Airport (KOLS)<br>{ph("STREET ADDRESS")}<br>Nogales, AZ 85621</p></div>
     <div><h3>Contact</h3><ul><li>Phone: {ph("PHONE")}</li><li><a href="mailto:{CONTACT_TO}">{CONTACT_TO}</a></li><li>Hours: {ph("HOURS")}</li><li><a href="{p}contact.html">Send a message</a></li></ul></div>
@@ -161,8 +183,7 @@ def kols_link(p, text):
 def home(p):
     return f"""
 <section class="hero" aria-label="Introduction" style="padding:0">
-  <div class="hero-media">{img("hero", p, eager=True)}</div>
-  {'<span class="slot-tag">Hero art placeholder · swap in assets/img/hero.jpg</span>' if IMG["hero"][0].endswith(".svg") else ''}
+  <div class="hero-media">{img("hero", p, eager=True, sizes="full")}</div>
   <div class="wrap hero-inner">
     <p class="eyebrow">Nogales International Airport · KOLS</p>
     <h1>Fuel, freight &amp; flight <span class="cu">on the border.</span></h1>
@@ -175,11 +196,13 @@ def home(p):
 <section><div class="wrap">
   <div class="section-head reveal"><p class="eyebrow">What we do</p><h2>One stop at KOLS.</h2><p>Whether you're fueling up on a cross-country, parking for the night or moving a time-critical load, start here.</p></div>
   <div class="grid cards">
-    <article class="card reveal"><div class="media">{img("fuel", p)}</div><div class="body"><span class="num">01</span><h3>Fuel</h3><p>Jet A and 100LL Avgas at Nogales International. Pricing: {ph("FUEL PRICES OR CALL FOR PRICE")}.</p><a class="more" href="{p}fuel-fbo.html">Fuel details {ARROW}</a></div></article>
-    <article class="card reveal"><div class="media">{img("fbo", p)}</div><div class="body"><span class="num">02</span><h3>FBO services</h3><p>Ground handling, ramp and tie-down parking, and hangar space on the field.</p><a class="more" href="{p}fuel-fbo.html#fbo">FBO services {ARROW}</a></div></article>
-    <article class="card reveal"><div class="media">{img("cargo", p)}</div><div class="body"><span class="num">03</span><h3>Cargo &amp; freight</h3><p>Time-critical freight out of Nogales by air and ground, including on-demand expedited freight.</p><a class="more" href="{p}services.html#cargo">Cargo services {ARROW}</a></div></article>
+    <article class="card reveal"><div class="media">{img("fuel", p, sizes="card")}</div><div class="body"><span class="num">01</span><h3>Fuel</h3><p>Jet A and 100LL Avgas at Nogales International. Pricing: {ph("FUEL PRICES OR CALL FOR PRICE")}.</p><a class="more" href="{p}fuel-fbo.html">Fuel details {ARROW}</a></div></article>
+    <article class="card reveal"><div class="media">{img("fbo", p, sizes="card")}</div><div class="body"><span class="num">02</span><h3>FBO services</h3><p>Ground handling, ramp and tie-down parking, and hangar space on the field.</p><a class="more" href="{p}fuel-fbo.html#fbo">FBO services {ARROW}</a></div></article>
+    <article class="card reveal"><div class="media">{img("cargo", p, sizes="card")}</div><div class="body"><span class="num">03</span><h3>Cargo &amp; freight</h3><p>Time-critical freight out of Nogales by air and ground, including on-demand expedited freight.</p><a class="more" href="{p}services.html#cargo">Cargo services {ARROW}</a></div></article>
   </div>
 </div></section>
+
+<figure class="photo-band">{img("ramp-band", p, sizes="full")}<figcaption>On the KOLS ramp</figcaption></figure>
 
 <section class="dark"><div class="wrap">
   <div class="section-head reveal"><p class="eyebrow">Flying in?</p><h2>Nogales International at a glance.</h2><p>A 7,200-foot runway at the foot of the Santa Cruz Valley, about 7 miles northeast of downtown Nogales.</p></div>
@@ -200,7 +223,7 @@ def home(p):
 def services(p):
     return page_hero("Services", "Built for the border.", "Fuel, FBO services and cargo at Nogales International Airport (KOLS), serving Nogales, Santa Cruz County and Southern Arizona.") + f"""
 <section id="cargo"><div class="wrap split">
-  <div class="frame reveal">{img("cargo", p)}</div>
+  <div class="frame reveal">{img("cargo-sign", p)}</div>
   <div class="reveal"><p class="eyebrow">Cargo &amp; freight</p><h2>Air and ground, on demand.</h2>
     <p>When a shipment can't wait, we move it. Copper Mountain Air handles time-critical freight out of Nogales by ground and coordinates air cargo at KOLS.</p>
     <ul class="checks">
@@ -227,8 +250,8 @@ def services(p):
 <section class="dark"><div class="wrap">
   <div class="section-head reveal"><span class="badge soon">Coming soon</span><h2>Flight training and charter.</h2><p>Both are in development and not offered yet. Join the interest list and we'll let you know when they open.</p></div>
   <div class="grid cards">
-    <article class="card reveal"><div class="media">{img("training", p)}</div><div class="body"><h3>Flight training</h3><p>A flight school at Nogales International, coming soon.</p><a class="more" href="{p}flight-training.html">Learn more {ARROW}</a></div></article>
-    <article class="card reveal"><div class="media">{img("charter", p)}</div><div class="body"><h3>Charter</h3><p>On-demand charter flights from KOLS, coming soon.</p><a class="more" href="{p}charter.html">Learn more {ARROW}</a></div></article>
+    <article class="card reveal"><div class="media">{img("training", p, sizes="card")}</div><div class="body"><h3>Flight training</h3><p>A flight school at Nogales International, coming soon.</p><a class="more" href="{p}flight-training.html">Learn more {ARROW}</a></div></article>
+    <article class="card reveal"><div class="media">{img("charter", p, sizes="card")}</div><div class="body"><h3>Charter</h3><p>On-demand charter flights from KOLS, coming soon.</p><a class="more" href="{p}charter.html">Learn more {ARROW}</a></div></article>
   </div>
 </div></section>
 {cta(p)}"""
@@ -277,10 +300,15 @@ def coming_soon(kind):
 def about(p):
     return page_hero("About", "Southern Arizona's home field team.", "Copper Mountain Air, LLC is based at Nogales International Airport (KOLS) in Nogales, Arizona.") + f"""
 <section><div class="wrap split">
-  <div class="frame reveal">{img("about", p)}</div>
+  <figure class="frame reveal">{img("terminal", p)}</figure>
   <div class="reveal"><p class="eyebrow">Our story</p><h2>Rooted at KOLS.</h2>
     <p>{ph("COMPANY STORY: how Copper Mountain Air started, and what it stands for. Seth to provide.")}</p>
     <p>Today we provide fuel and FBO services on the field and move freight by air and ground for customers across Southern Arizona, with flight training and charter coming soon.</p></div>
+</div></section>
+<section><div class="wrap split rev">
+  <figure class="frame reveal">{img("community", p)}</figure>
+  <div class="reveal"><p class="eyebrow">Community</p><h2>Wings &amp; Wheels at KOLS.</h2>
+    <p>Aircraft, classic cars and motorcycles shared the ramp at Wings &amp; Wheels, bringing neighbors from across Santa Cruz County out to the airport. {ph("EVENT DATE / NEXT EVENT")}</p></div>
 </div></section>
 <section class="sand"><div class="wrap">
   <div class="section-head reveal"><p class="eyebrow">Team</p><h2>The people behind the ramp.</h2><p>{ph("TEAM NAMES, ROLES, SHORT BIOS AND PHOTOS")}</p></div>
@@ -329,6 +357,8 @@ def load_posts():
             k, v = line.split(":", 1); v = re.sub(r"\s+#.*$", "", v.strip()) if not v.strip().startswith('"') else v.strip()
             fm[k.strip()] = v.strip().strip('"')
         body = markdown.markdown(m.group(2), extensions=["tables"])
+        body = re.sub(r"<p>\{\{gallery:([^}]*)\}\}</p>", lambda mm: "{{GALLERY:" + mm.group(1).strip() + "}}", body)
+        body = re.sub(r"<p>\{\{figure:([^|}]*)\|([^}]*)\}\}</p>", lambda mm: "{{FIGURE:" + mm.group(1).strip() + "|" + mm.group(2).strip() + "}}", body)
         fm["body"] = re.sub(r"\[([A-Z0-9][^\]<]*)\]", lambda mm: ph(mm.group(1)), body)  # highlight [PLACEHOLDERS]
         fm["source"] = "posts/" + fn
         fm["draft"] = fm.get("published", "false").lower() != "true"
@@ -339,7 +369,7 @@ def load_posts():
 
 def blog_index(posts):
     def f(p):
-        cards = "".join(f"""<article class="card post-card reveal"><div class="media">{img(x["image"], p)}</div><div class="body">
+        cards = "".join(f"""<article class="card post-card reveal"><div class="media">{img(x["image"], p, sizes="card")}</div><div class="body">
 {'<span class="badge draft">Draft · not published</span>' if x["draft"] else ''}<p class="meta">{html.escape(x["date"])}</p>
 <h3><a href="{p}blog/{x["slug"]}.html" style="color:inherit;text-decoration:none">{html.escape(x["title"])}</a></h3><p>{html.escape(x["description"])}</p>
 <a class="more" href="{p}blog/{x["slug"]}.html">{"Read the draft" if x["draft"] else "Read more"} {ARROW}</a></div></article>""" for x in posts)
@@ -352,13 +382,17 @@ def EMPTY_BLOG(p):
 <h2>New posts every month.</h2><p>We publish a new post each month: KOLS airport updates, pilot info, and freight tips for Santa Cruz County. Check back soon.</p>
 <a class="btn btn-dark" href="{p}fuel-fbo.html">Fuel &amp; FBO info {ARROW}</a></div></div>"""
 
+def expand(body, p):
+    body = re.sub(r"\{\{GALLERY:([^}]*)\}\}", lambda m: '<div class="gallery">' + "".join(f'<figure>{img(s.strip(), p, sizes="third")}</figure>' for s in m.group(1).split(",")) + "</div>", body)
+    return re.sub(r"\{\{FIGURE:([^|]*)\|([^}]*)\}\}", lambda m: f'<figure class="article-fig">{img(m.group(1), p, sizes="article")}<figcaption>{m.group(2)}</figcaption></figure>', body)
+
 def blog_post(x):
     def f(p):
         return f"""<div class="page-hero"><div class="wrap">{'<span class="badge draft">Draft · for review</span>' if x["draft"] else ''}<p class="eyebrow"><a href="{p}blog/index.html" style="color:inherit">Blog</a></p><h1 style="text-transform:none;font-size:clamp(2rem,5vw,3.4rem)">{html.escape(x["title"])}</h1><p class="post-meta">Copper Mountain Air · {html.escape(x["date"])}</p></div></div>
 <section style="padding-top:0"><div class="wrap"><article class="article">
-<div class="article-hero">{img(x["image"], p, eager=True)}</div>
+<div class="article-hero">{img(x["image"], p, eager=True, sizes="article")}</div>
 {f'<div class="draft-banner">DRAFT — not published. Seth to review and approve before this goes live. Source file: <code>{x["source"]}</code></div>' if x["draft"] else ''}
-{x["body"]}
+{expand(x["body"], p)}
 <p style="margin-top:2.5rem"><a class="btn btn-dark" href="{p}blog/index.html">← All posts</a></p>
 </article></div></section>"""
     return f
@@ -367,7 +401,7 @@ def main():
     global POSTS
     if os.path.isdir(OUT): shutil.rmtree(OUT)
     os.makedirs(OUT)
-    shutil.copytree(os.path.join(ROOT, "assets"), os.path.join(OUT, "assets"), ignore=shutil.ignore_patterns("README.md"))
+    shutil.copytree(os.path.join(ROOT, "assets"), os.path.join(OUT, "assets"), ignore=shutil.ignore_patterns("README.md", "manifest.json"))
     open(os.path.join(OUT, ".nojekyll"), "w").close()
     POSTS = load_posts()
     page("index.html", "Copper Mountain Air | Fuel, FBO & Cargo at Nogales International Airport (KOLS)",
