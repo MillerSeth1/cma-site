@@ -73,7 +73,7 @@ NAV = [("index.html","Home"),("services.html","Services"),("fuel-fbo.html","Fuel
 JSONLD_BIZ = {
   "@context":"https://schema.org","@type":["LocalBusiness"],"@id":SITE_URL+"#business",
   "name":"Copper Mountain Air, LLC","url":SITE_URL,
-  "description":"Fuel (Jet A and 100LL), FBO services, and air and ground cargo at Nogales International Airport (KOLS) in Nogales, Arizona.",
+  "description":"Fuel (Jet A and 100LL), FBO services, FAA Part 61 flight training, and air and ground cargo at Nogales International Airport (KOLS) in Nogales, Arizona.",
   "telephone":"+1-520-287-9120","email":CONTACT_TO,"openingHours":["Mo-Sa 07:00-19:00","Su 07:00-17:00"],"priceRange":"",
   "logo":SITE_URL+"assets/img/logo-stacked-dark.svg","image":SITE_URL+"assets/img/og-image.jpg",
   "address":{"@type":"PostalAddress","streetAddress":"11 Access Way","addressLocality":"Nogales","addressRegion":"AZ","postalCode":"85621","addressCountry":"US"},
@@ -150,7 +150,7 @@ def footer(p):
     <div><h3>Contact</h3><ul><li>Phone: {PHONE_LINK}</li><li><a href="mailto:{CONTACT_TO}">{CONTACT_TO}</a></li><li>Hours: {HOURS_HTML}</li><li><a href="{p}contact.html">Send a message</a></li></ul></div>
     <div><h3>Explore</h3><ul><li><a href="{p}services.html">Services</a></li><li><a href="{p}fuel-fbo.html">Fuel &amp; FBO</a></li><li><a href="{p}blog/index.html">Blog</a></li><li><a href="{PAY_URL}" rel="noopener">Pay online</a></li></ul></div>
   </div>
-  <div class="legal"><span>© 2026 Copper Mountain Air, LLC</span><span>Flight training and charter are coming soon and are not yet offered.</span></div>
+  <div class="legal"><span>© 2026 Copper Mountain Air, LLC</span><span>On-demand charter is coming soon and is not yet offered.</span></div>
 </div></footer>
 <script src="{p}assets/js/site.js" defer></script>
 </body>
@@ -202,9 +202,9 @@ def home(p):
   <div class="wrap hero-inner">
     <p class="eyebrow">Nogales International Airport · KOLS</p>
     <h1>Fuel, freight &amp; flight <span class="cu">on the border.</span></h1>
-    <p class="lede">Copper Mountain Air keeps Southern Arizona moving: Jet A and Avgas on the ramp, FBO service at KOLS, and air and ground cargo out of Nogales.</p>
+    <p class="lede">Copper Mountain Air keeps Southern Arizona moving: Jet A and Avgas on the ramp, FBO service at KOLS, Part 61 flight training, and air and ground cargo out of Nogales.</p>
     <div class="actions"><a class="btn btn-primary" href="{p}contact.html">Get in touch {ARROW}</a><a class="btn btn-ghost" href="{p}fuel-fbo.html">Fuel &amp; FBO</a></div>
-    <div class="hero-strip"><span>Jet A</span><span>100LL Avgas</span><span>FBO</span><span>Air &amp; ground cargo</span><span>Santa Cruz County, AZ</span></div>
+    <div class="hero-strip"><span>Jet A</span><span>100LL Avgas</span><span>FBO</span><span>Flight training</span><span>Air &amp; ground cargo</span><span>Santa Cruz County, AZ</span></div>
   </div>
 </section>
 
@@ -227,9 +227,10 @@ def home(p):
 
 <section><div class="wrap split">
   <div class="frame reveal">{img("training", p)}</div>
-  <div class="reveal"><span class="badge soon">Coming soon</span><h2>Flight training &amp; charter are on the way.</h2>
-    <p>We're building a flight school and an on-demand charter service at KOLS. Neither is offered yet; we'll announce them here as soon as they're ready.</p>
-    <p><a class="btn btn-dark" href="{p}contact.html?topic=Flight%20training%20interest">Join the interest list {ARROW}</a></p>
+  <div class="reveal"><p class="eyebrow">Flight training</p><h2>Learn to fly at KOLS.</h2>
+    <p>FAA Part 61 single-engine flight training is available now at Nogales International Airport. Multi-engine training is arriving shortly, and FAA Part 141 flight school certification is in process.</p>
+    <p>On-demand charter is coming soon and is not yet offered.</p>
+    <p><a class="btn btn-dark" href="{p}contact.html?topic=Flight%20training">Start flight training {ARROW}</a></p>
     <p><a href="{p}flight-training.html">Flight training</a> · <a href="{p}charter.html">Charter</a></p></div>
 </div></section>
 {cta(p)}
@@ -245,9 +246,31 @@ def services(p):
       <li>Ground trucking across Southern Arizona and beyond</li>
       <li>On-demand expedited freight</li>
       <li>Air cargo coordination and ramp handling at KOLS</li>
-      <li>Cargo van and 26-foot dock-height box truck</li>
     </ul>
     <a class="btn btn-dark" href="{p}contact.html?topic=Cargo%20%2F%20freight">Request a freight quote {ARROW}</a></div>
+</div>
+<div class="wrap" style="padding-top:0">
+  <div class="section-head reveal"><p class="eyebrow">Fleet</p><h2>Our trucks.</h2><p>Two trucks for on-demand moves, from smaller van loads to dock-height freight.</p></div>
+  <div class="grid cards">
+    <article class="card reveal"><div class="body">
+      <h3>Ford E-150 Cargo Van</h3>
+      <ul class="checks">
+        <li>Usable cargo length: 108 in (9 ft)</li>
+        <li>Door opening width: approx. 55 in</li>
+        <li>Max cargo height: 40 in</li>
+        <li>Max payload: approx. 1,600 lbs</li>
+      </ul>
+    </div></article>
+    <article class="card reveal"><div class="body">
+      <h3>Hino 268 Box Truck</h3>
+      <p>26-foot dock-height</p>
+      <ul class="checks">
+        <li>Cargo box length: 26 ft (dock-height)</li>
+        <li>GVWR: 25,999 lbs (16,500 lbs empty weight)</li>
+        <li>Max payload: up to 9,499 lbs theoretical (actual usable payload accounts for driver, fuel, equipment, and axle limits)</li>
+      </ul>
+    </div></article>
+  </div>
 </div></section>
 <section class="sand" id="fuel"><div class="wrap split rev">
   <div class="frame reveal">{img("fuel", p)}</div>
@@ -262,12 +285,22 @@ def services(p):
     <ul class="checks"><li>Aircraft ground handling</li><li>Ramp and tie-down parking</li><li>Hangar leasing — call or email for current availability and rates</li><li>Passenger terminal and pilot lounge with Wi-Fi, restrooms, coffee and refreshments, and a flight-planning desk</li></ul>
     <a class="btn btn-dark" href="{p}fuel-fbo.html#fbo">See FBO services {ARROW}</a></div>
 </div></section>
-<section class="dark"><div class="wrap">
-  <div class="section-head reveal"><span class="badge soon">Coming soon</span><h2>Flight training and charter.</h2><p>Both are in development and not offered yet. Join the interest list and we'll let you know when they open.</p></div>
-  <div class="grid cards">
-    <article class="card reveal"><div class="media">{img("training", p, sizes="card")}</div><div class="body"><h3>Flight training</h3><p>A flight school at Nogales International, coming soon.</p><a class="more" href="{p}flight-training.html">Learn more {ARROW}</a></div></article>
-    <article class="card reveal"><div class="media">{img("charter", p, sizes="card")}</div><div class="body"><h3>Charter</h3><p>On-demand charter flights from KOLS, coming soon.</p><a class="more" href="{p}charter.html">Learn more {ARROW}</a></div></article>
-  </div>
+<section id="training"><div class="wrap split">
+  <div class="frame reveal">{img("training", p)}</div>
+  <div class="reveal"><p class="eyebrow">Flight training</p><h2>Learn to fly at KOLS.</h2>
+    <p>FAA Part 61 single-engine flight training is available now at Nogales International Airport.</p>
+    <ul class="checks">
+      <li>Part 61 single-engine training, available now</li>
+      <li>Multi-engine training arriving shortly</li>
+      <li>FAA Part 141 flight school certification in process</li>
+    </ul>
+    <a class="btn btn-dark" href="{p}flight-training.html">Flight training details {ARROW}</a></div>
+</div></section>
+<section class="dark" id="charter"><div class="wrap split">
+  <div class="frame reveal">{img("charter", p)}</div>
+  <div class="reveal"><span class="badge soon">Coming soon</span><p class="eyebrow">Charter</p><h2>On-demand charter from KOLS.</h2>
+    <p>An FAA Part 135 on-demand charter program is in development and is not yet offered. Join the interest list and we'll reach out when the service opens.</p>
+    <a class="btn btn-ghost" href="{p}charter.html">Charter updates {ARROW}</a></div>
 </div></section>
 {cta(p)}"""
 
@@ -293,25 +326,30 @@ def fuel_fbo(p):
 </div></section>
 {cta(p, "Inbound to KOLS?", f"Let us know your ETA and fuel needs. Phone: {PHONE_LINK}")}"""
 
-def coming_soon(kind):
-    def f(p):
-        if kind == "training":
-            hero = page_hero("Flight Training", "Learn to fly in Nogales.", "An FAA Part 141 flight training program at Nogales International Airport is in certification and development. It is not open for enrollment yet.", '<span class="badge soon">Coming soon</span>')
-            heading = "A flight school is on the way."
-            body = "Copper Mountain Air is working toward FAA Part 141 flight training at KOLS. Programs, aircraft, instructors and start dates will be announced when the school is ready to enroll students. If you'd like to be notified, join the interest list."
-            slot, topic = "training", "Flight%20training%20interest"
-        else:
-            hero = page_hero("Charter", "Fly direct from KOLS.", "An FAA Part 135 on-demand charter program from Nogales International is in certification and development. It is not offered yet.", '<span class="badge soon">Coming soon</span>')
-            heading = "On-demand charter is in the works."
-            body = "We're working toward FAA Part 135 on-demand charter from Nogales International. We can't book charter flights yet; join the interest list and we'll reach out when the service opens."
-            slot, topic = "charter", "Charter%20interest"
-        return hero + f"""
+def flight_training(p):
+    return page_hero("Flight Training", "Learn to fly at KOLS.", "FAA Part 61 single-engine flight training is available now at Nogales International Airport (KOLS).") + f"""
 <section><div class="wrap split">
-  <div class="frame reveal">{img(slot, p)}</div>
-  <div class="reveal"><span class="badge soon">Coming soon</span><h2>{heading}</h2><p>{body}</p>
-    <a class="btn btn-dark" href="{p}contact.html?topic={topic}">Join the interest list {ARROW}</a></div>
-</div></section>{cta(p, "Questions in the meantime?", "We're happy to talk. Fuel, FBO and cargo services are available today.")}"""
-    return f
+  <div class="frame reveal">{img("training", p)}</div>
+  <div class="reveal"><p class="eyebrow">Available now</p><h2>Part 61 single-engine training.</h2>
+    <p>Copper Mountain Air offers FAA Part 61 single-engine flight training on the field at Nogales International Airport.</p>
+    <ul class="checks">
+      <li>FAA Part 61 single-engine flight training, available now</li>
+      <li>Multi-engine training arriving shortly</li>
+      <li>FAA Part 141 flight school certification in process</li>
+    </ul>
+    <p>To get started, or to join the list for multi-engine training and Part 141 updates, call {PHONE_LINK}, email <a href="mailto:{CONTACT_TO}">{CONTACT_TO}</a>, or send a note through the contact form.</p>
+    <a class="btn btn-dark" href="{p}contact.html?topic=Flight%20training">Get started {ARROW}</a></div>
+</div></section>{cta(p, "Ready to fly?", f"Call {PHONE_LINK} or email us and we'll help you get started.")}"""
+
+def coming_soon_charter(p):
+    hero = page_hero("Charter", "Fly direct from KOLS.", "An FAA Part 135 on-demand charter program from Nogales International is in development. It is not offered yet.", '<span class="badge soon">Coming soon</span>')
+    return hero + f"""
+<section><div class="wrap split">
+  <div class="frame reveal">{img("charter", p)}</div>
+  <div class="reveal"><span class="badge soon">Coming soon</span><h2>On-demand charter is in the works.</h2>
+    <p>We're working toward FAA Part 135 on-demand charter from Nogales International. We can't book charter flights yet; join the interest list and we'll reach out when the service opens.</p>
+    <a class="btn btn-dark" href="{p}contact.html?topic=Charter%20interest">Join the interest list {ARROW}</a></div>
+</div></section>{cta(p, "Questions in the meantime?", "We're happy to talk. Fuel, FBO, cargo and Part 61 flight training are available today.")}"""
 
 def about(p):
     return page_hero("About", "Southern Arizona's home field team.", "Copper Mountain Air, LLC is based at Nogales International Airport (KOLS) in Nogales, Arizona.") + f"""
@@ -319,7 +357,7 @@ def about(p):
   <figure class="frame reveal">{img("airfield", p)}</figure>
   <div class="reveal"><p class="eyebrow">Our story</p><h2>Rooted at KOLS.</h2>
     <p>Since 2024, Copper Mountain Air has been the fixed-base operator at Nogales International Airport (KOLS) in Santa Cruz County, Arizona, just north of the U.S.–Mexico border.</p>
-    <p>We provide full-service Jet A and 100LL fueling, FBO ground support on the field, and on-demand expedited cargo by ground. Flight training and on-demand charter are in development and are not offered yet.</p></div>
+    <p>We provide full-service Jet A and 100LL fueling, FBO ground support on the field, FAA Part 61 single-engine flight training, and on-demand expedited cargo by ground. Multi-engine training is arriving shortly, and FAA Part 141 flight school certification is in process. On-demand charter is in development and is not yet offered.</p></div>
 </div></section>
 <section><div class="wrap split rev">
   <figure class="frame reveal">{img("kols-guide", p)}</figure>
@@ -329,7 +367,7 @@ def about(p):
 <section class="sand"><div class="wrap">
   <div class="section-head reveal"><p class="eyebrow">Team</p><h2>Direct, hands-on service at KOLS.</h2><p>A locally led operation you can reach by phone or email when you need fuel, a ramp spot, a hangar, or a freight move.</p></div>
   <div class="grid cards">
-    <article class="card reveal"><div class="body"><h3>Seth Miller</h3><p>Principal</p><p>Leads Copper Mountain Air at Nogales International Airport, with a focus on dependable fuel, FBO service and on-demand cargo for the pilots and shippers who use KOLS.</p></div></article>
+    <article class="card reveal"><div class="body"><h3>Seth Miller</h3><p>Principal</p><p>Leads Copper Mountain Air at Nogales International Airport, with a focus on dependable fuel, FBO service, flight training and on-demand cargo for the pilots and shippers who use KOLS.</p></div></article>
     <article class="card reveal"><div class="body"><h3>Operations at KOLS</h3><p>On the field every day</p><p>Our operations team handles fueling, ramp and hangar needs, and freight coordination. Call {PHONE_LINK} or email <a href="mailto:{CONTACT_TO}">{CONTACT_TO}</a>.</p></div></article>
   </div>
 </div></section>
@@ -337,7 +375,7 @@ def about(p):
 {cta(p)}"""
 
 def contact(p):
-    opts = ["Fuel", "FBO / ramp / hangar", "Cargo / freight", "Flight training interest", "Charter interest", "Billing / payment", "Other"]
+    opts = ["Fuel", "FBO / ramp / hangar", "Cargo / freight", "Flight training", "Charter interest", "Billing / payment", "Other"]
     return page_hero("Contact", "Let's talk.", "Fuel, ramp space, a freight quote, or a question: send us a note.") + f"""
 <section><div class="wrap split" style="align-items:start">
   <form class="form reveal" id="contact-form" data-to="{CONTACT_TO}" action="mailto:{CONTACT_TO}" method="post" enctype="text/plain">
@@ -425,20 +463,20 @@ def main():
     shutil.copytree(os.path.join(ROOT, "assets"), os.path.join(OUT, "assets"), ignore=shutil.ignore_patterns("README.md", "manifest.json"))
     open(os.path.join(OUT, ".nojekyll"), "w").close()
     POSTS = load_posts()
-    page("index.html", "Copper Mountain Air | Fuel, FBO & Cargo at Nogales International Airport (KOLS)",
-         "Jet A and 100LL fuel, FBO services, and air and ground cargo at Nogales International Airport (KOLS) in Nogales, Santa Cruz County, Arizona.", home)
-    page("services.html", "Services | Cargo, Fuel & FBO in Nogales, AZ | Copper Mountain Air",
-         "Air and ground cargo, Jet A and 100LL fuel, and FBO services at Nogales International Airport (KOLS), serving Santa Cruz County, Arizona.", services)
+    page("index.html", "Copper Mountain Air | Fuel, FBO, Flight Training & Cargo at Nogales International Airport (KOLS)",
+         "Jet A and 100LL fuel, FBO services, FAA Part 61 flight training, and air and ground cargo at Nogales International Airport (KOLS) in Nogales, Santa Cruz County, Arizona.", home)
+    page("services.html", "Services | Cargo, Fuel, FBO & Flight Training in Nogales, AZ | Copper Mountain Air",
+         "Air and ground cargo, Jet A and 100LL fuel, FBO services, and FAA Part 61 flight training at Nogales International Airport (KOLS), serving Santa Cruz County, Arizona.", services)
     page("fuel-fbo.html", "Jet A & 100LL Fuel and FBO at KOLS | Copper Mountain Air",
          "Jet A and 100LL Avgas, ramp and tie-down parking, hangars and ground handling at Nogales International Airport (KOLS), Nogales, AZ.", fuel_fbo)
-    page("flight-training.html", "Flight Training in Nogales, AZ (Coming Soon) | Copper Mountain Air",
-         "A flight school at Nogales International Airport (KOLS) is coming soon. Join the interest list.", coming_soon("training"))
+    page("flight-training.html", "Flight Training in Nogales, AZ | Copper Mountain Air",
+         "FAA Part 61 single-engine flight training is available now at Nogales International Airport (KOLS). Multi-engine training is arriving shortly, and Part 141 certification is in process.", flight_training)
     page("charter.html", "Charter from Nogales, AZ (Coming Soon) | Copper Mountain Air",
-         "On-demand charter from Nogales International Airport (KOLS) is coming soon. Join the interest list.", coming_soon("charter"))
+         "On-demand charter from Nogales International Airport (KOLS) is coming soon. Join the interest list.", coming_soon_charter)
     page("about.html", "About Copper Mountain Air | Nogales International Airport (KOLS)",
-         "Copper Mountain Air, LLC provides fuel, FBO and cargo services at Nogales International Airport in Santa Cruz County, Arizona.", about)
+         "Copper Mountain Air, LLC provides fuel, FBO services, FAA Part 61 flight training and cargo at Nogales International Airport in Santa Cruz County, Arizona.", about)
     page("contact.html", "Contact Copper Mountain Air | Nogales, AZ (KOLS)",
-         "Contact Copper Mountain Air at Nogales International Airport (KOLS) for fuel, ramp space, hangars and freight quotes.", contact)
+         "Contact Copper Mountain Air at Nogales International Airport (KOLS) for fuel, ramp space, hangars, flight training and freight quotes.", contact)
     posts = POSTS
     page("blog/index.html", "Blog | Copper Mountain Air, Nogales International Airport (KOLS)",
          "Airport news, pilot info and freight tips from Copper Mountain Air at Nogales International Airport (KOLS), Arizona.", blog_index(posts))

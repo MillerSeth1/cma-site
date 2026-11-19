@@ -10,7 +10,20 @@ Nogales sits right on the U.S.–Mexico border, and when a shipment can't wait f
 
 ## Ground trucking
 
-We run on-demand ground moves across Southern Arizona and beyond, including **on-demand expedited freight**, with a cargo van and a 26-foot dock-height box truck.
+We run on-demand ground moves across Southern Arizona and beyond, including **on-demand expedited freight**.
+
+### Ford E-150 Cargo Van
+
+- Usable cargo length: 108 in (9 ft)
+- Door opening width: approx. 55 in
+- Max cargo height: 40 in
+- Max payload: approx. 1,600 lbs
+
+### Hino 268 Box Truck (26-foot dock-height)
+
+- Cargo box length: 26 ft (dock-height)
+- GVWR: 25,999 lbs (16,500 lbs empty weight)
+- Max payload: up to 9,499 lbs theoretical (actual usable payload accounts for driver, fuel, equipment, and axle limits)
 
 ## Air cargo
 
