@@ -10,7 +10,7 @@ OUT = os.path.join(ROOT, "_site")                       # build output (deployed
 SHOW_DRAFTS = "--drafts" in sys.argv
 SITE_URL = "https://millerseth1.github.io/cma-site/"   # change when the custom domain goes live
 PREVIEW = True                                          # True = noindex + preview banner
-CONTACT_TO = "seth.miller@coppermountainair.com"
+CONTACT_TO = "operations@coppermountainair.com"
 PAY_URL = "https://pay.coppermountainair.com"
 
 # Image slots. Photos: responsive AVIF/WebP/JPEG made by tools/optimize_images.py into assets/img/photos/.
