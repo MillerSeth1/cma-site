@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" role="img">
+<defs>
+<linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a5470"/><stop offset="0.6" stop-color="#8fb3c4"/><stop offset="1" stop-color="#efdcc2"/></linearGradient>
+<radialGradient id="sun" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ffd9a8"/><stop offset=".55" stop-color="#f0a15e" stop-opacity=".85"/><stop offset="1" stop-color="#f0a15e" stop-opacity="0"/></radialGradient>
+<filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .07 0"/></filter>
+</defs>
+<rect width="1200" height="800" fill="url(#sky)"/>
+<circle cx="600" cy="300" r="220" fill="url(#sun)"/>
+<path d="M0,800 L0,452 L86,466 L171,450 L257,428 L343,530 L429,497 L514,456 L600,478 L686,414 L771,474 L857,531 L943,464 L1029,486 L1114,445 L1200,416 L1200,800 Z" fill="#c09070"/>
+<path d="M0,800 L0,550 L86,597 L171,581 L257,612 L343,623 L429,553 L514,577 L600,587 L686,582 L771,636 L857,589 L943,559 L1029,591 L1114,567 L1200,612 L1200,800 Z" fill="#8b5a3f"/>
+<path d="M0,800 L0,723 L86,705 L171,717 L257,690 L343,691 L429,725 L514,709 L600,716 L686,709 L771,680 L857,710 L943,717 L1029,709 L1114,724 L1200,691 L1200,800 Z" fill="#4a3128"/>
+
+<rect width="1200" height="800" filter="url(#grain)"/>
+<g font-family="Inter,Arial,sans-serif" font-size="40" font-weight="700"><rect x="228.0" y="46.0" width="744.0" height="72.0" rx="36.0" fill="#0d1b24" fill-opacity=".62" stroke="#f4e7d6" stroke-opacity=".5" stroke-dasharray="8 8" stroke-width="2"/><text x="252.0" y="96" fill="#f4e7d6">PHOTO PLACEHOLDER · about.jpg</text></g>
+</svg>

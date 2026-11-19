@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" preserveAspectRatio="xMidYMid slice" role="img">
+<defs>
+<linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#132634"/><stop offset="0.45" stop-color="#5b3a3a"/><stop offset="0.72" stop-color="#c26a3c"/><stop offset="1" stop-color="#f0b27a"/></linearGradient>
+<radialGradient id="sun" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ffd9a8"/><stop offset=".55" stop-color="#f0a15e" stop-opacity=".85"/><stop offset="1" stop-color="#f0a15e" stop-opacity="0"/></radialGradient>
+<filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .07 0"/></filter>
+</defs>
+<rect width="1200" height="630" fill="url(#sky)"/>
+<circle cx="600" cy="420" r="260" fill="url(#sun)"/>
+<path d="M0,630 L0,416 L86,361 L171,404 L257,420 L343,408 L429,437 L514,384 L600,373 L686,419 L771,402 L857,430 L943,423 L1029,365 L1114,400 L1200,406 L1200,630 Z" fill="#6d3c2b"/>
+<path d="M0,630 L0,506 L86,507 L171,471 L257,493 L343,505 L429,498 L514,518 L600,488 L686,476 L771,504 L857,494 L943,511 L1029,512 L1114,475 L1200,492 L1200,630 Z" fill="#2a201d"/>
+
+<rect width="1200" height="630" filter="url(#grain)"/>
+<g font-family="Inter,Arial,sans-serif" font-size="40" font-weight="700"><rect x="228.0" y="46.0" width="744.0" height="72.0" rx="36.0" fill="#0d1b24" fill-opacity=".62" stroke="#f4e7d6" stroke-opacity=".5" stroke-dasharray="8 8" stroke-width="2"/><text x="252.0" y="96" fill="#f4e7d6">PHOTO PLACEHOLDER · event.jpg</text></g>
+</svg>

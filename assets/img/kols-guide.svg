@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" preserveAspectRatio="xMidYMid slice" role="img">
+<defs>
+<linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a5470"/><stop offset="0.6" stop-color="#8fb3c4"/><stop offset="1" stop-color="#efdcc2"/></linearGradient>
+<radialGradient id="sun" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ffd9a8"/><stop offset=".55" stop-color="#f0a15e" stop-opacity=".85"/><stop offset="1" stop-color="#f0a15e" stop-opacity="0"/></radialGradient>
+<filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .07 0"/></filter>
+</defs>
+<rect width="1200" height="630" fill="url(#sky)"/>
+<circle cx="920" cy="200" r="170" fill="url(#sun)"/>
+<path d="M0,630 L0,396 L86,385 L171,436 L257,413 L343,378 L429,401 L514,378 L600,408 L686,438 L771,389 L857,396 L943,389 L1029,377 L1114,434 L1200,415 L1200,630 Z" fill="#b07d5a"/>
+<path d="M0,630 L0,460 L86,492 L171,471 L257,451 L343,467 L429,453 L514,476 L600,490 L686,456 L771,464 L857,458 L943,454 L1029,491 L1114,474 L1200,459 L1200,630 Z" fill="#7d5440"/>
+<path d="M586.0,441.0 L614.0,441.0 L936.0,630 L264.0,630 Z" fill="#1b2a33"/><path d="M598.5,456.12 L601.5,456.12 L602.34,467.46 L597.66,467.46 Z" fill="#f4e7d6" opacity=".75"/><path d="M598.5,482.58 L601.5,482.58 L603.42,501.48 L596.58,501.48 Z" fill="#f4e7d6" opacity=".75"/><path d="M598.5,520.38 L601.5,520.38 L604.86,546.84 L595.14,546.84 Z" fill="#f4e7d6" opacity=".75"/><path d="M598.5,573.3 L601.5,573.3 L606.9,611.1 L593.1,611.1 Z" fill="#f4e7d6" opacity=".75"/>
+<rect width="1200" height="630" filter="url(#grain)"/>
+<g font-family="Inter,Arial,sans-serif" font-size="40" font-weight="700"><rect x="168.0" y="46.0" width="864.0" height="72.0" rx="36.0" fill="#0d1b24" fill-opacity=".62" stroke="#f4e7d6" stroke-opacity=".5" stroke-dasharray="8 8" stroke-width="2"/><text x="192.0" y="96" fill="#f4e7d6">PHOTO PLACEHOLDER · kols-guide.jpg</text></g>
+</svg>

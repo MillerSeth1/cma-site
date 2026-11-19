@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" role="img">
+<defs>
+<linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#132634"/><stop offset="0.45" stop-color="#5b3a3a"/><stop offset="0.72" stop-color="#c26a3c"/><stop offset="1" stop-color="#f0b27a"/></linearGradient>
+<radialGradient id="sun" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ffd9a8"/><stop offset=".55" stop-color="#f0a15e" stop-opacity=".85"/><stop offset="1" stop-color="#f0a15e" stop-opacity="0"/></radialGradient>
+<filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .07 0"/></filter>
+</defs>
+<rect width="1200" height="800" fill="url(#sky)"/>
+<circle cx="300" cy="520" r="260" fill="url(#sun)"/>
+<path d="M0,800 L0,533 L86,587 L171,536 L257,537 L343,530 L429,500 L514,568 L600,565 L686,532 L771,550 L857,501 L943,525 L1029,579 L1114,540 L1200,552 L1200,800 Z" fill="#6b3d2c"/>
+<path d="M0,800 L0,644 L86,600 L171,635 L257,648 L343,638 L429,662 L514,619 L600,610 L686,647 L771,633 L857,656 L943,651 L1029,604 L1114,632 L1200,637 L1200,800 Z" fill="#2a2220"/>
+
+<rect width="1200" height="800" filter="url(#grain)"/>
+<g font-family="Inter,Arial,sans-serif" font-size="40" font-weight="700"><rect x="240.0" y="46.0" width="720.0" height="72.0" rx="36.0" fill="#0d1b24" fill-opacity=".62" stroke="#f4e7d6" stroke-opacity=".5" stroke-dasharray="8 8" stroke-width="2"/><text x="264.0" y="96" fill="#f4e7d6">PHOTO PLACEHOLDER · fuel.jpg</text></g>
+</svg>
