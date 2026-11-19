@@ -17,9 +17,10 @@ PAY_URL = "https://pay.coppermountainair.com"
 # Slots still waiting on a real photo point at an SVG placeholder ("svg": file).
 MANIFEST = json.load(open(os.path.join(ROOT, "assets", "img", "photos", "manifest.json")))
 IMG = {
-  "hero":       "Twin-engine aircraft on the ramp at Nogales International Airport, with the Santa Cruz Valley mountains behind",
-  "ramp-band":  "Twin-engine aircraft on the taxiway centerline at Nogales International Airport",
-  "terminal":   "Aircraft on the KOLS ramp in front of the Nogales International Airport terminal",
+  "hero":       "Twin-engine aircraft seen head-on on the ramp at Nogales International Airport, with mountains behind",
+  "ramp-band":  "Inside a hangar at Nogales International Airport",
+  "airfield":   "Taxiway sign beside the airfield at Nogales International Airport, with mountains behind",
+  "taxiway-signs": "Yellow taxiway direction signs at Nogales International Airport",
   "fbo":        "Aircraft inside a hangar at Nogales International Airport",
   "cargo":      "Yellow CARGO direction sign beside the airfield at Nogales International Airport",
   "cargo-sign": "Close-up of a yellow CARGO taxiway sign at Nogales International Airport",
@@ -172,6 +173,8 @@ AIRPORT_FACTS = """<div class="facts reveal">
 </div>
 <p class="source">Source: FAA airport data via <a href="https://www.airnav.com/airport/KOLS" rel="noopener">AirNav (KOLS)</a>, effective 29 Oct 2026. Not for navigation.</p>"""
 
+AIRNAV = 'https://www.airnav.com/airport/KOLS'
+FUEL_PRICES = f'Current Jet A and 100LL prices are posted on <a href="{AIRNAV}" rel="noopener">AirNav</a>.'
 POSTS = []
 def kols_link(p, text):
     """Only link the KOLS guide once that post is published (or in a local --drafts build)."""
@@ -196,13 +199,13 @@ def home(p):
 <section><div class="wrap">
   <div class="section-head reveal"><p class="eyebrow">What we do</p><h2>One stop at KOLS.</h2><p>Whether you're fueling up on a cross-country, parking for the night or moving a time-critical load, start here.</p></div>
   <div class="grid cards">
-    <article class="card reveal"><div class="media">{img("fuel", p, sizes="card")}</div><div class="body"><span class="num">01</span><h3>Fuel</h3><p>Jet A and 100LL Avgas at Nogales International. Pricing: {ph("FUEL PRICES OR CALL FOR PRICE")}.</p><a class="more" href="{p}fuel-fbo.html">Fuel details {ARROW}</a></div></article>
+    <article class="card reveal"><div class="media">{img("fuel", p, sizes="card")}</div><div class="body"><span class="num">01</span><h3>Fuel</h3><p>Jet A and 100LL Avgas at Nogales International. {FUEL_PRICES}</p><a class="more" href="{p}fuel-fbo.html">Fuel details {ARROW}</a></div></article>
     <article class="card reveal"><div class="media">{img("fbo", p, sizes="card")}</div><div class="body"><span class="num">02</span><h3>FBO services</h3><p>Ground handling, ramp and tie-down parking, and hangar space on the field.</p><a class="more" href="{p}fuel-fbo.html#fbo">FBO services {ARROW}</a></div></article>
     <article class="card reveal"><div class="media">{img("cargo", p, sizes="card")}</div><div class="body"><span class="num">03</span><h3>Cargo &amp; freight</h3><p>Time-critical freight out of Nogales by air and ground, including on-demand expedited freight.</p><a class="more" href="{p}services.html#cargo">Cargo services {ARROW}</a></div></article>
   </div>
 </div></section>
 
-<figure class="photo-band">{img("ramp-band", p, sizes="full")}<figcaption>On the KOLS ramp</figcaption></figure>
+<figure class="photo-band">{img("ramp-band", p, sizes="full")}<figcaption>Hangars at KOLS</figcaption></figure>
 
 <section class="dark"><div class="wrap">
   <div class="section-head reveal"><p class="eyebrow">Flying in?</p><h2>Nogales International at a glance.</h2><p>A 7,200-foot runway at the foot of the Santa Cruz Valley, about 7 miles northeast of downtown Nogales.</p></div>
@@ -238,7 +241,7 @@ def services(p):
   <div class="frame reveal">{img("fuel", p)}</div>
   <div class="reveal"><p class="eyebrow">Fuel</p><h2>Jet A and 100LL.</h2>
     <p>Both jet fuel and Avgas are available on the field at Nogales International.</p>
-    <ul class="checks"><li>Jet A</li><li>100LL Avgas</li><li>Service type: {ph("FULL-SERVICE / SELF-SERVE")}</li><li>Pricing: {ph("FUEL PRICES OR CALL FOR PRICE")}</li></ul>
+    <ul class="checks"><li>Jet A</li><li>100LL Avgas</li><li>Service type: {ph("FULL-SERVICE / SELF-SERVE")}</li><li>{FUEL_PRICES}</li></ul>
     <a class="btn btn-dark" href="{p}fuel-fbo.html">Fuel &amp; FBO details {ARROW}</a></div>
 </div></section>
 <section id="fbo"><div class="wrap split">
@@ -259,10 +262,10 @@ def services(p):
 def fuel_fbo(p):
     return page_hero("Fuel &amp; FBO · KOLS", "Fuel up at Nogales International.", "Jet A and 100LL Avgas, plus ramp, hangar and handling services at Nogales International Airport (KOLS).") + f"""
 <section id="fuel"><div class="wrap">
-  <div class="section-head reveal"><p class="eyebrow">Fuel</p><h2>Jet A &amp; 100LL.</h2><p>Prices change with the market. Until posted prices are set, call or message for today's price.</p></div>
-  <table class="price-table reveal"><thead><tr><th scope="col">Fuel</th><th scope="col">Service</th><th scope="col">Price / gal</th></tr></thead>
-  <tbody><tr><td><strong>Jet A</strong></td><td>{ph("FULL-SERVICE / SELF-SERVE")}</td><td>{ph("PRICE OR CALL FOR PRICE")}</td></tr>
-  <tr><td><strong>100LL Avgas</strong></td><td>{ph("FULL-SERVICE / SELF-SERVE")}</td><td>{ph("PRICE OR CALL FOR PRICE")}</td></tr></tbody></table>
+  <div class="section-head reveal"><p class="eyebrow">Fuel</p><h2>Jet A &amp; 100LL.</h2><p>{FUEL_PRICES}</p></div>
+  <table class="price-table reveal"><thead><tr><th scope="col">Fuel</th><th scope="col">Service</th><th scope="col">Current price</th></tr></thead>
+  <tbody><tr><td><strong>Jet A</strong></td><td>{ph("FULL-SERVICE / SELF-SERVE")}</td><td><a href="{AIRNAV}" rel="noopener">See current price on AirNav</a></td></tr>
+  <tr><td><strong>100LL Avgas</strong></td><td>{ph("FULL-SERVICE / SELF-SERVE")}</td><td><a href="{AIRNAV}" rel="noopener">See current price on AirNav</a></td></tr></tbody></table>
   <p class="note" style="margin-top:1rem">Fuel hours: {ph("HOURS")} · After-hours call-out: {ph("AFTER-HOURS POLICY")} · Payment: {ph("ACCEPTED CARDS / FUEL CARDS")}</p>
 </div></section>
 <section class="sand" id="fbo"><div class="wrap split">
@@ -300,7 +303,7 @@ def coming_soon(kind):
 def about(p):
     return page_hero("About", "Southern Arizona's home field team.", "Copper Mountain Air, LLC is based at Nogales International Airport (KOLS) in Nogales, Arizona.") + f"""
 <section><div class="wrap split">
-  <figure class="frame reveal">{img("terminal", p)}</figure>
+  <figure class="frame reveal">{img("airfield", p)}</figure>
   <div class="reveal"><p class="eyebrow">Our story</p><h2>Rooted at KOLS.</h2>
     <p>{ph("COMPANY STORY: how Copper Mountain Air started, and what it stands for. Seth to provide.")}</p>
     <p>Today we provide fuel and FBO services on the field and move freight by air and ground for customers across Southern Arizona, with flight training and charter coming soon.</p></div>

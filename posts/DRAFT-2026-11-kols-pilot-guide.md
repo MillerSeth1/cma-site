@@ -49,9 +49,9 @@ Both **Jet A** and **100LL (Avgas)** are available on the field. For current pri
 
 - Phone: [PHONE]
 - Hours: [HOURS]
-- Fuel pricing: [FUEL PRICES OR "CALL FOR PRICE"]
+- Fuel pricing: current Jet A and 100LL prices are posted on [AirNav](https://www.airnav.com/airport/KOLS)
 - After-hours call-out: [AFTER-HOURS POLICY]
 
-{{figure: terminal | On the KOLS ramp in front of the Nogales International terminal.}}
+{{figure: taxiway-signs | Taxiway signs at Nogales International.}}
 
 *Source: [AirNav — KOLS Nogales International Airport](https://www.airnav.com/airport/KOLS), FAA information effective 29 October 2026.*

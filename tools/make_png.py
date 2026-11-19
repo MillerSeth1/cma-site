@@ -5,14 +5,14 @@ from playwright.sync_api import sync_playwright
 R = pathlib.Path(__file__).resolve().parent.parent
 img = R / "assets/img"
 def uri(path, mime): return f"data:{mime};base64," + base64.b64encode(path.read_bytes()).decode()
-hero = uri(img / "photos/ramp-band-1280.jpg", "image/jpeg")
+hero = uri(img / "photos/hero-1280.jpg", "image/jpeg")
 logo = uri(img / "logo-stacked-light.svg", "image/svg+xml")
 fav = uri(img / "favicon.svg", "image/svg+xml")
 font = uri(R / "assets/fonts/archivo-latin.woff2", "font/woff2")
 og = f"""<html><head><style>
 @font-face{{font-family:A;src:url('{font}');font-weight:500 900;font-stretch:100% 125%}}
 body{{margin:0;width:1200px;height:630px;position:relative;overflow:hidden;background:#0a141b}}
-.bg{{position:absolute;inset:0;background:url('{hero}') 62% 50%/cover}}
+.bg{{position:absolute;inset:0;background:url('{hero}') 62% 55%/cover}}
 .sh{{position:absolute;inset:0;background:linear-gradient(90deg,rgba(10,20,27,.92) 0%,rgba(10,20,27,.7) 42%,rgba(10,20,27,.05) 75%)}}
 .t{{position:absolute;left:64px;top:70px;bottom:64px;display:flex;flex-direction:column;justify-content:space-between;color:#f4e7d6}}
 .e{{font:700 20px A;font-stretch:125%;letter-spacing:.2em;color:#e9a06a;text-transform:uppercase}}

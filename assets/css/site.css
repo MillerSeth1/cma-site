@@ -26,7 +26,7 @@ p{margin:0 0 1em}
 .skip{position:absolute;left:-999px;top:0;background:var(--sand);padding:.6rem 1rem;z-index:100}
 .skip:focus{left:1rem;top:1rem}
 .eyebrow{font-family:var(--display);font-stretch:125%;font-weight:700;font-size:.78rem;letter-spacing:.22em;text-transform:uppercase;color:var(--copper)}
-.ph{background:#fff1c9;color:#6b4a00;border:1px dashed #c89a2a;border-radius:6px;padding:0 .35em;font-weight:600;white-space:nowrap}
+.ph{background:#fff1c9;color:#6b4a00;border:1px dashed #c89a2a;border-radius:6px;padding:0 .35em;font-weight:600;-webkit-box-decoration-break:clone;box-decoration-break:clone}
 .dark .ph{background:rgba(255,220,150,.14);color:#ffd99a;border-color:rgba(255,217,154,.5)}
 
 /* Preview bar */
@@ -109,7 +109,7 @@ section{padding:clamp(3.5rem,8vw,6.5rem) 0}
 .card .num{font-family:var(--display);font-stretch:125%;font-weight:800;color:var(--copper);font-size:.85rem;letter-spacing:.18em}
 
 .split{display:grid;gap:clamp(1.5rem,5vw,4rem);align-items:center}
-@media (min-width:860px){.split{grid-template-columns:1.05fr 1fr}.split.rev>:first-child{order:2}}
+@media (min-width:860px){.split{grid-template-columns:minmax(0,1.05fr) minmax(0,1fr)}.split.rev>:first-child{order:2}}
 .frame{border-radius:calc(var(--radius) + 6px);overflow:hidden;box-shadow:var(--shadow);aspect-ratio:4/3;background:var(--ink)}
 .frame img{width:100%;height:100%;object-fit:cover}
 

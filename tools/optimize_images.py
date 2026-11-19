@@ -8,9 +8,12 @@ SRC = sys.argv[1]
 OUT = os.path.join(os.path.dirname(__file__), "..", "assets", "img", "photos")
 # slot: (source, aspect w/h, focal (x,y) 0-1, widths)
 SLOTS = {
- "hero":      ("aircraft/Cessna414A_DSC09602.jpg", 16/9, (.5,.55), [640,960,1280,1920,2560]),
- "ramp-band": ("aircraft/Cessna414A_DSC09616.jpg", 21/9, (.5,.5),  [640,960,1280,1920,2560]),
- "terminal":  ("aircraft/Cessna414A_DSC09575.jpg", 4/3,  (.55,.5), [480,800,1200,1600]),
+ # No readable registration may appear in any published image (the photographed aircraft is not CMA's):
+ # DSC09602 and DSC09575 show the tail number and are NOT used. DSC09616 is head-on, so no registration shows.
+ "hero":      ("aircraft/Cessna414A_DSC09616.jpg", 16/9, (.5,.62), [640,960,1280,1920,2560]),
+ "ramp-band": ("aircraft/Hangar_with_the_Hangar_Queen.jpg", 21/9, (.5,.56), [640,960,1280,1920]),
+ "airfield":  ("kols/KOLS_2026-10-21_00.jpeg", 4/3, (.5,.5), [480,800,1200,1600]),
+ "taxiway-signs": ("kols/KOLS_2026-10-21_02.jpeg", 4/3, (.5,.5), [480,800,1200,1600]),
  "fbo":       ("aircraft/Hangar_with_the_Hangar_Queen.jpg", 4/3, (.5,.5), [480,800,1200,1600]),
  "cargo":     ("kols/KOLS_2026-10-21_06.jpeg", 4/3, (.5,.5), [480,800,1200,1600]),
  "cargo-sign":("kols/KOLS_2026-10-21_01.jpeg", 4/3, (.5,.5), [480,800,1200,1600]),
@@ -23,6 +26,18 @@ SLOTS = {
  "ww-car":     ("wings-and-wheels/car-winner-HD.jpeg", 3/4, (.5,.5), [400,800,1200]),
  "ww-motorcycle":("wings-and-wheels/motorcycle-winner-HD.jpeg", 3/4, (.5,.5), [400,800,1200]),
 }
+# Regions blurred in the ORIGINAL before cropping: (x0, y0, x1, y1, radius).
+# Hangar photo: partial registration on the high-wing aircraft parked behind the twin.
+REDACT = {"aircraft/Hangar_with_the_Hangar_Queen.jpg": [(440, 735, 530, 795, 9)]}
+def redact(im, src):
+    from PIL import ImageFilter, ImageDraw
+    for x0, y0, x1, y1, r in REDACT.get(src, []):
+        blurred = im.filter(ImageFilter.GaussianBlur(r))
+        mask = Image.new("L", im.size, 0)
+        ImageDraw.Draw(mask).rounded_rectangle((x0, y0, x1, y1), radius=12, fill=255)
+        im = Image.composite(blurred, im, mask.filter(ImageFilter.GaussianBlur(6)))  # feathered edge
+    return im
+
 def crop(im, aspect, focal):
     w, h = im.size
     if w / h > aspect: nw, nh = int(h * aspect), h
@@ -38,7 +53,7 @@ for slot, (src, aspect, focal, widths) in SLOTS.items():
     if "icc_profile" in im.info:
         from PIL import ImageCms; import io
         im = ImageCms.profileToProfile(im, ImageCms.ImageCmsProfile(io.BytesIO(im.info["icc_profile"])), ImageCms.createProfile("sRGB"), outputMode="RGB")
-    im = crop(im.convert("RGB"), aspect, focal); im.info = {}
+    im = crop(redact(im.convert("RGB"), src), aspect, focal); im.info = {}
     ws = [w for w in widths if w <= im.width] or [im.width]
     for w in ws:
         r = im.resize((w, round(w / aspect)), Image.LANCZOS); r.info = {}
