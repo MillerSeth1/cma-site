@@ -17,7 +17,7 @@ Static site for Copper Mountain Air, LLC at Nogales International Airport (KOLS)
 | `tools/optimize_images.py`, `tools/make_logo.py`, `tools/make_png.py`, `tools/make_art.py` | Rebuild photos, logo SVGs, favicons/OG image, and the remaining fuel placeholder. |
 
 Build locally: `pip install markdown && python3 tools/build.py` then open `_site/index.html`.
-Placeholders appear on the page as highlighted `[BRACKETS]` (e.g. `[PHONE]`, `[HOURS]`, fuel prices). Search `ph(` in `tools/build.py` to fill them.
+Public contact details (address, phone, hours, after-hours fueling, amenities and payment cards) live as constants near the top of `tools/build.py`. Do not invent facts; confirm any new detail before adding it.
 
 ## HOW TO ADD A POST (one new post a month)
 

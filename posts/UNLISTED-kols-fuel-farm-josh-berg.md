@@ -2,7 +2,7 @@
 title: "Thank You, Josh Berg: Building the New KOLS Fuel Farm"
 slug: kols-new-fuel-farm-josh-berg
 published: false   # HIDDEN DRAFT. Seth wants to preview it first. Do not publish.
-date: "[PUBLISH DATE]"
+date: ""
 description: "A thank-you to Josh Berg of KEAR Civil Corporation, who is managing the new Jet A and 100LL fuel farm at Nogales International Airport (KOLS)."
 image: fbo
 unlisted: true   # renders ONLY at preview/qro5v87xb3/kols-fuel-farm.html; never listed, always noindex
@@ -25,8 +25,6 @@ Josh has been managing the project day to day, coordinating the many moving part
 
 {{figure: josh-berg | PHOTO PLACEHOLDER: Josh Berg, photo coming}}
 
-[PLACEHOLDER: optional quote from Josh, with his OK]
-
 ## What's going in
 
 The new tanks arrived on site around the end of September 2026. The system includes:
@@ -42,7 +40,7 @@ When the new fuel farm comes online, pilots flying into KOLS can count on:
 - Leak monitoring built into the system
 - Dependable fuel on the border, for everything from piston singles to turbine aircraft
 
-New fuel available: [PLACEHOLDER: grand-opening / fuel available date]
+We'll post the opening date here when the new fuel farm comes online.
 
 Current Jet A and 100LL prices are posted on [AirNav's KOLS page](https://www.airnav.com/airport/KOLS). For fuel or FBO questions, email us at [operations@coppermountainair.com](mailto:operations@coppermountainair.com).
 

@@ -2,7 +2,7 @@
 title: "Flying into Nogales International (KOLS): A Pilot's Quick Guide"
 slug: kols-pilot-guide
 published: false   # Seth must approve, then set to true
-date: "[PUBLISH DATE]"
+date: ""
 description: "Runway, frequencies, fuel and arrival notes for Nogales International Airport (KOLS) in Santa Cruz County, Arizona, from FAA data, plus how to reach Copper Mountain Air on the field."
 image: kols-guide
 ---
@@ -41,17 +41,21 @@ Published procedures include the **RNAV (GPS)-A** and **VOR-B** approaches and t
 
 ## International airport of entry
 
-FAA data lists KOLS as an international airport of entry. If you're arriving from Mexico, plan U.S. Customs and Border Protection requirements well ahead of your flight. [ADD CMA GUIDANCE OR LINK FOR CUSTOMS ARRIVALS — CONFIRM WITH SETH]
+FAA data lists KOLS as an international airport of entry. If you're arriving from Mexico or another foreign point, plan U.S. Customs and Border Protection requirements well ahead of your flight.
+
+CBP's [General Aviation Airport Fact Sheet for KOLS](https://www.cbp.gov/sites/default/files/2026-02/KOLS%20GA%20Airport%20Fact%20Sheet%2020260224.pdf) (dated February 24, 2026) asks pilots to secure permission to land by contacting CBP before departing the foreign airport, and at least one hour before the expected arrival at KOLS. Permission is granted with a tolerance of 30 minutes either side of the ETA; if your arrival falls outside that window, you must contact CBP again. Park on the ramp at the Federal Inspection Station on the east side of the terminal. CBP office hours are 0800–1600 Mountain Time daily, and processing can be arranged 24/7 with at least one hour's notice: call 520-287-1433 during those hours, or 520-375-5785 after hours. The fact sheet notes a maximum passenger count of 20 at this location.
+
+For FBO support on arrival, contact Copper Mountain Air at 520-287-9120. Always follow current CBP instructions; this summary is not a substitute for official guidance.
 
 ## Fuel and services from Copper Mountain Air
 
-Both **Jet A** and **100LL (Avgas)** are available on the field. For current prices, hours and ramp needs, contact Copper Mountain Air:
+Both **Jet A** and **100LL (Avgas)** are available full service on the field. For current prices, hours and ramp needs, contact Copper Mountain Air:
 
-- Phone: [PHONE]
-- Hours: [HOURS]
+- Phone: 520-287-9120
+- Hours: Monday–Saturday 7:00 a.m.–7:00 p.m., Sunday 7:00 a.m.–5:00 p.m.
 - Fuel pricing: current Jet A and 100LL prices are posted on [AirNav](https://www.airnav.com/airport/KOLS)
-- After-hours call-out: [AFTER-HOURS POLICY]
+- After-hours call-out: available with prior arrangement, and a call-out fee may apply. Call 520-287-9120 for details.
 
 {{figure: taxiway-signs | Taxiway signs at Nogales International.}}
 
-*Source: [AirNav — KOLS Nogales International Airport](https://www.airnav.com/airport/KOLS), FAA information effective 29 October 2026.*
+*Sources: [AirNav — KOLS Nogales International Airport](https://www.airnav.com/airport/KOLS), FAA information effective 29 October 2026; [CBP KOLS General Aviation Airport Fact Sheet](https://www.cbp.gov/sites/default/files/2026-02/KOLS%20GA%20Airport%20Fact%20Sheet%2020260224.pdf) (February 24, 2026); Santa Cruz County airport page and Copper Mountain Air's AirNav FBO listing (hours and after-hours fueling).*

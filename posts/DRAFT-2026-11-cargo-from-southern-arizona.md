@@ -2,7 +2,7 @@
 title: "Moving Freight from the Border: Air and Ground Cargo from Nogales"
 slug: cargo-from-southern-arizona
 published: false   # Seth must approve, then set to true
-date: "[PUBLISH DATE]"
+date: ""
 description: "How Copper Mountain Air handles time-critical freight out of Nogales and Santa Cruz County, Arizona, by air and by ground, including on-demand expedited freight."
 image: cargo-sign
 ---
@@ -10,11 +10,11 @@ Nogales sits right on the U.S.–Mexico border, and when a shipment can't wait f
 
 ## Ground trucking
 
-[DESCRIBE FLEET / VEHICLE TYPES — CONFIRM WITH SETH] We run on-demand ground moves across Southern Arizona and beyond, including **on-demand expedited freight**.
+We run on-demand ground moves across Southern Arizona and beyond, including **on-demand expedited freight**, with a cargo van and a 26-foot dock-height box truck.
 
 ## Air cargo
 
-[CONFIRM WORDING WITH SETH: what air cargo service CMA offers today, e.g. coordination and ramp handling at KOLS. On-demand air charter is **coming soon** — do not describe it as an available service until approved.]
+At KOLS we coordinate air cargo and ramp handling for time-critical shipments. On-demand passenger charter is **coming soon** and is not offered yet.
 
 ## What to send us for a quote
 
@@ -23,6 +23,6 @@ Nogales sits right on the U.S.–Mexico border, and when a shipment can't wait f
 - Pieces, dimensions and weight
 - Any hazmat or special handling needs
 
-[Request a quote](../contact.html?topic=Cargo%20%2F%20freight) and we'll get back to you. Response time: [RESPONSE TIME].
+[Request a quote](../contact.html?topic=Cargo%20%2F%20freight) and we'll get back to you.
 
-[ADD PHOTO: truck or loading at KOLS — slot `cargo` (no truck photo yet)]
+{{figure: cargo | Yellow CARGO direction sign beside the airfield at Nogales International Airport}}

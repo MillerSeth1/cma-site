@@ -12,6 +12,21 @@ SITE_URL = "https://millerseth1.github.io/cma-site/"   # change when the custom 
 PREVIEW = True                                          # True = noindex + preview banner
 CONTACT_TO = "operations@coppermountainair.com"
 PAY_URL = "https://pay.coppermountainair.com"
+# Verified public contact facts (sources recorded in the commit / site copy notes):
+# Address & phone: Seth's email signature; FAA airport manager record and CMA's AirNav FBO listing; Santa Cruz County airport page.
+# Hours: Santa Cruz County airport page; CMA's previous coppermountainair.com (Wayback, 2025-12-14 and 2026-07-11); iFlightPlanner and PilotGPT FBO listings.
+# After-hours: CMA AirNav FBO listing ("after hours call-out service (with prior arrangement and/or a callout fee)"); County page ("after-hour on call"); FBO contract requires after-hours on-call fueling.
+# Full-service fuel (no self-serve): AirNav KOLS FBO listing (FS only), GlobalAir, iFlightPlanner, PilotGPT; FBO contract ("full service FBO", truck-to-aircraft dispensing).
+# Cards: iFlightPlanner and PilotGPT (Visa, Mastercard, American Express, Discover); FBO contract requires credit-card acceptance. Fuel brand Phillips 66: AirNav FBO listing.
+# Amenities: previous CMA website (lounge, Wi-Fi, refreshments, overnight parking); County page (restrooms, coffee/drinks, hotel and car arrangements, catering); FBO contract minimum lounge services; AirNav (passenger terminal and lounge, hangar leasing, ramp/tie-down).
+PHONE = "520-287-9120"
+PHONE_HREF = "tel:+15202879120"
+PHONE_LINK = f'<a href="{PHONE_HREF}">{PHONE}</a>'
+STREET = "11 Access Way"
+HOURS = "Monday–Saturday 7:00 a.m.–7:00 p.m., Sunday 7:00 a.m.–5:00 p.m."
+HOURS_HTML = "Monday–Saturday 7:00 a.m.–7:00 p.m.<br>Sunday 7:00 a.m.–5:00 p.m."
+AFTER_HOURS = f"After-hours call-out is available with prior arrangement, and a call-out fee may apply. Call {PHONE_LINK} for details."
+CARDS = "Visa, Mastercard, American Express and Discover"
 
 # Image slots. Photos: responsive AVIF/WebP/JPEG made by tools/optimize_images.py into assets/img/photos/.
 # Slots still waiting on a real photo point at an SVG placeholder ("svg": file).
@@ -59,9 +74,9 @@ JSONLD_BIZ = {
   "@context":"https://schema.org","@type":["LocalBusiness"],"@id":SITE_URL+"#business",
   "name":"Copper Mountain Air, LLC","url":SITE_URL,
   "description":"Fuel (Jet A and 100LL), FBO services, and air and ground cargo at Nogales International Airport (KOLS) in Nogales, Arizona.",
-  "telephone":"","email":CONTACT_TO,"openingHours":"","priceRange":"",
+  "telephone":"+1-520-287-9120","email":CONTACT_TO,"openingHours":["Mo-Sa 07:00-19:00","Su 07:00-17:00"],"priceRange":"",
   "logo":SITE_URL+"assets/img/logo-stacked-dark.svg","image":SITE_URL+"assets/img/og-image.jpg",
-  "address":{"@type":"PostalAddress","streetAddress":"","addressLocality":"Nogales","addressRegion":"AZ","postalCode":"85621","addressCountry":"US"},
+  "address":{"@type":"PostalAddress","streetAddress":"11 Access Way","addressLocality":"Nogales","addressRegion":"AZ","postalCode":"85621","addressCountry":"US"},
   "geo":{"@type":"GeoCoordinates","latitude":31.4177222,"longitude":-110.8478889},
   "areaServed":[{"@type":"City","name":"Nogales, AZ"},{"@type":"AdministrativeArea","name":"Santa Cruz County, AZ"},{"@type":"State","name":"Arizona"}],
   "containedInPlace":{"@type":"Airport","name":"Nogales International Airport","icaoCode":"KOLS",
@@ -114,8 +129,7 @@ def header(path, p):
         cur = ' aria-current="page"' if (href == path or (href == "blog/index.html" and path.startswith("blog/"))) else ""
         items.append(f'<li><a href="{p}{href}"{cur}>{label}</a></li>')
     items.append(f'<li><a class="pay" href="{PAY_URL}" rel="noopener">Pay online</a></li>')
-    bar = ('<div class="preview-bar"><strong>Preview draft.</strong> Not yet published. '
-           'Items in <span class="ph">[BRACKETS]</span> are placeholders awaiting confirmation.</div>') if PREVIEW else ""
+    bar = ('<div class="preview-bar"><strong>Preview draft.</strong> Not yet published.</div>') if PREVIEW else ""
     return f"""<body>
 <a class="skip" href="#main">Skip to content</a>
 {bar}
@@ -132,8 +146,8 @@ def footer(p):
   <div class="cols">
     <div><img src="{p}assets/img/logo-stacked-light.svg" alt="Copper Mountain Air" width="138" height="120" loading="lazy" style="height:120px;width:auto;margin-bottom:1rem">
       <p>Fuel, FBO and cargo at Nogales International Airport (KOLS), serving Nogales and Santa Cruz County, Arizona.</p></div>
-    <div><h3>Visit</h3><p>Copper Mountain Air, LLC<br>Nogales International Airport (KOLS)<br>{ph("STREET ADDRESS")}<br>Nogales, AZ 85621</p></div>
-    <div><h3>Contact</h3><ul><li>Phone: {ph("PHONE")}</li><li><a href="mailto:{CONTACT_TO}">{CONTACT_TO}</a></li><li>Hours: {ph("HOURS")}</li><li><a href="{p}contact.html">Send a message</a></li></ul></div>
+    <div><h3>Visit</h3><p>Copper Mountain Air, LLC<br>Nogales International Airport (KOLS)<br>{STREET}<br>Nogales, AZ 85621</p></div>
+    <div><h3>Contact</h3><ul><li>Phone: {PHONE_LINK}</li><li><a href="mailto:{CONTACT_TO}">{CONTACT_TO}</a></li><li>Hours: {HOURS_HTML}</li><li><a href="{p}contact.html">Send a message</a></li></ul></div>
     <div><h3>Explore</h3><ul><li><a href="{p}services.html">Services</a></li><li><a href="{p}fuel-fbo.html">Fuel &amp; FBO</a></li><li><a href="{p}blog/index.html">Blog</a></li><li><a href="{PAY_URL}" rel="noopener">Pay online</a></li></ul></div>
   </div>
   <div class="legal"><span>© 2026 Copper Mountain Air, LLC</span><span>Flight training and charter are coming soon and are not yet offered.</span></div>
@@ -228,10 +242,10 @@ def services(p):
   <div class="reveal"><p class="eyebrow">Cargo &amp; freight</p><h2>Air and ground, on demand.</h2>
     <p>When a shipment can't wait, we move it. Copper Mountain Air handles time-critical freight out of Nogales by ground and coordinates air cargo at KOLS.</p>
     <ul class="checks">
-      <li>Ground trucking across Southern Arizona {ph("CONFIRM SERVICE AREA")}</li>
+      <li>Ground trucking across Southern Arizona and beyond</li>
       <li>On-demand expedited freight</li>
-      <li>Air cargo at KOLS {ph("CONFIRM AIR CARGO WORDING")}</li>
-      <li>Vehicles / capacity: {ph("FLEET DETAILS")}</li>
+      <li>Air cargo coordination and ramp handling at KOLS</li>
+      <li>Cargo van and 26-foot dock-height box truck</li>
     </ul>
     <a class="btn btn-dark" href="{p}contact.html?topic=Cargo%20%2F%20freight">Request a freight quote {ARROW}</a></div>
 </div></section>
@@ -239,13 +253,13 @@ def services(p):
   <div class="frame reveal">{img("fuel", p)}</div>
   <div class="reveal"><p class="eyebrow">Fuel</p><h2>Jet A and 100LL.</h2>
     <p>Both jet fuel and Avgas are available on the field at Nogales International.</p>
-    <ul class="checks"><li>Jet A</li><li>100LL Avgas</li><li>Service type: {ph("FULL-SERVICE / SELF-SERVE")}</li><li>{FUEL_PRICES}</li></ul>
+    <ul class="checks"><li>Full-service Jet A (including with additive)</li><li>Full-service 100LL Avgas</li><li>Phillips 66</li><li>{FUEL_PRICES}</li></ul>
     <a class="btn btn-dark" href="{p}fuel-fbo.html">Fuel &amp; FBO details {ARROW}</a></div>
 </div></section>
 <section id="fbo"><div class="wrap split">
   <div class="frame reveal">{img("fbo", p)}</div>
   <div class="reveal"><p class="eyebrow">FBO</p><h2>Your stop at KOLS.</h2>
-    <ul class="checks"><li>Aircraft ground handling</li><li>Ramp and tie-down parking</li><li>Hangar space {ph("AVAILABILITY")}</li><li>Passenger terminal and lounge {ph("CONFIRM AMENITIES")}</li></ul>
+    <ul class="checks"><li>Aircraft ground handling</li><li>Ramp and tie-down parking</li><li>Hangar leasing — call or email for current availability and rates</li><li>Passenger terminal and pilot lounge with Wi-Fi, restrooms, coffee and refreshments, and a flight-planning desk</li></ul>
     <a class="btn btn-dark" href="{p}fuel-fbo.html#fbo">See FBO services {ARROW}</a></div>
 </div></section>
 <section class="dark"><div class="wrap">
@@ -262,14 +276,14 @@ def fuel_fbo(p):
 <section id="fuel"><div class="wrap">
   <div class="section-head reveal"><p class="eyebrow">Fuel</p><h2>Jet A &amp; 100LL.</h2><p>{FUEL_PRICES}</p></div>
   <table class="price-table reveal"><thead><tr><th scope="col">Fuel</th><th scope="col">Service</th><th scope="col">Current price</th></tr></thead>
-  <tbody><tr><td><strong>Jet A</strong></td><td>{ph("FULL-SERVICE / SELF-SERVE")}</td><td><a href="{AIRNAV}" rel="noopener">See current price on AirNav</a></td></tr>
-  <tr><td><strong>100LL Avgas</strong></td><td>{ph("FULL-SERVICE / SELF-SERVE")}</td><td><a href="{AIRNAV}" rel="noopener">See current price on AirNav</a></td></tr></tbody></table>
-  <p class="note" style="margin-top:1rem">Fuel hours: {ph("HOURS")} · After-hours call-out: {ph("AFTER-HOURS POLICY")} · Payment: {ph("ACCEPTED CARDS / FUEL CARDS")}</p>
+  <tbody><tr><td><strong>Jet A</strong> (including with additive)</td><td>Full service</td><td><a href="{AIRNAV}" rel="noopener">See current price on AirNav</a></td></tr>
+  <tr><td><strong>100LL Avgas</strong></td><td>Full service</td><td><a href="{AIRNAV}" rel="noopener">See current price on AirNav</a></td></tr></tbody></table>
+  <p class="note" style="margin-top:1rem">Phillips 66 · Fuel hours: {HOURS} · {AFTER_HOURS} · Payment: {CARDS}.</p>
 </div></section>
 <section class="sand" id="fbo"><div class="wrap split">
   <div class="frame reveal">{img("fbo", p)}</div>
   <div class="reveal"><p class="eyebrow">FBO services</p><h2>Ramp, hangar &amp; handling.</h2>
-    <ul class="checks"><li>Aircraft ground handling</li><li>Ramp and tie-down parking {ph("FEES OR CALL")}</li><li>Hangar leasing {ph("AVAILABILITY")}</li><li>Passenger terminal and lounge {ph("CONFIRM AMENITIES: restrooms, Wi-Fi, crew car, etc.")}</li></ul>
+    <ul class="checks"><li>Aircraft ground handling</li><li>Ramp and tie-down parking — call or email for current rates</li><li>Hangar leasing — call or email for current availability and rates</li><li>Passenger terminal and pilot lounge with Wi-Fi, restrooms, coffee and refreshments, and a flight-planning desk. We can also help with hotel and rental-car arrangements, and with catering.</li></ul>
     <a class="btn btn-dark" href="{p}contact.html?topic=FBO%20%2F%20ramp%20%2F%20hangar">Reserve a ramp spot or hangar {ARROW}</a></div>
 </div></section>
 <section class="dark"><div class="wrap">
@@ -277,23 +291,24 @@ def fuel_fbo(p):
   {AIRPORT_FACTS}
   {kols_link(p, "Full KOLS pilot guide")}
 </div></section>
-{cta(p, "Inbound to KOLS?", "Let us know your ETA and fuel needs. Phone: <span class='ph'>[PHONE]</span>")}"""
+{cta(p, "Inbound to KOLS?", f"Let us know your ETA and fuel needs. Phone: {PHONE_LINK}")}"""
 
 def coming_soon(kind):
     def f(p):
         if kind == "training":
-            hero = page_hero("Flight Training", "Learn to fly in Nogales.", "We're building a flight school at Nogales International Airport. It is not open yet.", '<span class="badge soon">Coming soon</span>')
-            body = "A flight school at KOLS is in development. Programs, aircraft, instructors and pricing will be announced when the school is ready to enroll students."
-            slot, topic, items = "training", "Flight%20training%20interest", ["Programs: " + ph("TBD"), "Aircraft: " + ph("TBD"), "Instructors: " + ph("TBD"), "Opening date: " + ph("TBD")]
+            hero = page_hero("Flight Training", "Learn to fly in Nogales.", "An FAA Part 141 flight training program at Nogales International Airport is in certification and development. It is not open for enrollment yet.", '<span class="badge soon">Coming soon</span>')
+            heading = "A flight school is on the way."
+            body = "Copper Mountain Air is working toward FAA Part 141 flight training at KOLS. Programs, aircraft, instructors and start dates will be announced when the school is ready to enroll students. If you'd like to be notified, join the interest list."
+            slot, topic = "training", "Flight%20training%20interest"
         else:
-            hero = page_hero("Charter", "Fly direct from KOLS.", "On-demand charter from Nogales International is in development. It is not offered yet.", '<span class="badge soon">Coming soon</span>')
-            body = "We're working toward on-demand charter flights from Nogales International. We can't book charter flights yet; join the interest list and we'll reach out when the service opens."
-            slot, topic, items = "charter", "Charter%20interest", ["Aircraft: " + ph("TBD"), "Destinations: " + ph("TBD"), "Launch date: " + ph("TBD")]
+            hero = page_hero("Charter", "Fly direct from KOLS.", "An FAA Part 135 on-demand charter program from Nogales International is in certification and development. It is not offered yet.", '<span class="badge soon">Coming soon</span>')
+            heading = "On-demand charter is in the works."
+            body = "We're working toward FAA Part 135 on-demand charter from Nogales International. We can't book charter flights yet; join the interest list and we'll reach out when the service opens."
+            slot, topic = "charter", "Charter%20interest"
         return hero + f"""
 <section><div class="wrap split">
   <div class="frame reveal">{img(slot, p)}</div>
-  <div class="reveal"><span class="badge soon">Coming soon</span><h2>Not open yet, but close.</h2><p>{body}</p>
-    <ul class="checks">{''.join(f'<li>{i}</li>' for i in items)}</ul>
+  <div class="reveal"><span class="badge soon">Coming soon</span><h2>{heading}</h2><p>{body}</p>
     <a class="btn btn-dark" href="{p}contact.html?topic={topic}">Join the interest list {ARROW}</a></div>
 </div></section>{cta(p, "Questions in the meantime?", "We're happy to talk. Fuel, FBO and cargo services are available today.")}"""
     return f
@@ -303,8 +318,8 @@ def about(p):
 <section><div class="wrap split">
   <figure class="frame reveal">{img("airfield", p)}</figure>
   <div class="reveal"><p class="eyebrow">Our story</p><h2>Rooted at KOLS.</h2>
-    <p>{ph("COMPANY STORY: how Copper Mountain Air started, and what it stands for. Seth to provide.")}</p>
-    <p>Today we provide fuel and FBO services on the field and move freight by air and ground for customers across Southern Arizona, with flight training and charter coming soon.</p></div>
+    <p>Since 2024, Copper Mountain Air has been the fixed-base operator at Nogales International Airport (KOLS) in Santa Cruz County, Arizona, just north of the U.S.–Mexico border.</p>
+    <p>We provide full-service Jet A and 100LL fueling, FBO ground support on the field, and on-demand expedited cargo by ground. Flight training and on-demand charter are in development and are not offered yet.</p></div>
 </div></section>
 <section><div class="wrap split rev">
   <figure class="frame reveal">{img("kols-guide", p)}</figure>
@@ -312,12 +327,13 @@ def about(p):
     <p>We work on the field every day alongside the pilots, tenants and neighbors who rely on KOLS, Santa Cruz County's public-use airport.</p></div>
 </div></section>
 <section class="sand"><div class="wrap">
-  <div class="section-head reveal"><p class="eyebrow">Team</p><h2>The people behind the ramp.</h2><p>{ph("TEAM NAMES, ROLES, SHORT BIOS AND PHOTOS")}</p></div>
+  <div class="section-head reveal"><p class="eyebrow">Team</p><h2>Direct, hands-on service at KOLS.</h2><p>A locally led operation you can reach by phone or email when you need fuel, a ramp spot, a hangar, or a freight move.</p></div>
   <div class="grid cards">
-    {''.join(f'<article class="card reveal"><div class="body"><h3>{ph("NAME")}</h3><p>{ph("ROLE")}</p><p>{ph("SHORT BIO")}</p></div></article>' for _ in range(3))}
+    <article class="card reveal"><div class="body"><h3>Seth Miller</h3><p>Principal</p><p>Leads Copper Mountain Air at Nogales International Airport, with a focus on dependable fuel, FBO service and on-demand cargo for the pilots and shippers who use KOLS.</p></div></article>
+    <article class="card reveal"><div class="body"><h3>Operations at KOLS</h3><p>On the field every day</p><p>Our operations team handles fueling, ramp and hangar needs, and freight coordination. Call {PHONE_LINK} or email <a href="mailto:{CONTACT_TO}">{CONTACT_TO}</a>.</p></div></article>
   </div>
 </div></section>
-<section class="dark"><div class="wrap"><div class="section-head reveal"><p class="eyebrow">Where we are</p><h2>Nogales International Airport (KOLS)</h2><p>About 7 miles northeast of Nogales in Santa Cruz County, Arizona. Address: {ph("STREET ADDRESS")}, Nogales, AZ 85621.</p></div>{AIRPORT_FACTS}</div></section>
+<section class="dark"><div class="wrap"><div class="section-head reveal"><p class="eyebrow">Where we are</p><h2>Nogales International Airport (KOLS)</h2><p>About 7 miles northeast of Nogales in Santa Cruz County, Arizona. Address: {STREET}, Nogales, AZ 85621.</p></div>{AIRPORT_FACTS}</div></section>
 {cta(p)}"""
 
 def contact(p):
@@ -336,10 +352,10 @@ def contact(p):
     <p class="note">This form opens a pre-filled email to <a href="mailto:{CONTACT_TO}">{CONTACT_TO}</a> in your email app. Nothing is sent until you press Send there.</p>
   </form>
   <div class="contact-cards reveal">
-    <div class="contact-card"><h3>Phone</h3><p>{ph("PHONE")}</p></div>
+    <div class="contact-card"><h3>Phone</h3><p>{PHONE_LINK}</p></div>
     <div class="contact-card"><h3>Email</h3><p><a href="mailto:{CONTACT_TO}">{CONTACT_TO}</a></p></div>
-    <div class="contact-card"><h3>Hours</h3><p>{ph("HOURS")}</p></div>
-    <div class="contact-card"><h3>Location</h3><p>Nogales International Airport (KOLS)<br>{ph("STREET ADDRESS")}<br>Nogales, AZ 85621</p></div>
+    <div class="contact-card"><h3>Hours</h3><p>{HOURS_HTML}</p></div>
+    <div class="contact-card"><h3>Location</h3><p>Nogales International Airport (KOLS)<br>{STREET}<br>Nogales, AZ 85621</p></div>
     <div class="contact-card"><h3>Pay an invoice</h3><p><a href="{PAY_URL}" rel="noopener">pay.coppermountainair.com</a></p></div>
   </div>
 </div></section>"""
@@ -375,7 +391,7 @@ def load_posts():
 def blog_index(posts):
     def f(p):
         cards = "".join(f"""<article class="card post-card reveal"><div class="media">{img(x["image"], p, sizes="card")}</div><div class="body">
-{'<span class="badge draft">Draft · not published</span>' if x["draft"] else ''}<p class="meta">{html.escape(x["date"])}</p>
+{'<span class="badge draft">Draft · not published</span>' if x["draft"] else ''}{f'<p class="meta">{html.escape(x["date"])}</p>' if x.get("date") and not x["date"].startswith("[") else ''}
 <h3><a href="{p}blog/{x["slug"]}.html" style="color:inherit;text-decoration:none">{html.escape(x["title"])}</a></h3><p>{html.escape(x["description"])}</p>
 <a class="more" href="{p}blog/{x["slug"]}.html">{"Read the draft" if x["draft"] else "Read more"} {ARROW}</a></div></article>""" for x in posts)
         return page_hero("Blog", "From the ramp.", "Airport news, pilot info and freight tips from Nogales International Airport (KOLS) and Santa Cruz County.") + f"""
@@ -393,7 +409,7 @@ def expand(body, p):
 
 def blog_post(x):
     def f(p):
-        return f"""<div class="page-hero"><div class="wrap">{'<span class="badge draft">Draft · for review</span>' if x["draft"] else ''}<p class="eyebrow"><a href="{p}blog/index.html" style="color:inherit">Blog</a></p><h1 style="text-transform:none;font-size:clamp(2rem,5vw,3.4rem)">{html.escape(x["title"])}</h1><p class="post-meta">Copper Mountain Air · {html.escape(x["date"])}</p></div></div>
+        return f"""<div class="page-hero"><div class="wrap">{'<span class="badge draft">Draft · for review</span>' if x["draft"] else ''}<p class="eyebrow"><a href="{p}blog/index.html" style="color:inherit">Blog</a></p><h1 style="text-transform:none;font-size:clamp(2rem,5vw,3.4rem)">{html.escape(x["title"])}</h1><p class="post-meta">Copper Mountain Air{" · " + html.escape(x["date"]) if x.get("date") and not x["date"].startswith("[") else ""}</p></div></div>
 <section style="padding-top:0"><div class="wrap"><article class="article">
 <div class="article-hero">{img(x["image"], p, eager=True, sizes="article")}</div>
 {'<div class="draft-banner">UNLISTED PREVIEW — not linked anywhere on the site and hidden from search engines. Share this link only with people reviewing the post.</div>' if x.get("unlisted") == "true" else ''}{f'<div class="draft-banner">DRAFT — not published. Seth to review and approve before this goes live. Source file: <code>{x["source"]}</code></div>' if x["draft"] else ''}
