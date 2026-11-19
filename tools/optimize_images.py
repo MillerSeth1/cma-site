@@ -20,11 +20,6 @@ SLOTS = {
  "kols-guide":("kols/KOLS_2026-10-21_03.jpeg", 1200/630, (.5,.5), [480,800,1200,1600]),
  "training":  ("kols/KOLS_2026-10-21_05.jpeg", 4/3, (.5,.5), [480,800,1200,1600]),
  "charter":   ("lighting/KOLS_lighting_fullsizerender.jpg", 4/3, (.5,.47), [480,800,1200,1600]),
- "event":     ("wings-and-wheels/car-winner-HD.jpeg", 1200/630, (.5,.5), [480,800,1200,1600]),
- "community": ("wings-and-wheels/car-winner-HD.jpeg", 4/3, (.5,.55), [480,800,1200,1600]),
- "ww-airplane":("wings-and-wheels/airplane-winner-HD.jpeg", 3/4, (.5,.5), [400,800,1200]),
- "ww-car":     ("wings-and-wheels/car-winner-HD.jpeg", 3/4, (.5,.5), [400,800,1200]),
- "ww-motorcycle":("wings-and-wheels/motorcycle-winner-HD.jpeg", 3/4, (.5,.5), [400,800,1200]),
 }
 # Regions blurred in the ORIGINAL before cropping: (x0, y0, x1, y1, radius).
 # Hangar photo: partial registration on the high-wing aircraft parked behind the twin.

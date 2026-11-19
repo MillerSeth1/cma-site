@@ -27,11 +27,6 @@ IMG = {
   "kols-guide": "Red runway 22-4 sign at Nogales International Airport",
   "training":   "Yellow taxiway direction signs at Nogales International Airport",
   "charter":    "The runway at Nogales International Airport at dusk",
-  "event":      "Classic car and its owner at Wings & Wheels at KOLS",
-  "community":  "Classic car and its owner at Wings & Wheels at KOLS",
-  "ww-airplane":"Wings & Wheels airplane award presentation at the KOLS terminal",
-  "ww-car":     "Wings & Wheels car show winner with a classic car",
-  "ww-motorcycle":"Wings & Wheels motorcycle winner",
   "fuel":       {"svg": "fuel.svg", "alt": "Placeholder: fuel photo coming soon"},
 }
 SIZES = {"full": "100vw", "half": "(min-width: 860px) 50vw, 100vw", "card": "(min-width: 1100px) 380px, (min-width: 700px) 50vw, 100vw",
@@ -309,9 +304,9 @@ def about(p):
     <p>Today we provide fuel and FBO services on the field and move freight by air and ground for customers across Southern Arizona, with flight training and charter coming soon.</p></div>
 </div></section>
 <section><div class="wrap split rev">
-  <figure class="frame reveal">{img("community", p)}</figure>
-  <div class="reveal"><p class="eyebrow">Community</p><h2>Wings &amp; Wheels at KOLS.</h2>
-    <p>Aircraft, classic cars and motorcycles shared the ramp at Wings &amp; Wheels, bringing neighbors from across Santa Cruz County out to the airport. {ph("EVENT DATE / NEXT EVENT")}</p></div>
+  <figure class="frame reveal">{img("kols-guide", p)}</figure>
+  <div class="reveal"><p class="eyebrow">On the field</p><h2>Part of Nogales International.</h2>
+    <p>We work on the field every day alongside the pilots, tenants and neighbors who rely on KOLS, Santa Cruz County's public-use airport.</p></div>
 </div></section>
 <section class="sand"><div class="wrap">
   <div class="section-head reveal"><p class="eyebrow">Team</p><h2>The people behind the ramp.</h2><p>{ph("TEAM NAMES, ROLES, SHORT BIOS AND PHOTOS")}</p></div>

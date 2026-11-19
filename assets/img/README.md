@@ -22,7 +22,6 @@ To change a photo: edit the slot's source in `tools/optimize_images.py`, rerun i
 | kols-guide | kols/KOLS_2026-10-21_03 | KOLS guide draft; blog empty state |
 | training | kols/KOLS_2026-10-21_05 | Flight Training, coming-soon sections |
 | charter | lighting/KOLS_lighting_fullsizerender | Charter |
-| community, event, ww-* | wings-and-wheels/* | About (Community); Wings & Wheels draft |
 | fuel | `fuel.svg` placeholder (no fuel photo yet) | Fuel cards/sections |
 
 **Rule:** no readable aircraft registration may appear in any published image, and no aircraft may be presented as CMA's. Photos where the tail number is readable (DSC09602, DSC09575 and the other side/tail views) are not used. Check every new aircraft photo at full resolution; blur or crop out any registration (see `REDACT` in `tools/optimize_images.py`).

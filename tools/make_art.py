@@ -64,7 +64,6 @@ slots = {
  "charter": (1200, 800, DUSK, (960, 420, 240), [(ridge(1200,800,620,140,11),"#5a3428"),(ridge(1200,800,700,90,3),"#211c1b")], None, "PHOTO PLACEHOLDER · charter.jpg"),
  "about": (1200, 800, NOON, (600, 300, 220), [(ridge(1200,800,560,160,13),"#c09070"),(ridge(1200,800,650,110,5),"#8b5a3f"),(ridge(1200,800,740,60,2),"#4a3128")], None, "PHOTO PLACEHOLDER · about.jpg"),
  "kols-guide": (1200, 630, NOON, (920, 200, 170), [(ridge(1200,630,450,90,4),"#b07d5a"),(ridge(1200,630,500,60,9),"#7d5440")], "RUNWAY", "PHOTO PLACEHOLDER · kols-guide.jpg"),
- "event": (1200, 630, DUSK, (600, 420, 260), [(ridge(1200,630,460,100,6),"#6d3c2b"),(ridge(1200,630,530,60,1),"#2a201d")], None, "PHOTO PLACEHOLDER · event.jpg"),
 }
 os.makedirs(OUT, exist_ok=True)
 KEEP = {"fuel"}  # only slots that still have no real photo
