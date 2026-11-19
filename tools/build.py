@@ -27,6 +27,8 @@ HOURS = "Monday–Saturday 7:00 a.m.–7:00 p.m., Sunday 7:00 a.m.–5:00 p.m."
 HOURS_HTML = "Monday–Saturday 7:00 a.m.–7:00 p.m.<br>Sunday 7:00 a.m.–5:00 p.m."
 AFTER_HOURS = f"After-hours call-out is available with prior arrangement, and a call-out fee may apply. Call {PHONE_LINK} for details."
 CARDS = "Visa, Mastercard, American Express and Discover"
+# Official branding: Phillips 66 Aviation WingPoints Rewards program (wingpoints.com; phillips66.com/aviation/cards-rewards/).
+WINGPOINTS = 'Phillips 66 <a href="https://www.wingpoints.com/" rel="noopener">WingPoints</a> rewards program participant'
 
 # Image slots. Photos: responsive AVIF/WebP/JPEG made by tools/optimize_images.py into assets/img/photos/.
 # Slots still waiting on a real photo point at an SVG placeholder ("svg": file).
@@ -276,7 +278,7 @@ def services(p):
   <div class="frame reveal">{img("fuel", p)}</div>
   <div class="reveal"><p class="eyebrow">Fuel</p><h2>Jet A and 100LL.</h2>
     <p>Both jet fuel and Avgas are available on the field at Nogales International.</p>
-    <ul class="checks"><li>Full-service Jet A (including with additive)</li><li>Full-service 100LL Avgas</li><li>Phillips 66</li><li>{FUEL_PRICES}</li></ul>
+    <ul class="checks"><li>Full-service Jet A (including with additive)</li><li>Full-service 100LL Avgas</li><li>Phillips 66</li><li>{WINGPOINTS}</li><li>{FUEL_PRICES}</li></ul>
     <a class="btn btn-dark" href="{p}fuel-fbo.html">Fuel &amp; FBO details {ARROW}</a></div>
 </div></section>
 <section id="fbo"><div class="wrap split">
@@ -311,7 +313,7 @@ def fuel_fbo(p):
   <table class="price-table reveal"><thead><tr><th scope="col">Fuel</th><th scope="col">Service</th><th scope="col">Current price</th></tr></thead>
   <tbody><tr><td><strong>Jet A</strong> (including with additive)</td><td>Full service</td><td><a href="{AIRNAV}" rel="noopener">See current price on AirNav</a></td></tr>
   <tr><td><strong>100LL Avgas</strong></td><td>Full service</td><td><a href="{AIRNAV}" rel="noopener">See current price on AirNav</a></td></tr></tbody></table>
-  <p class="note" style="margin-top:1rem">Phillips 66 · Fuel hours: {HOURS} · {AFTER_HOURS} · Payment: {CARDS}.</p>
+  <p class="note" style="margin-top:1rem">Phillips 66 · {WINGPOINTS} · Fuel hours: {HOURS} · {AFTER_HOURS} · Payment: {CARDS}.</p>
 </div></section>
 <section class="sand" id="fbo"><div class="wrap split">
   <div class="frame reveal">{img("fbo", p)}</div>
