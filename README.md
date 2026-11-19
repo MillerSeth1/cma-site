@@ -36,3 +36,7 @@ Note: this repo is public (required for free GitHub Pages), so draft Markdown is
 
 1. Set `PREVIEW = False` and `SITE_URL` to the real domain in `tools/build.py` (removes noindex, opens robots.txt).
 2. Add the custom domain in repo Settings → Pages, and add **only** the website records at the DNS host (an `A`/`CNAME` for `www` and the apex). Leave every Microsoft 365 record (MX, autodiscover CNAME, SPF TXT, DKIM selector CNAMEs, DMARC, any `msoid`/`lyncdiscover`/SRV records) untouched.
+
+## Unlisted preview pages
+
+For a post Seth wants to see on the live preview without listing it: keep `published: false` and add `unlisted: true`, `unlisted_token: <random 10+ lowercase letters/digits>` and optionally `unlisted_file: <name>`. It renders only at `preview/<token>/<name>.html`, is never added to the blog index, home, nav or sitemap, and always carries noindex. Ordinary `published: false` drafts still never render. Note the repo is public, so the text and token are readable on GitHub.

@@ -27,7 +27,9 @@ IMG = {
   "kols-guide": "Red runway 22-4 sign at Nogales International Airport",
   "training":   "Yellow taxiway direction signs at Nogales International Airport",
   "charter":    "The runway at Nogales International Airport at dusk",
-  "fuel":       {"svg": "fuel.svg", "alt": "Placeholder: fuel photo coming soon"},
+  "fuel":       {"file": "fuel.svg", "alt": "Placeholder: fuel photo coming soon"},
+  # Drop the real photo in as assets/img/josh-berg.jpg and change "file" below to "josh-berg.jpg".
+  "josh-berg":  {"file": "josh-berg.svg", "alt": "Photo placeholder: Josh Berg, photo coming"},
 }
 SIZES = {"full": "100vw", "half": "(min-width: 860px) 50vw, 100vw", "card": "(min-width: 1100px) 380px, (min-width: 700px) 50vw, 100vw",
          "article": "(min-width: 800px) 760px, 100vw", "third": "(min-width: 700px) 33vw, 100vw"}
@@ -39,7 +41,7 @@ def img(slot, p, cls="", eager=False, sizes="half"):
     load = 'loading="eager" fetchpriority="high"' if eager else 'loading="lazy"'
     c = f' class="{cls}"' if cls else ""
     if isinstance(v, dict):
-        return f'<img src="{p}assets/img/{v["svg"]}" alt="{html.escape(v["alt"])}" {load} decoding="async" width="1200" height="800"{c}>'
+        return f'<img src="{p}assets/img/{v["file"]}" alt="{html.escape(v["alt"])}" {load} decoding="async" width="1200" height="800"{c}>'
     m = MANIFEST[slot]; sz = SIZES.get(sizes, sizes)
     mid = [w for w in m["widths"] if w >= 1200] or m["widths"][-1:]
     return (f'<picture><source type="image/avif" srcset="{srcset(slot, p, "avif")}" sizes="{sz}">'
@@ -72,7 +74,7 @@ def head(title, desc, path, p, extra_ld=None, og_type="website", og_img=None):
     url = SITE_URL + ("" if path == "index.html" else path)
     og = SITE_URL + "assets/img/" + (og_img or "og-image.jpg")
     ld = [JSONLD_BIZ] + ([extra_ld] if extra_ld else [])
-    robots = '<meta name="robots" content="noindex, nofollow">\n' if PREVIEW else ''
+    robots = '<meta name="robots" content="noindex, nofollow">\n' if (PREVIEW or path.startswith("preview/")) else ''
     return f"""<!doctype html>
 <html lang="en" class="no-js">
 <head>
@@ -171,6 +173,7 @@ AIRPORT_FACTS = """<div class="facts reveal">
 AIRNAV = 'https://www.airnav.com/airport/KOLS'
 FUEL_PRICES = f'Current Jet A and 100LL prices are posted on <a href="{AIRNAV}" rel="noopener">AirNav</a>.'
 POSTS = []
+UNLISTED = []
 def kols_link(p, text):
     """Only link the KOLS guide once that post is published (or in a local --drafts build)."""
     if any(x["slug"] == "kols-pilot-guide" for x in POSTS):
@@ -360,6 +363,10 @@ def load_posts():
         fm["body"] = re.sub(r"\[([A-Z0-9][^\]<]*)\]", lambda mm: ph(mm.group(1)), body)  # highlight [PLACEHOLDERS]
         fm["source"] = "posts/" + fn
         fm["draft"] = fm.get("published", "false").lower() != "true"
+        if fm.get("unlisted", "false").lower() == "true":
+            # Unlisted: rendered only at preview/<token>/<file>.html, never in any list, sitemap or nav; always noindex.
+            assert re.fullmatch(r"[a-z0-9]{10,}", fm.get("unlisted_token", "")), "unlisted posts need a random unlisted_token"
+            UNLISTED.append(fm); continue
         if fm["draft"] and not SHOW_DRAFTS:
             print("  skipping unpublished post:", fn); continue
         posts.append(fm)
@@ -389,7 +396,7 @@ def blog_post(x):
         return f"""<div class="page-hero"><div class="wrap">{'<span class="badge draft">Draft · for review</span>' if x["draft"] else ''}<p class="eyebrow"><a href="{p}blog/index.html" style="color:inherit">Blog</a></p><h1 style="text-transform:none;font-size:clamp(2rem,5vw,3.4rem)">{html.escape(x["title"])}</h1><p class="post-meta">Copper Mountain Air · {html.escape(x["date"])}</p></div></div>
 <section style="padding-top:0"><div class="wrap"><article class="article">
 <div class="article-hero">{img(x["image"], p, eager=True, sizes="article")}</div>
-{f'<div class="draft-banner">DRAFT — not published. Seth to review and approve before this goes live. Source file: <code>{x["source"]}</code></div>' if x["draft"] else ''}
+{'<div class="draft-banner">UNLISTED PREVIEW — not linked anywhere on the site and hidden from search engines. Share this link only with people reviewing the post.</div>' if x.get("unlisted") == "true" else ''}{f'<div class="draft-banner">DRAFT — not published. Seth to review and approve before this goes live. Source file: <code>{x["source"]}</code></div>' if x["draft"] else ''}
 {expand(x["body"], p)}
 <p style="margin-top:2.5rem"><a class="btn btn-dark" href="{p}blog/index.html">← All posts</a></p>
 </article></div></section>"""
@@ -424,13 +431,16 @@ def main():
               "author":{"@type":"Organization","name":"Copper Mountain Air, LLC"},"publisher":{"@id":SITE_URL+"#business"},
               "datePublished":"" if x["draft"] else x["date"],"mainEntityOfPage":SITE_URL+"blog/"+x["slug"]+".html"}
         page(f"blog/{x['slug']}.html", f"{'DRAFT: ' if x['draft'] else ''}{x['title']} | Copper Mountain Air", x["description"], blog_post(x), ld, "article")
+    for x in UNLISTED:
+        page(f"preview/{x['unlisted_token']}/{x.get('unlisted_file') or x['slug']}.html",
+             f"PREVIEW: {x['title']} | Copper Mountain Air", x["description"], blog_post(x), None, "article")
     # 404
     page("404.html", "Page not found | Copper Mountain Air", "Page not found.",
          lambda p: page_hero("404", "Off the chart.", "That page isn't here.") + f'<section><div class="wrap"><a class="btn btn-dark" href="{SITE_URL}">Back to home</a></div></section>')
     f404 = os.path.join(OUT, "404.html"); t = open(f404).read()
     open(f404, "w").write(t.replace('<meta charset="utf-8">', f'<meta charset="utf-8">\n<base href="{SITE_URL}">', 1))
     # sitemap + robots
-    urls = [u for u in PAGES if u != "404.html"]
+    urls = [u for u in PAGES if u != "404.html" and not u.startswith("preview/")]
     sm = ['<?xml version="1.0" encoding="UTF-8"?>','<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
     sm += [f"  <url><loc>{SITE_URL}{'' if u=='index.html' else u}</loc></url>" for u in urls]
     sm.append("</urlset>")

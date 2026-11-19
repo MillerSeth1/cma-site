@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-label="Photo placeholder: Josh Berg, photo coming">
+  <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#16303f"/><stop offset="1" stop-color="#0a141b"/></linearGradient></defs>
+  <rect width="1200" height="800" fill="url(#g)"/>
+  <rect x="24" y="24" width="1152" height="752" rx="28" fill="none" stroke="#f4e7d6" stroke-opacity=".45" stroke-width="3" stroke-dasharray="14 12"/>
+  <circle cx="600" cy="300" r="105" fill="#c4703d" fill-opacity=".55"/>
+  <path d="M410 560c0-105 85-170 190-170s190 65 190 170z" fill="#c4703d" fill-opacity=".55"/>
+  <text x="600" y="652" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="44" font-weight="700" fill="#f4e7d6">PHOTO PLACEHOLDER: Josh Berg, photo coming</text>
+  <text x="600" y="708" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="28" fill="#e9a06a">Image slot: assets/img/josh-berg.jpg</text>
+</svg>
