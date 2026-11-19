@@ -11,7 +11,6 @@ SHOW_DRAFTS = "--drafts" in sys.argv
 SITE_URL = "https://millerseth1.github.io/cma-site/"   # change when the custom domain goes live
 PREVIEW = True                                          # True = noindex + preview banner
 CONTACT_TO = "operations@coppermountainair.com"
-PAY_URL = "https://pay.coppermountainair.com"
 # Verified public contact facts (sources recorded in the commit / site copy notes):
 # Address & phone: Seth's email signature; FAA airport manager record and CMA's AirNav FBO listing; Santa Cruz County airport page.
 # Hours: Santa Cruz County airport page; CMA's previous coppermountainair.com (Wayback, 2025-12-14 and 2026-07-11); iFlightPlanner and PilotGPT FBO listings.
@@ -70,7 +69,7 @@ def ph(t): return f'<span class="ph">[{t}]</span>'
 
 NAV = [("index.html","Home"),("services.html","Services"),("fuel-fbo.html","Fuel &amp; FBO"),
        ("flight-training.html","Flight Training"),("charter.html","Charter"),("about.html","About"),
-       ("blog/index.html","Blog"),("contact.html","Contact")]
+       ("blog/index.html","Blog")]
 
 JSONLD_BIZ = {
   "@context":"https://schema.org","@type":["LocalBusiness"],"@id":SITE_URL+"#business",
@@ -130,7 +129,8 @@ def header(path, p):
     for href, label in NAV:
         cur = ' aria-current="page"' if (href == path or (href == "blog/index.html" and path.startswith("blog/"))) else ""
         items.append(f'<li><a href="{p}{href}"{cur}>{label}</a></li>')
-    items.append(f'<li><a class="pay" href="{PAY_URL}" rel="noopener">Pay online</a></li>')
+    contact_cur = ' aria-current="page"' if path == "contact.html" else ""
+    items.append(f'<li><a class="nav-cta" href="{p}contact.html"{contact_cur}>Contact</a></li>')
     bar = ('<div class="preview-bar"><strong>Preview draft.</strong> Not yet published.</div>') if PREVIEW else ""
     return f"""<body>
 <a class="skip" href="#main">Skip to content</a>
@@ -150,7 +150,7 @@ def footer(p):
       <p>Fuel, FBO and cargo at Nogales International Airport (KOLS), serving Nogales and Santa Cruz County, Arizona.</p></div>
     <div><h3>Visit</h3><p>Copper Mountain Air, LLC<br>Nogales International Airport (KOLS)<br>{STREET}<br>Nogales, AZ 85621</p></div>
     <div><h3>Contact</h3><ul><li>Phone: {PHONE_LINK}</li><li><a href="mailto:{CONTACT_TO}">{CONTACT_TO}</a></li><li>Hours: {HOURS_HTML}</li><li><a href="{p}contact.html">Send a message</a></li></ul></div>
-    <div><h3>Explore</h3><ul><li><a href="{p}services.html">Services</a></li><li><a href="{p}fuel-fbo.html">Fuel &amp; FBO</a></li><li><a href="{p}blog/index.html">Blog</a></li><li><a href="{PAY_URL}" rel="noopener">Pay online</a></li></ul></div>
+    <div><h3>Explore</h3><ul><li><a href="{p}services.html">Services</a></li><li><a href="{p}fuel-fbo.html">Fuel &amp; FBO</a></li><li><a href="{p}flight-training.html">Flight training</a></li><li><a href="{p}blog/index.html">Blog</a></li></ul></div>
   </div>
   <div class="legal"><span>© 2026 Copper Mountain Air, LLC</span><span>On-demand charter is coming soon and is not yet offered.</span></div>
 </div></footer>
@@ -396,7 +396,6 @@ def contact(p):
     <div class="contact-card"><h3>Email</h3><p><a href="mailto:{CONTACT_TO}">{CONTACT_TO}</a></p></div>
     <div class="contact-card"><h3>Hours</h3><p>{HOURS_HTML}</p></div>
     <div class="contact-card"><h3>Location</h3><p>Nogales International Airport (KOLS)<br>{STREET}<br>Nogales, AZ 85621</p></div>
-    <div class="contact-card"><h3>Pay an invoice</h3><p><a href="{PAY_URL}" rel="noopener">pay.coppermountainair.com</a></p></div>
   </div>
 </div></section>"""
 
