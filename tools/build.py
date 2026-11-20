@@ -41,6 +41,15 @@ IMG = {
   "cargo":      "Yellow CARGO direction sign beside the airfield at Nogales International Airport",
   "cargo-sign": "Close-up of a yellow CARGO taxiway sign at Nogales International Airport",
   "kols-guide": "Red runway 22-4 sign at Nogales International Airport",
+  # Official FAA Phoenix VFR Sectional crop (not a photo slot — files live in assets/img/charts/).
+  "kols-sectional": {
+    "alt": "FAA Phoenix VFR Sectional Chart centered on Nogales International Airport (KOLS)",
+    "chart_dir": "assets/img/charts",
+    "prefix": "kols-sectional",
+    "widths": [480, 800, 1200, 1600, 2400],
+    "w": 2400,
+    "h": 1260,
+  },
   "training":   "Yellow taxiway direction signs at Nogales International Airport",
   "charter":    "The runway at Nogales International Airport at dusk",
   "aero-1920":  "Row of 12th Aero Squadron biplanes on the grass at Camp Stephen D. Little near Nogales, 1920 (U.S. Air Service, public domain)",
@@ -50,13 +59,32 @@ IMG = {
 }
 SIZES = {"full": "100vw", "half": "(min-width: 860px) 50vw, 100vw", "card": "(min-width: 1100px) 380px, (min-width: 700px) 50vw, 100vw",
          "article": "(min-width: 800px) 760px, 100vw", "third": "(min-width: 700px) 33vw, 100vw"}
+# Official FAA chart figures for blog posts (assets/img/charts/). Clickable to the full-resolution PNG.
+CHARTS = {
+  "rnav-gps-a": {"file": "kols-rnav-gps-a", "w": 1331, "h": 1935,
+                 "alt": "FAA RNAV (GPS)-A instrument approach procedure for Nogales International Airport (KOLS)"},
+  "vor-b": {"file": "kols-vor-b", "w": 1331, "h": 1928,
+            "alt": "FAA VOR-B instrument approach procedure for Nogales International Airport (KOLS)"},
+  "airport-sketch": {"file": "kols-airport-sketch", "w": 733, "h": 851,
+                     "alt": "FAA Chart Supplement airport sketch for Nogales International Airport (KOLS)"},
+}
 def srcset(slot, p, ext):
     m = MANIFEST[slot]
     return ", ".join(f"{p}assets/img/photos/{slot}-{w}.{ext} {w}w" for w in m["widths"])
+def srcset_custom(p, directory, prefix, widths, ext):
+    return ", ".join(f"{p}{directory}/{prefix}-{w}.{ext} {w}w" for w in widths)
 def img(slot, p, cls="", eager=False, sizes="half"):
     v = IMG[slot]
     load = 'loading="eager" fetchpriority="high"' if eager else 'loading="lazy"'
     c = f' class="{cls}"' if cls else ""
+    if isinstance(v, dict) and v.get("chart_dir"):
+        sz = SIZES.get(sizes, sizes)
+        mid = [w for w in v["widths"] if w >= 1200] or v["widths"][-1:]
+        d, prefix = v["chart_dir"], v["prefix"]
+        return (f'<picture><source type="image/avif" srcset="{srcset_custom(p, d, prefix, v["widths"], "avif")}" sizes="{sz}">'
+                f'<source type="image/webp" srcset="{srcset_custom(p, d, prefix, v["widths"], "webp")}" sizes="{sz}">'
+                f'<img src="{p}{d}/{prefix}-{mid[0]}.jpg" srcset="{srcset_custom(p, d, prefix, v["widths"], "jpg")}" sizes="{sz}" alt="{html.escape(v["alt"])}" '
+                f'{load} decoding="async" width="{v["w"]}" height="{v["h"]}"{c}></picture>')
     if isinstance(v, dict):
         return f'<img src="{p}assets/img/{v["file"]}" alt="{html.escape(v["alt"])}" {load} decoding="async" width="1200" height="800"{c}>'
     m = MANIFEST[slot]; sz = SIZES.get(sizes, sizes)
@@ -839,6 +867,8 @@ def load_posts():
         body = markdown.markdown(m.group(2), extensions=["tables"])
         body = re.sub(r"<p>\{\{gallery:([^}]*)\}\}</p>", lambda mm: "{{GALLERY:" + mm.group(1).strip() + "}}", body)
         body = re.sub(r"<p>\{\{figure:([^|}]*)\|([^}]*)\}\}</p>", lambda mm: "{{FIGURE:" + mm.group(1).strip() + "|" + mm.group(2).strip() + "}}", body)
+        body = re.sub(r"<p>\{\{chart:([^|}]*)\|([^}]*)\}\}</p>", lambda mm: "{{CHART:" + mm.group(1).strip() + "|" + mm.group(2).strip() + "}}", body)
+        body = re.sub(r"<p>\{\{charts:([^}]*)\}\}</p>", lambda mm: "{{CHARTS:" + mm.group(1).strip() + "}}", body)
         fm["body"] = re.sub(r"\[([A-Z0-9][^\]<]*)\]", lambda mm: ph(mm.group(1)), body)  # highlight [PLACEHOLDERS]
         fm["source"] = "posts/" + fn
         fm["draft"] = fm.get("published", "false").lower() != "true"
@@ -866,9 +896,28 @@ def EMPTY_BLOG(p):
 <h2>New posts every month.</h2><p>We publish a new post each month: KOLS airport updates, pilot info, and freight tips for Santa Cruz County. Check back soon.</p>
 <a class="btn btn-dark" href="{p}fuel-fbo.html">Fuel &amp; FBO info {ARROW}</a></div></div>"""
 
+def chart_fig(cid, cap, p):
+    meta = CHARTS[cid.strip()]
+    src = f'{p}assets/img/charts/{meta["file"]}'
+    extra = " chart-sketch" if cid.strip() == "airport-sketch" else ""
+    return (f'<figure class="chart-fig{extra}">'
+            f'<a href="{src}.png" target="_blank" rel="noopener">'
+            f'<picture><source type="image/webp" srcset="{src}.webp">'
+            f'<img src="{src}.png" alt="{html.escape(meta["alt"])}" width="{meta["w"]}" height="{meta["h"]}" loading="lazy" decoding="async">'
+            f'</picture></a><figcaption>{cap.strip()}</figcaption></figure>')
+
 def expand(body, p):
     body = re.sub(r"\{\{GALLERY:([^}]*)\}\}", lambda m: '<div class="gallery">' + "".join(f'<figure>{img(s.strip(), p, sizes="third")}</figure>' for s in m.group(1).split(",")) + "</div>", body)
-    return re.sub(r"\{\{FIGURE:([^|]*)\|([^}]*)\}\}", lambda m: f'<figure class="article-fig">{img(m.group(1), p, sizes="article")}<figcaption>{m.group(2)}</figcaption></figure>', body)
+    body = re.sub(r"\{\{FIGURE:([^|]*)\|([^}]*)\}\}", lambda m: f'<figure class="article-fig">{img(m.group(1), p, sizes="article")}<figcaption>{m.group(2)}</figcaption></figure>', body)
+    body = re.sub(r"\{\{CHART:([^|]*)\|([^}]*)\}\}", lambda m: chart_fig(m.group(1), m.group(2), p), body)
+    def grid(m):
+        items = [part.strip() for part in m.group(1).split(";;") if part.strip()]
+        figs = []
+        for item in items:
+            cid, cap = item.split("|", 1)
+            figs.append(chart_fig(cid, cap, p))
+        return '<div class="article-charts">' + "".join(figs) + "</div>"
+    return re.sub(r"\{\{CHARTS:([^}]*)\}\}", grid, body)
 
 def fmt_date(d):
     """'2026-11-19' -> 'November 19, 2026' for display; anything else passes through."""

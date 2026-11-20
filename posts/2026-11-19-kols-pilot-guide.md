@@ -4,11 +4,11 @@ slug: kols-pilot-guide
 published: true   # approved by Seth, Nov 19, 2026
 date: "2026-11-19"
 description: "Fly into Nogales International Airport (KOLS) with verified field data, frequencies, and U.S. Customs basics for this southern Arizona border gateway."
-image: kols-guide
+image: kols-sectional
 ---
 Nogales International Airport (KOLS) sits about 7 miles northeast of downtown Nogales, Arizona, in Santa Cruz County, at the foot of the Santa Cruz Valley. The field lies just north of the U.S.–Mexico border along State Route 82. It is a non-towered Santa Cruz County airport, an international airport of entry, and a working gateway for pilots flying the southern Arizona border corridor.
 
-This guide collects verified airfield, frequency, history, and arrival information for KOLS itself. **It is not for navigation.** Always check the current FAA Chart Supplement, NOTAMs, official charts, and U.S. Customs and Border Protection procedures before you fly.
+This guide collects airfield, frequency, history, and arrival information for KOLS.
 
 ## Where the field sits
 
@@ -18,7 +18,7 @@ Surveyed field elevation is **3,955 ft MSL**, with a magnetic variation of 9° E
 
 ## The airfield at a glance
 
-> **Not for navigation.** Figures below follow FAA airport data as published in the Chart Supplement (Southwest, 29 October 2026 cycle) and on AirNav. Confirm every item against current official sources before you fly.
+{{chart: airport-sketch | FAA Airport Sketch — KOLS}}
 
 | Item | KOLS |
 |---|---|
@@ -46,9 +46,9 @@ Surveyed field elevation is **3,955 ft MSL**, with a magnetic variation of 9° E
 
 ### Instrument procedures
 
-Published approaches include the **RNAV (GPS)-A** and **VOR-B**. The Nogales VOR/DME (OLS, 114.65) is on the field, and Tucson Approach provides approach and departure services. Review the full current procedure set, including any special minimums, before you file.
+Published approaches include the **RNAV (GPS)-A** and **VOR-B**. The Nogales VOR/DME (OLS, 114.65) is on the field, and Tucson Approach provides approach and departure services. Current plates are published in the FAA d-TPP and linked from [AirNav for KOLS](https://www.airnav.com/airport/KOLS).
 
-{{figure: taxiway-signs | Yellow taxiway direction signs at Nogales International Airport.}}
+{{charts: rnav-gps-a | FAA RNAV (GPS)-A — KOLS ;; vor-b | FAA VOR-B — KOLS}}
 
 ## A southern Arizona border gateway
 

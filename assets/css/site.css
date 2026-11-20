@@ -199,4 +199,13 @@ picture{display:contents}
 .article-fig{margin:1.5rem 0 2rem}
 .article-fig img{border-radius:14px;width:100%}
 .article-fig figcaption{font-size:.9rem;color:var(--muted);margin-top:.5rem}
+
+/* Official FAA charts in blog posts: never crop plates; keep paper-like frame. */
+.chart-fig{margin:1.5rem 0 2rem;background:#fff;border:1px solid #e4d6c6;border-radius:14px;box-shadow:var(--shadow);padding:.75rem .75rem 0;overflow:hidden}
+.chart-fig a{display:block;line-height:0}
+.chart-fig img{width:100%;height:auto;object-fit:contain;display:block;background:#fff;border-radius:6px}
+.chart-fig figcaption{font-size:.9rem;color:var(--muted);margin:0;padding:.7rem .35rem .85rem}
+.article-charts{display:grid;gap:1.5rem;margin:1.5rem 0 2rem}
+.article-charts .chart-fig{margin:0}
+.chart-fig.chart-sketch{max-width:40rem;margin-left:auto;margin-right:auto}
 .dark .card{color:var(--ink)}.dark .card p{color:var(--muted)}.dark .card a{color:var(--copper-3)}
