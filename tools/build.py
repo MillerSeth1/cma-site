@@ -59,14 +59,16 @@ IMG = {
 }
 SIZES = {"full": "100vw", "half": "(min-width: 860px) 50vw, 100vw", "card": "(min-width: 1100px) 380px, (min-width: 700px) 50vw, 100vw",
          "article": "(min-width: 800px) 760px, 100vw", "third": "(min-width: 700px) 33vw, 100vw"}
-# Official FAA chart figures for blog posts (assets/img/charts/). Clickable to the full-resolution PNG.
+# Blog figures in assets/img/charts/. Approach plates are clickable full-resolution PNGs.
+# The KOLS aerial is a responsive photo (clickable JPEG) with article-fig styling.
 CHARTS = {
   "rnav-gps-a": {"file": "kols-rnav-gps-a", "w": 1331, "h": 1935,
                  "alt": "FAA RNAV (GPS)-A instrument approach procedure for Nogales International Airport (KOLS)"},
   "vor-b": {"file": "kols-vor-b", "w": 1331, "h": 1928,
             "alt": "FAA VOR-B instrument approach procedure for Nogales International Airport (KOLS)"},
-  "airport-sketch": {"file": "kols-airport-sketch", "w": 733, "h": 851,
-                     "alt": "FAA Chart Supplement airport sketch for Nogales International Airport (KOLS)"},
+  "airport-aerial": {"file": "kols-aerial", "w": 3840, "h": 2560,
+                     "alt": "Aerial photograph of Nogales International Airport (KOLS) showing Runway 04/22, Taxiway A, and the ramp",
+                     "kind": "photo", "full_ext": "jpg", "widths": [480, 800, 1200, 1600, 2400]},
 }
 def srcset(slot, p, ext):
     m = MANIFEST[slot]
@@ -899,8 +901,24 @@ def EMPTY_BLOG(p):
 def chart_fig(cid, cap, p):
     meta = CHARTS[cid.strip()]
     src = f'{p}assets/img/charts/{meta["file"]}'
-    extra = " chart-sketch" if cid.strip() == "airport-sketch" else ""
-    return (f'<figure class="chart-fig{extra}">'
+    if meta.get("kind") == "photo":
+        widths = meta["widths"]
+        d, prefix = "assets/img/charts", meta["file"]
+        sz = SIZES["article"]
+        mid = [w for w in widths if w >= 1200] or widths[-1:]
+        full = f'{src}.{meta.get("full_ext", "jpg")}'
+        picture = (
+            f'<picture>'
+            f'<source type="image/avif" srcset="{srcset_custom(p, d, prefix, widths, "avif")}" sizes="{sz}">'
+            f'<source type="image/webp" srcset="{srcset_custom(p, d, prefix, widths, "webp")}" sizes="{sz}">'
+            f'<img src="{p}{d}/{prefix}-{mid[0]}.jpg" srcset="{srcset_custom(p, d, prefix, widths, "jpg")}" sizes="{sz}" '
+            f'alt="{html.escape(meta["alt"])}" width="{meta["w"]}" height="{meta["h"]}" loading="lazy" decoding="async">'
+            f'</picture>'
+        )
+        return (f'<figure class="article-fig">'
+                f'<a href="{full}" target="_blank" rel="noopener">{picture}</a>'
+                f'<figcaption>{cap.strip()}</figcaption></figure>')
+    return (f'<figure class="chart-fig">'
             f'<a href="{src}.png" target="_blank" rel="noopener">'
             f'<picture><source type="image/webp" srcset="{src}.webp">'
             f'<img src="{src}.png" alt="{html.escape(meta["alt"])}" width="{meta["w"]}" height="{meta["h"]}" loading="lazy" decoding="async">'

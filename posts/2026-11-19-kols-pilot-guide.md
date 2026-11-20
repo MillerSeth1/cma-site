@@ -18,7 +18,7 @@ Surveyed field elevation is **3,955 ft MSL**, with a magnetic variation of 9° E
 
 ## The airfield at a glance
 
-{{chart: airport-sketch | FAA Airport Sketch — KOLS}}
+{{chart: airport-aerial | Aerial view of Nogales International Airport (KOLS) showing Runway 04/22, Taxiway A, and the ramp (USGS/NAIP aerial imagery).}}
 
 | Item | KOLS |
 |---|---|

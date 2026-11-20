@@ -1,7 +1,7 @@
-# Official FAA charts used on the KOLS pilot-guide post
+# Official U.S. government charts and imagery used on the KOLS pilot-guide post
 
-All files here are cropped or rasterized from current-cycle U.S. government
-publications (public domain). They were not redrawn or AI-generated.
+All files here are cropped or rasterized from U.S. government publications
+(public domain). They were not redrawn or AI-generated.
 
 Current cycle used (built 19 November 2026):
 
@@ -15,14 +15,23 @@ Current cycle used (built 19 November 2026):
   (runway 04/22, Nogales VOR/DME OLS, the U.S.–Mexico border, and
   Santa Cruz Valley terrain). Used as the blog hero and index card.
 
-## FAA Chart Supplement airport sketch (`kols-airport-sketch.*`)
+## USGS/NAIP aerial photograph (`kols-aerial.*`)
 
-- Product: Chart Supplement Southwest, airport listing/sketch for OLS (KOLS)
-- Effective: 29 October 2026 to 24 December 2026
-- Source PDF: https://aeronav.faa.gov/afd/29Oct2026/sw_68_29OCT2026.pdf
-- Search: https://www.faa.gov/air_traffic/flight_info/aeronav/digital_products/dafd/search/results/?cycle=2611&ident=OLS
-- Note: KOLS has no published FAA d-TPP Airport Diagram (`06151AD.PDF` is 404).
-  The official field layout graphic is this Chart Supplement sketch.
+- Source: USGS NAIP Plus ImageServer, The National Map
+  https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPPlus/ImageServer
+- Imagery: USDA National Agriculture Imagery Program (NAIP), public domain
+  U.S. federal government work (USDA-FSA-APFO / USGS)
+- Tile: `m_3111034_sw_12_030_20230805` (Arizona, 0.30 m, 4-band CNIR)
+- Acquisition date: 5 August 2023
+- Service copyright notice: "USGS, USDA, The National Map: Orthoimagery. March 12, 2025."
+- Export: `exportImage` with `bboxSR=3857`, `imageSR=3857` (Web Mercator, undistorted),
+  `renderingRule=NaturalColor`, 3840×2560 (3:2 landscape) tightly framed on
+  Runway 04/22, Taxiway A, connectors, FBO/terminal ramp, hangars, and
+  surrounding Santa Cruz Valley terrain
+- Bounding box (EPSG:3857):
+  xmin=-12341607.44, ymin=3685733.38, xmax=-12337453.65, ymax=3688502.57
+- Used under "The airfield at a glance" on the KOLS pilot-guide post
+  (clickable to `kols-aerial.jpg`; responsive 480/800/1200/1600/2400 derivatives)
 
 ## FAA instrument approach procedures (`kols-rnav-gps-a.*`, `kols-vor-b.*`)
 
@@ -33,6 +42,6 @@ Current cycle used (built 19 November 2026):
 - Catalog: https://www.faa.gov/air_traffic/flight_info/aeronav/digital_products/dtpp/
 - Also linked from https://www.airnav.com/airport/KOLS
 
-Rendered with `pdftoppm -png -r 250` (plates) or `-r 400` (sketch); white PDF
-margins trimmed only enough to keep the full chart border, header, cycle dates,
+Approach plates were rendered with `pdftoppm -png -r 250`; white PDF margins
+trimmed only enough to keep the full chart border, header, cycle dates,
 plan view, profile, and minimums intact.
