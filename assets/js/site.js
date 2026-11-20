@@ -49,6 +49,68 @@
     });
   }
 
+  // Trip / quote request form.
+  var tf=document.getElementById("trip-form");
+  if(tf){
+    var to=tf.getAttribute("data-to")||"operations@coppermountainair.com",st=document.getElementById("form-status");
+    var btn=document.getElementById("trip-submit")||tf.querySelector('button[type="submit"]');
+    var endpoint=tf.getAttribute("data-endpoint");
+    var q=new URLSearchParams(location.search);
+    var want=q.get("service")||q.get("topic")||"";
+    if(/charter/i.test(want)){var ch=document.getElementById("service-charter");if(ch) ch.checked=true;}
+    else if(/cargo|freight/i.test(want)){var cg=document.getElementById("service-cargo");if(cg) cg.checked=true;}
+    function tv(id){var el=document.getElementById(id);return el?(el.value||"").trim():"";}
+    function serviceType(){
+      var picked=tf.querySelector('input[name="serviceType"]:checked');
+      return picked?picked.value:"";
+    }
+    function setStatus(msg,kind){
+      if(!st)return;
+      st.textContent=msg;
+      st.style.color=kind==="ok"?"#1f6b3a":kind==="err"?"#8a2a2a":"";
+    }
+    var fail="Sorry, we couldn't send your request just now. Please email "+to+" or call (520) 287-9120 directly.";
+    tf.addEventListener("submit",function(e){
+      e.preventDefault();if(!tf.reportValidity())return;
+      if(tv("form-honey")){setStatus("Request sent. Our team at KOLS will get back to you shortly.","ok");tf.reset();return;}
+      var orig=btn?btn.innerHTML:"";
+      if(btn){btn.disabled=true;btn.innerHTML="Sending…";}
+      setStatus("Sending your request…","");
+      fetch(endpoint,{
+        method:"POST",
+        headers:{"Content-Type":"application/json","Accept":"application/json"},
+        body:JSON.stringify({
+          name:tv("name"),
+          email:tv("email"),
+          phone:tv("phone"),
+          company:tv("company"),
+          serviceType:serviceType(),
+          pickup:tv("pickup"),
+          dropoff:tv("dropoff"),
+          weight:tv("weight"),
+          pieces:tv("pieces"),
+          dates:tv("dates"),
+          notes:tv("notes"),
+          _honey:tv("form-honey")
+        })
+      }).then(function(res){
+        return res.json().then(function(data){return {ok:res.ok,data:data};}).catch(function(){return {ok:res.ok,data:null};});
+      }).then(function(r){
+        if(r.ok&&r.data&&r.data.ok){
+          setStatus("Request sent. Our team at KOLS will get back to you shortly.","ok");
+          tf.reset();
+        }else if(r.data&&r.data.error&&!r.ok){
+          setStatus(r.data.error,"err");
+        }else{
+          setStatus(fail,"err");
+        }
+      }).catch(function(){setStatus(fail,"err");
+      }).finally(function(){
+        if(btn){btn.disabled=false;btn.innerHTML=orig;}
+      });
+    });
+  }
+
   // Cookie notice + GA4 Consent Mode v2 (defaults are set denied in <head>).
   var CONSENT_KEY="cma-cookie-consent";
   function consentValue(){try{return localStorage.getItem(CONSENT_KEY);}catch(e){return null;}}

@@ -70,7 +70,7 @@ FAA data lists KOLS as an international airport of entry. If you are arriving fr
 
 CBP's [General Aviation Airport Fact Sheet for KOLS](https://www.cbp.gov/sites/default/files/2026-02/KOLS%20GA%20Airport%20Fact%20Sheet%2020260224.pdf) (dated February 24, 2026) asks pilots to secure permission to land by contacting CBP before departing the foreign airport, and at least one hour before the expected arrival at KOLS. Permission is granted with a tolerance of 30 minutes either side of the ETA; if your arrival falls outside that window, you must contact CBP again. Park on the ramp at the Federal Inspection Station on the east side of the terminal, and be ready to present passports, visas, pilot certificate, medical certificate, aircraft registration and user fee decal. CBP office hours are 0800–1600 Mountain Time daily, and processing can be arranged 24/7 with at least one hour's notice: call 520-287-1433 during those hours, or 520-375-5785 after hours. The fact sheet notes a maximum passenger count of 20 at this location.
 
-Always follow current CBP instructions, NOTAMs, and the Chart Supplement. This summary is not a substitute for official guidance.
+Always follow current CBP instructions, NOTAMs, and the Chart Supplement. This summary is not a substitute for official guidance. A longer walkthrough, with the official CBP and eCFR links, is in [Cross-border flying through Nogales: customs basics](cross-border-flying-nogales-customs.html).
 
 ## On the ramp: fuel and FBO
 
@@ -80,5 +80,13 @@ Full-service fueling and ramp support are available on the field through Copper 
 - **Email:** [operations@coppermountainair.com](mailto:operations@coppermountainair.com)
 - **Hours:** Monday–Saturday 7:00 a.m.–7:00 p.m., Sunday 7:00 a.m.–5:00 p.m.
 - **Address:** 11 Access Way, Nogales, AZ 85621
+
+## Related reading
+
+- [Getting your private pilot license in Nogales](private-pilot-license-nogales.html)
+- [Fuel and FBO services at KOLS](fuel-and-fbo-at-kols.html)
+- [Cross-border flying through Nogales: customs basics](cross-border-flying-nogales-customs.html)
+- [Ground cargo in the Nogales corridor](ground-cargo-nogales-corridor.html)
+- [Photo gallery](../gallery.html)
 
 *Sources: FAA Chart Supplement (Southwest, 29 October 2026 cycle) and [AirNav — KOLS Nogales International Airport](https://www.airnav.com/airport/KOLS); [CBP KOLS General Aviation Airport Fact Sheet](https://www.cbp.gov/sites/default/files/2026-02/KOLS%20GA%20Airport%20Fact%20Sheet%2020260224.pdf) (February 24, 2026); [history of Nogales International Airport](../about.html#history) on this site (Coffman Associates, *Airport Master Plan, Nogales International Airport*, Santa Cruz County, February 2015, and the other sources listed there).*

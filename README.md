@@ -12,6 +12,7 @@ Static site for Copper Mountain Air, LLC at Nogales International Airport (KOLS)
 |---|---|
 | `tools/build.py` | Page templates, nav, SEO/JSON-LD, image slot map. Builds into `_site/`. |
 | `posts/` | Blog posts as Markdown with front matter. `_TEMPLATE.md` is the starting point. |
+| `gallery.html` | Photo gallery (built by `tools/build.py` from `assets/img/gallery/`). |
 | `assets/css`, `assets/js`, `assets/fonts` | Styles, small script (nav, reveal motion, contact form), self-hosted Archivo + Inter (SIL OFL). |
 | `assets/img/` | Logo variants, favicons, share image, and optimized photos (`photos/`, AVIF/WebP/JPEG, no metadata). Originals stay outside the repo. See `assets/img/README.md`. |
 | `tools/optimize_images.py`, `tools/make_logo.py`, `tools/make_png.py`, `tools/make_art.py` | Rebuild photos, logo SVGs, favicons/OG image, and the remaining fuel placeholder. |

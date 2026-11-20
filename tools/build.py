@@ -15,6 +15,8 @@ CONTACT_TO = "operations@coppermountainair.com"
 CONTACT_ENDPOINT = "https://contact-api-production-d6d93922.up.railway.app/contact"
 NOTAMS_ENDPOINT = "https://contact-api-production-d6d93922.up.railway.app/notams"
 METAR_ENDPOINT = "https://contact-api-production-d6d93922.up.railway.app/metar"
+FUEL_ENDPOINT = "https://contact-api-production-d6d93922.up.railway.app/fuel"
+TRIP_ENDPOINT = "https://contact-api-production-d6d93922.up.railway.app/trip-request"
 GA_ID = "G-RXRN6HKGZM"
 GA_HEAD = """
 <script>
@@ -59,6 +61,7 @@ WINGPOINTS = 'Phillips 66 <a href="https://www.wingpoints.com/" rel="noopener">W
 # Image slots. Photos: responsive AVIF/WebP/JPEG made by tools/optimize_images.py into assets/img/photos/.
 # Slots still waiting on a real photo point at an SVG placeholder ("svg": file).
 MANIFEST = json.load(open(os.path.join(ROOT, "assets", "img", "photos", "manifest.json")))
+GALLERY_MANIFEST = json.load(open(os.path.join(ROOT, "assets", "img", "gallery", "manifest.json")))
 IMG = {
   "hero":       "Twin-engine aircraft seen head-on on the ramp at Nogales International Airport, with mountains behind",
   "ramp-band":  "Inside a hangar at Nogales International Airport",
@@ -79,6 +82,11 @@ IMG = {
   },
   "training":   "Yellow taxiway direction signs at Nogales International Airport",
   "charter":    "The runway at Nogales International Airport at dusk",
+  "fbo-night":  "Illuminated FBO taxiway sign and taxiway lights at Nogales International Airport at night",
+  "term-night": "Illuminated terminal taxiway sign and airfield lights at Nogales International Airport at night",
+  "ww-airplane": "Best Plane award presented in the terminal at Copper Mountain Air's first Wings & Wheels at Nogales International Airport",
+  "ww-car":      "Best Car award winner with a classic car on the ramp at Nogales International Airport, mountains behind",
+  "ww-motorcycle": "Best Motorcycle award winner with a motorcycle on the ramp at Nogales International Airport, mountains behind",
   "aero-1920":  "Row of 12th Aero Squadron biplanes on the grass at Camp Stephen D. Little near Nogales, 1920 (U.S. Air Service, public domain)",
   "fuel":       {"file": "fuel.svg", "alt": "Placeholder: fuel photo coming soon"},
   # Drop the real photo in as assets/img/josh-berg.jpg and change "file" below to "josh-berg.jpg".
@@ -128,13 +136,14 @@ def ph(t): return f'<span class="ph">[{t}]</span>'
 # Home is reached from the logo; Cargo has its own page (Seth, Nov 19, 2026).
 NAV = [("services.html","Services"),("fuel-fbo.html","Fuel &amp; FBO"),
        ("flight-training.html","Flight Training"),("cargo.html","Cargo"),("charter.html","Charter"),("about.html","About"),
-       ("blog/index.html","Blog")]
+       ("gallery.html","Gallery"),("blog/index.html","Blog")]
 # Page-specific assets. Leaflet 1.9.4 is vendored in assets/vendor/leaflet (BSD-2-Clause) so the map never depends on a CDN.
 PAGE_CSS = {"about.html": ["assets/css/pages.css"], "flight-training.html": ["assets/vendor/leaflet/leaflet.css", "assets/css/pages.css"], "cargo.html": ["assets/css/pages.css"]}
 PAGE_JS = {
-  "index.html": ["assets/js/flightplan.js", "assets/js/notams.js"],
-  "fuel-fbo.html": ["assets/js/flightplan.js", "assets/js/notams.js"],
+  "index.html": ["assets/js/flightplan.js", "assets/js/notams.js", "assets/js/fuel.js"],
+  "fuel-fbo.html": ["assets/js/flightplan.js", "assets/js/notams.js", "assets/js/fuel.js"],
   "flight-training.html": ["assets/vendor/leaflet/leaflet.js", "assets/js/kols.js"],
+  "gallery.html": ["assets/js/gallery.js"],
 }
 
 JSONLD_BIZ = {
@@ -151,7 +160,7 @@ JSONLD_BIZ = {
   "sameAs":[]
 }
 
-def head(title, desc, path, p, extra_ld=None, og_type="website", og_img=None):
+def head(title, desc, path, p, extra_ld=None, og_type="website", og_img=None, og_w=1200, og_h=630):
     pre = (f'<link rel="preload" as="image" type="image/avif" imagesrcset="{srcset("hero", p, "avif")}" imagesizes="100vw" fetchpriority="high">\n') if path == "index.html" else ""
     url = SITE_URL + ("" if path == "index.html" else path)
     og = SITE_URL + "assets/img/" + (og_img or "og-image.jpg")
@@ -175,8 +184,8 @@ def head(title, desc, path, p, extra_ld=None, og_type="website", og_img=None):
 <meta property="og:description" content="{html.escape(desc)}">
 <meta property="og:url" content="{url}">
 <meta property="og:image" content="{og}">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
+<meta property="og:image:width" content="{og_w}">
+<meta property="og:image:height" content="{og_h}">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{title}">
 <meta name="twitter:description" content="{html.escape(desc)}">
@@ -234,8 +243,8 @@ def footer(p):
       <p>Fuel, FBO and cargo at Nogales International Airport (KOLS), serving Nogales and Santa Cruz County, Arizona.</p>
       {social_links()}</div>
     <div><h3>Visit</h3><p>Copper Mountain Air, LLC<br>Nogales International Airport (KOLS)<br>{STREET}<br>Nogales, AZ 85621</p></div>
-    <div><h3>Contact</h3><ul><li>Phone: {PHONE_LINK}</li><li><a href="mailto:{CONTACT_TO}">{CONTACT_TO}</a></li><li>Hours: {HOURS_HTML}</li><li><a href="{p}contact.html">Send a message</a></li></ul></div>
-    <div><h3>Explore</h3><ul><li><a href="{p}services.html">Services</a></li><li><a href="{p}fuel-fbo.html">Fuel &amp; FBO</a></li><li><a href="{p}flight-training.html">Flight training</a></li><li><a href="{p}cargo.html">Cargo</a></li><li><a href="{p}charter.html">Charter</a></li><li><a href="{p}about.html">About</a></li><li><a href="{p}blog/index.html">Blog</a></li></ul></div>
+    <div><h3>Contact</h3><ul><li>Phone: {PHONE_LINK}</li><li><a href="mailto:{CONTACT_TO}">{CONTACT_TO}</a></li><li>Hours: {HOURS_HTML}</li><li><a href="{p}contact.html">Send a message</a></li><li><a href="{p}trip-request.html">Request a trip / quote</a></li></ul></div>
+    <div><h3>Explore</h3><ul><li><a href="{p}services.html">Services</a></li><li><a href="{p}fuel-fbo.html">Fuel &amp; FBO</a></li><li><a href="{p}flight-training.html">Flight training</a></li><li><a href="{p}cargo.html">Cargo</a></li><li><a href="{p}charter.html">Charter</a></li><li><a href="{p}trip-request.html">Request a quote</a></li><li><a href="{p}about.html">About</a></li><li><a href="{p}gallery.html">Gallery</a></li><li><a href="{p}blog/index.html">Blog</a></li></ul></div>
   </div>
   <div class="legal"><span>© 2026 Copper Mountain Air, LLC</span><span>On-demand charter is coming soon and is not yet offered.</span><a href="{p}privacy.html">Privacy</a></div>
 </div></footer>
@@ -244,9 +253,9 @@ def footer(p):
 </html>
 """
 
-def page(path, title, desc, body, extra_ld=None, og_type="website"):
+def page(path, title, desc, body, extra_ld=None, og_type="website", og_img=None, og_w=1200, og_h=630):
     p = "../" * path.count("/")
-    out = head(title, desc, path, p, extra_ld, og_type) + "\n" + header(path, p) + "\n" + body(p) + "\n" + footer(p)
+    out = head(title, desc, path, p, extra_ld, og_type, og_img, og_w, og_h) + "\n" + header(path, p) + "\n" + body(p) + "\n" + footer(p)
     js = "".join(f'<script src="{p}{s}" defer></script>\n' for s in PAGE_JS.get(path, []))
     if js: out = out.replace(f'<script src="{p}assets/js/site.js" defer></script>\n', f'<script src="{p}assets/js/site.js" defer></script>\n{js}', 1)
     full = os.path.join(OUT, path)
@@ -261,7 +270,7 @@ def page_hero(eyebrow, h1, lede, badge=""):
     return f'<div class="page-hero"><div class="wrap">{badge}<p class="eyebrow">{eyebrow}</p><h1>{h1}</h1><p>{lede}</p></div></div>'
 
 def cta(p, h="Need fuel, a ramp spot or a freight quote?", t="Tell us what you need and we'll get back to you."):
-    return f'<section><div class="wrap"><div class="cta-band reveal"><div><h2>{h}</h2><p>{t}</p></div><div><a class="btn btn-dark" href="{p}contact.html">Contact us {ARROW}</a></div></div></div></section>'
+    return f'<section><div class="wrap"><div class="cta-band reveal"><div><h2>{h}</h2><p>{t}</p></div><div style="display:flex;gap:.6rem;flex-wrap:wrap"><a class="btn btn-dark" href="{p}contact.html">Contact us {ARROW}</a><a class="btn" href="{p}trip-request.html">Request a trip / quote {ARROW}</a></div></div></div></section>'
 
 AIRNAV = 'https://www.airnav.com/airport/KOLS'
 # Official FAA Defense Internet NOTAM Service query, pre-filled for KOLS.
@@ -444,7 +453,8 @@ def home(p):
     <p class="eyebrow">Nogales International Airport · KOLS</p>
     <h1>Fuel, freight &amp; flight <span class="cu">on the border.</span></h1>
     <p class="lede">Copper Mountain Air keeps Southern Arizona moving: Jet A and Avgas on the ramp, FBO service at KOLS, Part 61 flight training, and air and ground cargo out of Nogales.</p>
-    <div class="actions"><a class="btn btn-primary" href="{p}contact.html">Get in touch {ARROW}</a><a class="btn btn-ghost" href="{p}fuel-fbo.html">Fuel &amp; FBO</a><a class="btn btn-ghost" href="#plan-flight">Plan your flight</a><a class="btn btn-ghost btn-notams" id="hero-notams" href="#notams" data-endpoint="{NOTAMS_ENDPOINT}">KOLS NOTAMs</a></div>
+    <div class="actions"><a class="btn btn-primary" href="{p}contact.html">Get in touch {ARROW}</a><a class="btn btn-ghost" href="{p}trip-request.html">Request a trip / quote</a><a class="btn btn-ghost" href="{p}fuel-fbo.html">Fuel &amp; FBO</a><a class="btn btn-ghost" href="#plan-flight">Plan your flight</a><a class="btn btn-ghost btn-notams" id="hero-notams" href="#notams" data-endpoint="{NOTAMS_ENDPOINT}">KOLS NOTAMs</a></div>
+    <a class="fuel-badge" href="{p}fuel-fbo.html" data-fuel="badge" data-endpoint="{FUEL_ENDPOINT}"><span class="k">Fuel prices</span><span data-fuel="badge-text">Current Jet A and 100LL prices</span></a>
     <div class="hero-strip"><span>Jet A</span><span>100LL Avgas</span><span>FBO</span><span>Flight training</span><span>Air &amp; ground cargo</span><span>Santa Cruz County, AZ</span></div>
   </div>
 </section>
@@ -452,9 +462,9 @@ def home(p):
 <section><div class="wrap">
   <div class="section-head reveal"><p class="eyebrow">What we do</p><h2>One stop at KOLS.</h2><p>Whether you're fueling up on a cross-country, parking for the night or moving a time-critical load, start here.</p></div>
   <div class="grid cards">
-    <article class="card reveal"><div class="media">{img("fuel", p, sizes="card")}</div><div class="body"><span class="num">01</span><h3>Fuel</h3><p>Jet A and 100LL Avgas at Nogales International. {FUEL_PRICES}</p><a class="more" href="{p}fuel-fbo.html">Fuel details {ARROW}</a></div></article>
+    <article class="card reveal"><div class="media">{img("fuel", p, sizes="card")}</div><div class="body"><span class="num">01</span><h3>Fuel</h3><p>Jet A and 100LL Avgas at Nogales International.</p><p class="note" data-fuel="card" data-endpoint="{FUEL_ENDPOINT}">{FUEL_PRICES}</p><a class="more" href="{p}fuel-fbo.html">Fuel details {ARROW}</a></div></article>
     <article class="card reveal"><div class="media">{img("fbo", p, sizes="card")}</div><div class="body"><span class="num">02</span><h3>FBO services</h3><p>Ground handling, ramp and tie-down parking, and hangar space on the field.</p><a class="more" href="{p}fuel-fbo.html#fbo">FBO services {ARROW}</a></div></article>
-    <article class="card reveal"><div class="media">{img("cargo", p, sizes="card")}</div><div class="body"><span class="num">03</span><h3>Cargo &amp; freight</h3><p>Time-critical freight out of Nogales by air and ground, including on-demand expedited freight.</p><a class="more" href="{p}cargo.html">Cargo services {ARROW}</a></div></article>
+    <article class="card reveal"><div class="media">{img("cargo", p, sizes="card")}</div><div class="body"><span class="num">03</span><h3>Cargo &amp; freight</h3><p>Time-critical freight out of Nogales by air and ground, including on-demand expedited freight.</p><a class="more" href="{p}cargo.html">Cargo services {ARROW}</a> · <a class="more" href="{p}trip-request.html?service=cargo">Request a quote {ARROW}</a></div></article>
   </div>
 </div></section>
 
@@ -490,7 +500,7 @@ def services(p):
       <li>On-demand expedited freight</li>
       <li>Air cargo coordination and ramp handling at KOLS</li>
     </ul>
-    <p style="display:flex;gap:.6rem;flex-wrap:wrap"><a class="btn btn-dark" href="{p}cargo.html">Cargo &amp; fleet details {ARROW}</a><a class="btn" style="border-color:#d9c9b5;color:var(--ink)" href="{p}contact.html?topic=Cargo%20%2F%20freight">Request a freight quote</a></p></div>
+    <p style="display:flex;gap:.6rem;flex-wrap:wrap"><a class="btn btn-dark" href="{p}cargo.html">Cargo &amp; fleet details {ARROW}</a><a class="btn" style="border-color:#d9c9b5;color:var(--ink)" href="{p}trip-request.html?service=cargo">Request a freight quote</a></p></div>
 </div>
 <div class="wrap" style="padding-top:0">
   <div class="section-head reveal"><p class="eyebrow">Fleet</p><h2>Our trucks.</h2><p>Two trucks for on-demand moves, from smaller van loads to dock-height freight.</p></div>
@@ -551,11 +561,12 @@ def services(p):
 def fuel_fbo(p):
     return page_hero("Fuel &amp; FBO · KOLS", "Fuel up at Nogales International.", "Jet A and 100LL Avgas, plus ramp, hangar and handling services at Nogales International Airport (KOLS).") + f"""
 <section id="fuel"><div class="wrap">
-  <div class="section-head reveal"><p class="eyebrow">Fuel</p><h2>Jet A &amp; 100LL.</h2><p>{FUEL_PRICES}</p></div>
+  <div class="section-head reveal"><p class="eyebrow">Fuel</p><h2>Jet A &amp; 100LL.</h2><p>Live prices from our <a href="{AIRNAV}" rel="noopener">AirNav KOLS listing</a>.</p></div>
   <div class="fuel-notam-banner" data-notams="fuel-banner" hidden></div>
-  <table class="price-table reveal"><thead><tr><th scope="col">Fuel</th><th scope="col">Service</th><th scope="col">Current price</th></tr></thead>
-  <tbody><tr><td><strong>Jet A</strong> (including with additive)</td><td>Full service</td><td><a href="{AIRNAV}" rel="noopener">See current price on AirNav</a></td></tr>
-  <tr><td><strong>100LL Avgas</strong></td><td>Full service</td><td><a href="{AIRNAV}" rel="noopener">See current price on AirNav</a></td></tr></tbody></table>
+  <table class="price-table reveal" data-fuel="table" data-endpoint="{FUEL_ENDPOINT}"><thead><tr><th scope="col">Fuel</th><th scope="col">Service</th><th scope="col">Current price</th></tr></thead>
+  <tbody><tr><td><strong>Jet A</strong> (including with additive)</td><td data-fuel="jeta-service">Full service</td><td data-fuel="jeta-price">Loading current price…</td></tr>
+  <tr><td><strong>100LL Avgas</strong></td><td data-fuel="100ll-service">Full service</td><td data-fuel="100ll-price">Loading current price…</td></tr></tbody></table>
+  <p class="note fuel-updated" data-fuel="updated">Prices are posted on <a href="{AIRNAV}" rel="noopener">AirNav</a>. If a price does not load, call {PHONE_LINK}.</p>
   <p class="note" style="margin-top:1rem">Phillips 66 · {WINGPOINTS} · Fuel hours: {HOURS} · {AFTER_HOURS} · Payment: {CARDS}.</p>
 </div></section>
 <section class="sand" id="fbo"><div class="wrap split">
@@ -846,7 +857,6 @@ def truck_svg(kind):
 </svg>'''
 
 def cargo(p):
-    q = f"{p}contact.html?topic=Cargo%20%2F%20freight"
     return f"""
 <section class="xhero cargo-hero" aria-label="Cargo from KOLS" style="min-height:min(86vh,820px)">
   <div class="hero-media">{img("cargo-sign", p, eager=True, sizes="full")}</div><div class="grid-lines" aria-hidden="true"></div>
@@ -857,7 +867,7 @@ def cargo(p):
         <p class="eyebrow">Cargo · Nogales International Airport · KOLS</p>
         <h1>Freight that <span class="cu">can't wait.</span></h1>
         <p class="lede">Expedited ground and air-to-ground cargo from Nogales International Airport, right on the Nogales, Rio Rico and Santa Cruz County border corridor. Dock-to-dock, liftgate and ramp-to-truck moves, dispatched by our own team at KOLS.</p>
-        <div class="actions"><a class="btn btn-primary" href="{PHONE_HREF}">Call dispatch · {PHONE} {ARROW}</a><a class="btn btn-glass" href="{q}">Request a freight quote</a></div>
+        <div class="actions"><a class="btn btn-primary" href="{PHONE_HREF}">Call dispatch · {PHONE} {ARROW}</a><a class="btn btn-glass" href="{p}trip-request.html?service=cargo">Request a freight quote</a></div>
       </div>
     </div>
     <div class="qstrip">
@@ -915,7 +925,7 @@ def cargo(p):
     <ul class="checks quote-list"><li>Pickup and delivery locations</li><li>Ready time and required delivery time</li><li>Pieces, dimensions and weight</li><li>Dock, liftgate or ramp handling needed</li><li>Any hazmat or special handling needs</li></ul>
     <div class="dispatch">
       <a href="{PHONE_HREF}"><span class="ic">{ico("phone")}</span><span><span class="lbl">Call dispatch</span><b>{PHONE}</b></span></a>
-      <a href="mailto:{CONTACT_TO}?subject=Freight%20quote"><span class="ic">{ico("mail")}</span><span><span class="lbl">Email</span><b>{CONTACT_TO}</b></span></a>
+      <a href="{p}trip-request.html?service=cargo"><span class="ic">{ico("mail")}</span><span><span class="lbl">Request a quote</span><b>Trip request form</b></span></a>
     </div>
   </div>
 </div></section>
@@ -927,8 +937,8 @@ def coming_soon_charter(p):
 <section><div class="wrap split">
   <div class="frame reveal">{img("charter", p)}</div>
   <div class="reveal"><span class="badge soon">Coming soon</span><h2>On-demand charter is in the works.</h2>
-    <p>We're working toward FAA Part 135 on-demand charter from Nogales International. We can't book charter flights yet; join the interest list and we'll reach out when the service opens.</p>
-    <a class="btn btn-dark" href="{p}contact.html?topic=Charter%20interest">Join the interest list {ARROW}</a></div>
+    <p>We're working toward FAA Part 135 on-demand charter from Nogales International. We can't book charter flights yet. You can send a quote request or join the interest list, and we'll follow up when the service opens.</p>
+    <p style="display:flex;gap:.6rem;flex-wrap:wrap"><a class="btn btn-dark" href="{p}trip-request.html?service=charter">Request a charter quote {ARROW}</a><a class="btn" style="border-color:#d9c9b5;color:var(--ink)" href="{p}contact.html?topic=Charter%20interest">Join the interest list</a></p></div>
 </div></section>{cta(p, "Questions in the meantime?", "We're happy to talk. Fuel, FBO, cargo and Part 61 flight training are available today.")}"""
 
 # History copy follows /workspace/cma-kols-history-research.md (Nov 19, 2026); every clause is tied to a source listed in HISTORY_SOURCES.
@@ -1041,6 +1051,41 @@ def about(p):
 <section class="dark"><div class="wrap"><div class="section-head reveal"><p class="eyebrow">Where we are</p><h2>Nogales International Airport (KOLS)</h2><p>About 7 miles northeast of Nogales in Santa Cruz County, Arizona. Address: {STREET}, Nogales, AZ 85621.</p></div>{AIRPORT_FACTS}</div></section>
 {cta(p)}"""
 
+def trip_request(p):
+    return page_hero("Request a quote", "Tell us about the trip.", "Send a cargo freight quote request, or a charter quote request for when that service becomes available. Our operations team at KOLS will follow up.") + f"""
+<section><div class="wrap split" style="align-items:start">
+  <form class="form reveal" id="trip-form" data-to="{CONTACT_TO}" data-endpoint="{TRIP_ENDPOINT}" action="{TRIP_ENDPOINT}" method="POST">
+    <div class="row"><div class="field"><label for="name">Name</label><input id="name" name="name" autocomplete="name" required></div>
+    <div class="field"><label for="company">Company <span class="hint">Optional</span></label><input id="company" name="company" autocomplete="organization"></div></div>
+    <div class="row"><div class="field"><label for="phone">Phone</label><input id="phone" name="phone" type="tel" autocomplete="tel" required></div>
+    <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" required></div></div>
+    <fieldset class="field">
+      <legend>Service</legend>
+      <div class="service-choices">
+        <label class="choice"><input type="radio" name="serviceType" id="service-cargo" value="cargo" required> Cargo / freight</label>
+        <label class="choice"><input type="radio" name="serviceType" id="service-charter" value="charter"> Charter quote request</label>
+      </div>
+      <p class="note charter-caveat">On-demand charter is in development and is not yet offered. A charter quote request is an interest form only — Copper Mountain Air cannot book charter flights today.</p>
+    </fieldset>
+    <div class="row"><div class="field"><label for="pickup">Pickup location</label><input id="pickup" name="pickup" required placeholder="City, airport, or address"></div>
+    <div class="field"><label for="dropoff">Drop-off location</label><input id="dropoff" name="dropoff" required placeholder="City, airport, or address"></div></div>
+    <div class="row"><div class="field"><label for="weight">Weight &amp; dimensions <span class="hint">Optional</span></label><input id="weight" name="weight" placeholder="e.g. 4,000 lbs, 4 pallets 48×40×48 in"></div>
+    <div class="field"><label for="pieces">Pieces or passengers <span class="hint">Optional</span></label><input id="pieces" name="pieces" placeholder="e.g. 6 pieces, or 3 passengers"></div></div>
+    <div class="field"><label for="dates">Preferred dates <span class="hint">Optional</span></label><input id="dates" name="dates" placeholder="Ready date and needed-by date"></div>
+    <div class="field"><label for="notes">Notes <span class="hint">Optional</span></label><textarea id="notes" name="notes" placeholder="Dock or liftgate needs, hazmat, special handling, or anything else we should know"></textarea></div>
+    <input type="text" name="_honey" id="form-honey" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+    <div><button class="btn btn-primary" type="submit" id="trip-submit">Request a quote {ARROW}</button></div>
+    <p class="note" id="form-status" role="status" aria-live="polite"></p>
+    <p class="note">Requests go directly to <a href="mailto:{CONTACT_TO}">{CONTACT_TO}</a>. For immediate dispatch, call {PHONE_LINK}.</p>
+  </form>
+  <div class="contact-cards reveal">
+    <div class="contact-card"><h3>Cargo ground fleet</h3><p>Ford E-150 cargo van for hot-shot and smaller loads, and a 26-ft Hino 268 box truck with liftgate for dock-height freight.</p></div>
+    <div class="contact-card"><h3>Charter</h3><p>FAA Part 135 on-demand charter is in development and is not yet offered. Submit a quote request and we'll follow up when the service opens.</p></div>
+    <div class="contact-card"><h3>Phone</h3><p>{PHONE_LINK}</p></div>
+    <div class="contact-card"><h3>Hours</h3><p>{HOURS_HTML}</p></div>
+  </div>
+</div></section>"""
+
 def contact(p):
     opts = ["Fuel", "FBO / ramp / hangar", "Cargo / freight", "Flight training", "Charter interest", "Billing / payment", "Other"]
     return page_hero("Contact", "Let's talk.", "Fuel, ramp space, a freight quote, or a question: send us a note.") + f"""
@@ -1068,6 +1113,101 @@ def contact(p):
 </div></section>"""
 
 # ---------- BLOG ----------
+
+def gallery_picture(item, p, sizes="(min-width: 900px) 33vw, (min-width: 600px) 50vw, 100vw", eager=False):
+    widths = item["widths"]
+    directory = item.get("dir", "assets/img/gallery")
+    prefix = item.get("prefix", item["id"])
+    mid = [w for w in widths if w >= 800] or widths[-1:]
+    load = 'loading="eager"' if eager else 'loading="lazy"'
+    return (
+        f'<picture>'
+        f'<source type="image/avif" srcset="{srcset_custom(p, directory, prefix, widths, "avif")}" sizes="{sizes}">'
+        f'<source type="image/webp" srcset="{srcset_custom(p, directory, prefix, widths, "webp")}" sizes="{sizes}">'
+        f'<img src="{p}{directory}/{prefix}-{mid[0]}.jpg" srcset="{srcset_custom(p, directory, prefix, widths, "jpg")}" sizes="{sizes}" '
+        f'alt="{html.escape(item["alt"])}" width="{item["w"]}" height="{item["h"]}" {load} decoding="async">'
+        f'</picture>'
+    )
+
+def gallery_items():
+    items = list(GALLERY_MANIFEST["items"])
+    aerial = CHARTS["airport-aerial"]
+    items.append({
+        "id": "aerial",
+        "group": "At the field",
+        "alt": aerial["alt"],
+        "caption": "Aerial view of Nogales International Airport (KOLS), showing Runway 04/22, Taxiway A, and the ramp. USGS/NAIP imagery; not for navigation.",
+        "dir": "assets/img/charts",
+        "prefix": aerial["file"],
+        "widths": aerial["widths"],
+        "w": aerial["w"],
+        "h": aerial["h"],
+        "full": "assets/img/charts/kols-aerial.jpg",
+    })
+    return items
+
+def gallery_full_url(item, p):
+    if item.get("full"):
+        return p + item["full"]
+    directory = item.get("dir", "assets/img/gallery")
+    prefix = item.get("prefix", item["id"])
+    w = item["widths"][-1]
+    return f"{p}{directory}/{prefix}-{w}.jpg"
+
+def gallery(p):
+    items = gallery_items()
+    groups = ["Wings & Wheels", "At the field"]
+    intro = {
+        "Wings & Wheels": "Copper Mountain Air's first Wings &amp; Wheels was held at Nogales International Airport on November 8, 2026.",
+        "At the field": "Taxiway signs, night lighting, and an aerial view of the field at KOLS.",
+    }
+    sections = []
+    for i, group in enumerate(groups):
+        subset = [x for x in items if x["group"] == group]
+        figures = []
+        for j, item in enumerate(subset):
+            full = gallery_full_url(item, p)
+            eager = i == 0 and j < 3
+            figures.append(
+                f'<li><a class="gallery-item" href="{full}" data-caption="{html.escape(item["caption"])}" data-alt="{html.escape(item["alt"])}">'
+                f'{gallery_picture(item, p, eager=eager)}'
+                f'<span class="gallery-cap">{html.escape(item["caption"])}</span></a></li>'
+            )
+        sections.append(
+            f'<section class="{"sand" if i else ""}" id="{ "wings-and-wheels" if group == "Wings & Wheels" else "at-the-field" }">'
+            f'<div class="wrap">'
+            f'<div class="section-head reveal"><p class="eyebrow">Gallery</p><h2>{html.escape(group)}</h2><p>{intro[group]}</p></div>'
+            f'<ul class="photo-grid" data-gallery>{"".join(figures)}</ul>'
+            f'</div></section>'
+        )
+    return page_hero("Gallery · KOLS", "On the field at Nogales.",
+                     "Photographs from Nogales International Airport and Copper Mountain Air's first Wings &amp; Wheels on November 8, 2026.") + "".join(sections) + f"""
+<p class="sr-only" id="gallery-help">The gallery opens a larger image in a dialog. Use the arrow keys to move between photos, and Escape to close.</p>
+"""
+
+# hook used below — gallery.ld is set when gallery() is first called; main() will call a wrapper.
+
+def gallery_schema():
+    images = []
+    for x in gallery_items():
+        images.append({
+            "@type": "ImageObject",
+            "contentUrl": SITE_URL + gallery_full_url(x, ""),
+            "caption": x["caption"],
+            "name": x["alt"],
+        })
+    return {
+        "@context": "https://schema.org",
+        "@type": "ImageGallery",
+        "name": "Photo gallery | Copper Mountain Air at Nogales International Airport (KOLS)",
+        "url": SITE_URL + "gallery.html",
+        "isPartOf": {"@id": SITE_URL + "#business"},
+        "associatedMedia": images,
+    }
+
+def gallery_page(p):
+    return gallery(p)
+
 def load_posts():
     posts = []
     d = os.path.join(ROOT, "posts")
@@ -1189,18 +1329,41 @@ def main():
          "On-demand charter from Nogales International Airport (KOLS) is coming soon. Join the interest list.", coming_soon_charter)
     page("about.html", "About Copper Mountain Air | Nogales International Airport (KOLS)",
          "Copper Mountain Air, LLC provides fuel, FBO services, FAA Part 61 flight training and cargo at Nogales International Airport in Santa Cruz County, Arizona.", about)
+    page("trip-request.html", "Request a Trip or Quote | Copper Mountain Air, Nogales (KOLS)",
+         "Request a cargo freight quote or a charter quote from Copper Mountain Air at Nogales International Airport (KOLS). Charter service is not yet offered.", trip_request)
     page("contact.html", "Contact Copper Mountain Air | Nogales, AZ (KOLS)",
          "Contact Copper Mountain Air at Nogales International Airport (KOLS) for fuel, ramp space, hangars, flight training and freight quotes.", contact)
     page("privacy.html", "Privacy | Copper Mountain Air",
          "How Copper Mountain Air uses cookies and Google Analytics on coppermountainair.com, and how to contact us about this notice.", privacy)
+    page("gallery.html", "Photo Gallery | Copper Mountain Air at Nogales International Airport (KOLS)",
+         "Photos from Nogales International Airport (KOLS) and Copper Mountain Air's first Wings & Wheels on November 8, 2026.",
+         gallery_page, gallery_schema(), "website")
     posts = POSTS
     page("blog/index.html", "Blog | Copper Mountain Air, Nogales International Airport (KOLS)",
          "Airport news, pilot info and freight tips from Copper Mountain Air at Nogales International Airport (KOLS), Arizona.", blog_index(posts))
     for x in posts:
+        og_img, og_w, og_h = None, 1200, 630
+        slot = x.get("image")
+        if slot in MANIFEST:
+            m = MANIFEST[slot]
+            og_w = min(m["widths"], key=lambda n: abs(n-1200))
+            og_h = round(m["h"] * og_w / m["w"])
+            og_img = f"photos/{slot}-{og_w}.jpg"
+        elif slot in IMG and isinstance(IMG[slot], dict) and IMG[slot].get("chart_dir"):
+            v = IMG[slot]
+            og_w = min(v["widths"], key=lambda n: abs(n-1200))
+            og_h = round(v["h"] * og_w / v["w"])
+            og_img = f"charts/{v['prefix']}-{og_w}.jpg"
+        image_url = SITE_URL + "assets/img/" + (og_img or "og-image.jpg")
+        post_url = SITE_URL + "blog/" + x["slug"] + ".html"
         ld = {"@context":"https://schema.org","@type":"BlogPosting","headline":x["title"],"description":x["description"],
               "author":{"@type":"Organization","name":"Copper Mountain Air, LLC"},"publisher":{"@id":SITE_URL+"#business"},
-              "datePublished":"" if x["draft"] else x["date"],"mainEntityOfPage":SITE_URL+"blog/"+x["slug"]+".html"}
-        page(f"blog/{x['slug']}.html", f"{'DRAFT: ' if x['draft'] else ''}{x['title']} | Copper Mountain Air", x["description"], blog_post(x), ld, "article")
+              "datePublished":"" if x["draft"] else x["date"],
+              "dateModified":"" if x["draft"] else x["date"],
+              "image": image_url,
+              "url": post_url,
+              "mainEntityOfPage": {"@type":"WebPage","@id": post_url}}
+        page(f"blog/{x['slug']}.html", f"{'DRAFT: ' if x['draft'] else ''}{x['title']} | Copper Mountain Air", x["description"], blog_post(x), ld, "article", og_img, og_w, og_h)
     for x in UNLISTED:
         page(f"preview/{x['unlisted_token']}/{x.get('unlisted_file') or x['slug']}.html",
              f"PREVIEW: {x['title']} | Copper Mountain Air", x["description"], blog_post(x), None, "article")

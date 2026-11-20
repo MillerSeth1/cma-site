@@ -1,0 +1,147 @@
+{
+ "items": [
+  {
+   "id": "ww-airplane",
+   "group": "Wings & Wheels",
+   "alt": "Best Plane award presented in the terminal at Copper Mountain Air's first Wings & Wheels at Nogales International Airport",
+   "caption": "Best Plane award, Copper Mountain Air's first Wings & Wheels at KOLS, November 8, 2026.",
+   "widths": [
+    400,
+    800,
+    1600
+   ],
+   "w": 1200,
+   "h": 1600
+  },
+  {
+   "id": "ww-car",
+   "group": "Wings & Wheels",
+   "alt": "Best Car award winner standing with an orange classic Chevrolet Camaro on the ramp at Nogales International Airport, mountains behind",
+   "caption": "Best Car award, Wings & Wheels at KOLS, November 8, 2026.",
+   "widths": [
+    400,
+    800,
+    1600
+   ],
+   "w": 1200,
+   "h": 1600
+  },
+  {
+   "id": "ww-motorcycle",
+   "group": "Wings & Wheels",
+   "alt": "Best Motorcycle award winner standing with a black motorcycle on the ramp at Nogales International Airport, mountains behind",
+   "caption": "Best Motorcycle award, Wings & Wheels at KOLS, November 8, 2026.",
+   "widths": [
+    400,
+    800,
+    1600
+   ],
+   "w": 1200,
+   "h": 1600
+  },
+  {
+   "id": "airfield",
+   "group": "At the field",
+   "alt": "Taxiway A and D sign beside the runway at Nogales International Airport, with mountains in the distance",
+   "caption": "Taxiway A and D sign looking toward the runway and the Santa Cruz Valley mountains.",
+   "widths": [
+    400,
+    800,
+    1600
+   ],
+   "w": 1600,
+   "h": 1200
+  },
+  {
+   "id": "taxiway-signs",
+   "group": "At the field",
+   "alt": "Yellow taxiway D and A direction signs at Nogales International Airport",
+   "caption": "Taxiway D and A direction signs on the field at KOLS.",
+   "widths": [
+    400,
+    800,
+    1600
+   ],
+   "w": 1600,
+   "h": 1200
+  },
+  {
+   "id": "runway-22",
+   "group": "At the field",
+   "alt": "Red runway 22-4 location sign at Nogales International Airport",
+   "caption": "Runway 22-4 location sign at Nogales International Airport.",
+   "widths": [
+    400,
+    800,
+    1600
+   ],
+   "w": 1600,
+   "h": 1200
+  },
+  {
+   "id": "taxiway-ad",
+   "group": "At the field",
+   "alt": "Yellow taxiway A and D signs beside the runway at Nogales International Airport, with mountains behind",
+   "caption": "Taxiway A and D signs along the runway at KOLS.",
+   "widths": [
+    400,
+    800,
+    1600
+   ],
+   "w": 1600,
+   "h": 1200
+  },
+  {
+   "id": "cargo-field",
+   "group": "At the field",
+   "alt": "Yellow CARGO direction sign beside the airfield at Nogales International Airport, with hangars and mountains in the distance",
+   "caption": "Cargo direction sign beside the airfield, looking toward the hangars at KOLS.",
+   "widths": [
+    400,
+    800,
+    1600
+   ],
+   "w": 1600,
+   "h": 1200
+  },
+  {
+   "id": "runway-dusk",
+   "group": "At the field",
+   "alt": "Runway at Nogales International Airport at dusk, with edge lights and a windsock",
+   "caption": "Runway 4/22 at dusk, with edge lights and the windsock.",
+   "widths": [
+    400,
+    800,
+    1600
+   ],
+   "w": 1200,
+   "h": 1600
+  },
+  {
+   "id": "fbo-night",
+   "group": "At the field",
+   "alt": "Illuminated FBO taxiway sign and taxiway lights at Nogales International Airport at night",
+   "caption": "FBO taxiway sign and taxiway lights at night.",
+   "widths": [
+    400,
+    800,
+    1600
+   ],
+   "w": 1200,
+   "h": 1600
+  },
+  {
+   "id": "term-night",
+   "group": "At the field",
+   "alt": "Illuminated terminal taxiway sign and airfield lights at Nogales International Airport at night",
+   "caption": "Terminal taxiway sign and airfield lights at night.",
+   "widths": [
+    400,
+    800,
+    1600
+   ],
+   "w": 1200,
+   "h": 1600
+  }
+ ]
+}
