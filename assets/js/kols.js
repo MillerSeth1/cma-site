@@ -166,6 +166,7 @@
     var cat=category(o), wc=windComponents(o), da=densityAlt(o), sky=skyText(o);
     document.documentElement.setAttribute("data-wx-cat", cat||"");
     $$("[data-cat]").forEach(function(e){e.classList.toggle("on", e.getAttribute("data-cat")===cat);});
+    renderIcon(o, when);
     set("[data-wx=cat]", cat||"—");
     set("[data-wx=wind]", windText(o));
     set("[data-wx=wind-sub]", o.wspd===0?"Rwy 22 is the calm-wind runway": (o.wdir==="VRB"?"Direction variable":(o.wvar?"Varying "+pad3(o.wvar[0])+"°–"+pad3(o.wvar[1])+"° · ":"")+"True; ≈"+pad3(o.wdir-VAR_E)+"° magnetic"));
