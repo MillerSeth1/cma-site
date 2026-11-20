@@ -834,16 +834,18 @@ def contact(p):
     opts = ["Fuel", "FBO / ramp / hangar", "Cargo / freight", "Flight training", "Charter interest", "Billing / payment", "Other"]
     return page_hero("Contact", "Let's talk.", "Fuel, ramp space, a freight quote, or a question: send us a note.") + f"""
 <section><div class="wrap split" style="align-items:start">
-  <form class="form reveal" id="contact-form" data-to="{CONTACT_TO}" action="mailto:{CONTACT_TO}" method="post" enctype="text/plain">
+  <form class="form reveal" id="contact-form" data-to="{CONTACT_TO}" data-endpoint="https://formsubmit.co/ajax/{CONTACT_TO}" action="https://formsubmit.co/{CONTACT_TO}" method="POST">
     <div class="row"><div class="field"><label for="name">Name</label><input id="name" name="name" autocomplete="name" required></div>
     <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" required></div></div>
     <div class="row"><div class="field"><label for="phone">Phone <span class="hint">Optional</span></label><input id="phone" name="phone" type="tel" autocomplete="tel"></div>
     <div class="field"><label for="company">Company <span class="hint">Optional</span></label><input id="company" name="company" autocomplete="organization"></div></div>
     <div class="field"><label for="topic">What can we help with?</label><select id="topic" name="topic" required>{''.join(f'<option>{html.escape(o)}</option>' for o in opts)}</select></div>
     <div class="field"><label for="message">Message</label><textarea id="message" name="message" required placeholder="Tail number and ETA, fuel needs, or shipment details (pickup, delivery, pieces, weight)"></textarea></div>
-    <div><button class="btn btn-primary" type="submit">Open in my email app {ARROW}</button></div>
+    <input type="text" name="_honey" id="form-honey" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+    <input type="hidden" name="_template" value="table"><input type="hidden" name="_captcha" value="false"><input type="hidden" name="_subject" value="Website inquiry — Copper Mountain Air">
+    <div><button class="btn btn-primary" type="submit" id="contact-submit">Send message {ARROW}</button></div>
     <p class="note" id="form-status" role="status" aria-live="polite"></p>
-    <p class="note">This form opens a pre-filled email to <a href="mailto:{CONTACT_TO}">{CONTACT_TO}</a> in your email app. Nothing is sent until you press Send there.</p>
+    <p class="note">Messages go directly to <a href="mailto:{CONTACT_TO}">{CONTACT_TO}</a>. For immediate ramp or fuel needs, call {PHONE_LINK}.</p>
   </form>
   <div class="contact-cards reveal">
     <div class="contact-card"><h3>Phone</h3><p>{PHONE_LINK}</p></div>
