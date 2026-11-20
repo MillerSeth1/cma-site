@@ -3,6 +3,65 @@
    Situational awareness only. Not for navigation or flight planning. */
 (function(){
   "use strict";
+
+  var ES = document.documentElement.lang === "es";
+  var T = ES ? {
+    noSky: "Sin reporte de cielo",
+    clear: "Despejado",
+    noClouds: "Sin nubes por debajo de 12,000 ft (ASOS)",
+    skyClear: "Cielo despejado",
+    few: "Pocas",
+    sct: "Dispersas",
+    bkn: "Rotas",
+    ovc: "Cubierto",
+    vv: "Vis. vertical",
+    noCeiling: "Sin techo",
+    calm: "Calma",
+    variable: "Variable",
+    justNow: "ahora mismo",
+    minAgo: function(m){ return "hace " + m + " min"; },
+    hoursAgo: function(h,m){ return "hace " + h + " h " + m + " min"; },
+    loading: "Cargando datos en vivo de KOLS…",
+    refreshing: "Actualizando…",
+    live: "En vivo · ASOS de la FAA",
+    via: "vía ",
+    unavailable: "Datos en vivo no disponibles en este momento",
+    metarFail: "No se pudo alcanzar la fuente de clima en vivo (red o bloqueador). Use el enlace de AviationWeather.gov o llame al ASOS al 520-287-9332.",
+    copied: "Copiado",
+    copy: "Copiar METAR",
+    radarFail: "El radar no está disponible en este momento.",
+    sample: function(when, wind, temp){ return "Muestra más reciente del ASOS a 5 minutos a las " + when + ": viento " + wind + (temp != null ? ", " + temp : "") + "."; },
+    az: " hora AZ",
+    layers: {"FAA VFR Sectional":"Seccional VFR de la FAA","FAA IFR Enroute Low":"IFR Enroute Low de la FAA","25 / 50 NM range rings":"Anillos de 25 / 50 NM","Cross-country routes":"Rutas de travesía","Airports":"Aeropuertos"}
+  } : {
+    noSky: "No sky report",
+    clear: "Clear",
+    noClouds: "No clouds below 12,000 ft (ASOS)",
+    skyClear: "Sky clear",
+    few: "Few",
+    sct: "Scattered",
+    bkn: "Broken",
+    ovc: "Overcast",
+    vv: "Vertical vis",
+    noCeiling: "No ceiling",
+    calm: "Calm",
+    variable: "Variable",
+    justNow: "just now",
+    minAgo: function(m){ return m + " min ago"; },
+    hoursAgo: function(h,m){ return h + " h " + m + " min ago"; },
+    loading: "Loading live KOLS data…",
+    refreshing: "Refreshing…",
+    live: "Live · FAA ASOS",
+    via: "via ",
+    unavailable: "Live data unavailable right now",
+    metarFail: "Couldn't reach the live weather feed (network or content blocker). Use the AviationWeather.gov link or call the ASOS at 520-287-9332.",
+    copied: "Copied",
+    copy: "Copy METAR",
+    radarFail: "Radar is unavailable right now.",
+    sample: function(when, wind, temp){ return "Newer ASOS 5-minute sample at " + when + ": wind " + wind + (temp != null ? ", " + temp : "") + "."; },
+    az: " AZ time",
+    layers: {"FAA VFR Sectional":"FAA VFR Sectional","FAA IFR Enroute Low":"FAA IFR Enroute Low","25 / 50 NM range rings":"25 / 50 NM range rings","Cross-country routes":"Cross-country routes","Airports":"Airports"}
+  };
   var ELEV = 3955;            // ft MSL (surveyed, FAA)
   var VAR_E = 9;              // magnetic variation, 9°E (FAA)
   var RWYS = [{id:"04",mag:37},{id:"22",mag:217}];   // FAA runway magnetic headings
@@ -12,7 +71,7 @@
   function set(sel,txt){$$(sel).forEach(function(e){e.textContent=txt;});}
   function round(n){return Math.round(n);}
   function pad3(n){n=((round(n)%360)+360)%360;if(n===0)n=360;return ("00"+n).slice(-3);}
-  function fmtNum(n){return round(n).toLocaleString("en-US");}
+  function fmtNum(n){return round(n).toLocaleString(ES ? "es-MX" : "en-US");}
 
   /* ---------- METAR parsing ---------- */
   function parseVis(tokens,i){
@@ -97,24 +156,24 @@
     return {rw:res, best:res[0].id, wm:wm};
   }
   function skyText(o){
-    if(!o.clouds.length) return {main:"—",sub:"No sky report"};
+    if(!o.clouds.length) return {main:"—",sub:T.noSky};
     var first=o.clouds[0];
-    if(/CLR|SKC|NSC|NCD/.test(first.amt)) return {main:"Clear",sub:first.amt==="CLR"?"No clouds below 12,000 ft (ASOS)":"Sky clear"};
-    var names={FEW:"Few",SCT:"Scattered",BKN:"Broken",OVC:"Overcast",VV:"Vertical vis"};
+    if(/CLR|SKC|NSC|NCD/.test(first.amt)) return {main:T.clear,sub:first.amt==="CLR"?T.noClouds:T.skyClear};
+    var names={FEW:T.few,SCT:T.sct,BKN:T.bkn,OVC:T.ovc,VV:T.vv};
     var c=ceiling(o);
-    return {main: c!=null ? fmtNum(c)+" ft" : "No ceiling", sub:o.clouds.map(function(l){return (names[l.amt]||l.amt)+(l.base!=null?" "+fmtNum(l.base):"")+(l.type?" "+l.type:"");}).join(" · ")};
+    return {main: c!=null ? fmtNum(c)+" ft" : T.noCeiling, sub:o.clouds.map(function(l){return (names[l.amt]||l.amt)+(l.base!=null?" "+fmtNum(l.base):"")+(l.type?" "+l.type:"");}).join(" · ")};
   }
   function cToF(c){return c*9/5+32;}
   function visText(o){if(o.vis==null)return "—";var v=o.vis;var s=v>=10?"10":(v%1? (v<1? (Math.round(v*4)/4).toString():v.toFixed(2).replace(/0$/,"")):String(v));return (o.visPlus?"6+":(o.visMinus?"<"+s:s));}
   function windText(o){
     if(o.wspd==null) return "—";
-    if(o.wspd===0) return "Calm";
-    return (o.wdir==="VRB"?"Variable":pad3(o.wdir)+"°")+" @ "+o.wspd+(o.wgst?" G"+o.wgst:"")+" kt";
+    if(o.wspd===0) return T.calm;
+    return (o.wdir==="VRB"?T.variable:pad3(o.wdir)+"°")+" @ "+o.wspd+(o.wgst?" G"+o.wgst:"")+" kt";
   }
-  var TZ_FMT = (function(){try{return new Intl.DateTimeFormat("en-US",{timeZone:"America/Phoenix",hour:"numeric",minute:"2-digit",month:"short",day:"numeric"});}catch(e){return null;}})();
+  var TZ_FMT = (function(){try{return new Intl.DateTimeFormat(ES?"es-MX":"en-US",{timeZone:"America/Phoenix",hour:"numeric",minute:"2-digit",month:"short",day:"numeric"});}catch(e){return null;}})();
   function zulu(d){return ("0"+d.getUTCDate()).slice(-2)+("0"+d.getUTCHours()).slice(-2)+("0"+d.getUTCMinutes()).slice(-2)+"Z";}
-  function mst(d){return TZ_FMT?TZ_FMT.format(d)+" AZ time":d.toISOString();}
-  function ago(d){var m=Math.round((Date.now()-d.getTime())/60000);return m<1?"just now":(m<60?m+" min ago":Math.floor(m/60)+" h "+(m%60)+" min ago");}
+  function mst(d){return TZ_FMT?TZ_FMT.format(d)+T.az:d.toISOString();}
+  function ago(d){var m=Math.round((Date.now()-d.getTime())/60000);return m<1?T.justNow:(m<60?T.minAgo(m):T.hoursAgo(Math.floor(m/60), m%60));}
 
 
   function azHour(d){
@@ -230,7 +289,7 @@
       var o, when, sample="", src;
       if(cands.length && (!tL || (tL - cands[0].t) < 90*60000)){
         o = parseMetar(cands[0].raw.replace(/^(METAR|SPECI)\s+/,"")); when = cands[0].t; src = cands[0].src;
-        if(tL && tL > when){ var s=fromProps(latest); if(s.wspd!=null) sample="Newer ASOS 5-minute sample at "+mst(tL)+": wind "+windText(s)+(s.temp!=null?", "+s.temp.toFixed(0)+"°C":"")+"."; }
+        if(tL && tL > when){ var s=fromProps(latest); if(s.wspd!=null) sample=T.sample(mst(tL), windText(s), s.temp!=null?s.temp.toFixed(0)+"°C":null); }
       } else if(latest){ o = fromProps(latest); when = tL; src = "NWS"; }
       else throw new Error("No observations");
       return {o:o, when:when, src:src, sample:sample};
@@ -239,18 +298,18 @@
   function load(manual){
     if(!$("[data-wx]")) return;
     document.documentElement.classList.add("wx-loading");
-    set("[data-wx=status]", manual?"Refreshing…":"Loading live KOLS data…");
+    set("[data-wx=status]", manual?T.refreshing:T.loading);
     var primary = METAR_API ? getJSON(METAR_API).then(fromAwc) : Promise.reject(new Error("no metar proxy"));
     primary.catch(function(){return fromNwsIem();}).then(function(r){
       last=r.o; render(r.o, r.when, r.sample);
       document.documentElement.classList.remove("wx-loading","wx-error");
       var via = r.src==="AWC"?"AviationWeather.gov":(r.src==="IEM"?"Iowa Environmental Mesonet":"National Weather Service");
-      set("[data-wx=status]","Live · FAA ASOS"); set("[data-wx=src]","via "+via);
+      set("[data-wx=status]",T.live); set("[data-wx=src]",T.via+via);
     }).catch(function(){
       document.documentElement.classList.remove("wx-loading");document.documentElement.classList.add("wx-error");
-      set("[data-wx=status]","Live data unavailable right now");
+      set("[data-wx=status]",T.unavailable);
       set("[data-wx=pill]","KOLS · ASOS 121.125 · 520-287-9332");
-      set("[data-wx=metar]","Couldn't reach the live weather feed (network or content blocker). Use the AviationWeather.gov link or call the ASOS at 520-287-9332.");
+      set("[data-wx=metar]",T.metarFail);
     });
   }
   function initWx(){
@@ -259,7 +318,7 @@
     var rb=$("#wx-refresh"); if(rb) rb.addEventListener("click",function(){load(true);});
     var cb=$("#wx-copy"); if(cb) cb.addEventListener("click",function(){
       var t=last&&last.raw; if(!t) return;
-      var done=function(){cb.textContent="Copied";setTimeout(function(){cb.textContent="Copy METAR";},1600);};
+      var done=function(){cb.textContent=T.copied;setTimeout(function(){cb.textContent=T.copy;},1600);};
       if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(done,function(){});}
     });
   }
@@ -295,7 +354,9 @@
       byId[d.id]=m;
     });
     rings.addTo(map); routes.addTo(map); pins.addTo(map);
-    L.control.layers(base,{"25 / 50 NM range rings":rings,"Cross-country routes":routes,"Airports":pins},{collapsed:window.innerWidth<760,position:"topright"}).addTo(map);
+    var baseLabeled={}; Object.keys(base).forEach(function(k){baseLabeled[T.layers[k]||k]=base[k];});
+    var overlayLabeled={}; overlayLabeled[T.layers["25 / 50 NM range rings"]||"25 / 50 NM range rings"]=rings; overlayLabeled[T.layers["Cross-country routes"]||"Cross-country routes"]=routes; overlayLabeled[T.layers["Airports"]||"Airports"]=pins;
+    L.control.layers(baseLabeled,overlayLabeled,{collapsed:window.innerWidth<760,position:"topright"}).addTo(map);
     L.control.scale({imperial:true,metric:false,position:"bottomleft"}).addTo(map);
     map.fitBounds(L.latLngBounds(data.dest.map(function(d){return [d.lat,d.lon];}).concat([[K.lat-0.08,K.lon]])),{padding:[24,24]});
     $$("[data-goto]").forEach(function(b){b.addEventListener("click",function(){
@@ -338,7 +399,7 @@
         setTimeout(function(){map.invalidateSize();},250);
         window.__kolsRadar=map;
       }).catch(function(){
-        box.innerHTML="<p class='wx-radar-fail'>Radar is unavailable right now.</p>";
+        box.innerHTML="<p class='wx-radar-fail'>"+T.radarFail+"</p>";
       });
     }
     if("IntersectionObserver" in window){

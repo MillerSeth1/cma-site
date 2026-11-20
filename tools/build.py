@@ -120,23 +120,156 @@ def img(slot, p, cls="", eager=False, sizes="half"):
         d, prefix = v["chart_dir"], v["prefix"]
         return (f'<picture><source type="image/avif" srcset="{srcset_custom(p, d, prefix, v["widths"], "avif")}" sizes="{sz}">'
                 f'<source type="image/webp" srcset="{srcset_custom(p, d, prefix, v["widths"], "webp")}" sizes="{sz}">'
-                f'<img src="{p}{d}/{prefix}-{mid[0]}.jpg" srcset="{srcset_custom(p, d, prefix, v["widths"], "jpg")}" sizes="{sz}" alt="{html.escape(v["alt"])}" '
+                f'<img src="{p}{d}/{prefix}-{mid[0]}.jpg" srcset="{srcset_custom(p, d, prefix, v["widths"], "jpg")}" sizes="{sz}" alt="{html.escape(slot_alt(slot, v["alt"]))}" '
                 f'{load} decoding="async" width="{v["w"]}" height="{v["h"]}"{c}></picture>')
     if isinstance(v, dict):
-        return f'<img src="{p}assets/img/{v["file"]}" alt="{html.escape(v["alt"])}" {load} decoding="async" width="1200" height="800"{c}>'
+        return f'<img src="{p}assets/img/{v["file"]}" alt="{html.escape(slot_alt(slot, v["alt"]))}" {load} decoding="async" width="1200" height="800"{c}>'
     m = MANIFEST[slot]; sz = SIZES.get(sizes, sizes)
     mid = [w for w in m["widths"] if w >= 1200] or m["widths"][-1:]
     return (f'<picture><source type="image/avif" srcset="{srcset(slot, p, "avif")}" sizes="{sz}">'
             f'<source type="image/webp" srcset="{srcset(slot, p, "webp")}" sizes="{sz}">'
-            f'<img src="{p}assets/img/photos/{slot}-{mid[0]}.jpg" srcset="{srcset(slot, p, "jpg")}" sizes="{sz}" alt="{html.escape(v)}" '
+            f'<img src="{p}assets/img/photos/{slot}-{mid[0]}.jpg" srcset="{srcset(slot, p, "jpg")}" sizes="{sz}" alt="{html.escape(slot_alt(slot, v))}" '
             f'{load} decoding="async" width="{m["w"]}" height="{m["h"]}"{c}></picture>')
 
 def ph(t): return f'<span class="ph">[{t}]</span>'
+
+# Language context set by page() while a page is being written.
+LANG = "en"
+LP = ""  # prefix to the current language root (same as asset prefix on English pages)
+
+def is_es():
+    return LANG == "es"
+
+def en_path(path):
+    return path[3:] if path.startswith("es/") else path
+
+def rel_href(from_path, to_path):
+    from_dir = from_path.rsplit("/", 1)[0] if "/" in from_path else ""
+    ups = from_dir.count("/") + (1 if from_dir else 0)
+    return ("../" * ups) + to_path
+
+def canonical_url(path):
+    if path == "index.html":
+        return SITE_URL
+    if path == "es/index.html":
+        return SITE_URL + "es/"
+    return SITE_URL + path
+
+def hreflang_tags(path):
+    if path == "404.html" or path.startswith("preview/"):
+        return ""
+    ep = en_path(path)
+    en_url = SITE_URL if ep == "index.html" else SITE_URL + ep
+    es_url = SITE_URL + "es/" if ep == "index.html" else SITE_URL + "es/" + ep
+    return (f'<link rel="alternate" hreflang="en" href="{en_url}">\n'
+            f'<link rel="alternate" hreflang="es" href="{es_url}">\n'
+            f'<link rel="alternate" hreflang="x-default" href="{en_url}">\n')
+
+def lang_switch_html(path):
+    if path.startswith("preview/"):
+        return ""
+    ep = en_path(path)
+    if ep == "404.html":
+        en_href = rel_href(path, "index.html")
+        es_href = rel_href(path, "es/index.html")
+    else:
+        en_href = rel_href(path, ep)
+        es_href = rel_href(path, "es/" + ep)
+    en_cur, es_cur = (' aria-current="true"', "") if LANG == "en" else ("", ' aria-current="true"')
+    label = "Idioma" if is_es() else "Language"
+    return (f'<nav class="lang-switch" aria-label="{label}">'
+            f'<a href="{en_href}" lang="en" hreflang="en"{en_cur}>EN</a>'
+            f'<span class="lang-sep" aria-hidden="true">|</span>'
+            f'<a href="{es_href}" lang="es" hreflang="es"{es_cur}>ES</a>'
+            f'</nav>')
+
+def slot_alt(slot, fallback):
+    if LANG == "es" and slot in IMG_ALT_ES:
+        return IMG_ALT_ES[slot]
+    return fallback
+
+def hours_text():
+    return "Lunes a sábado de 7:00 a.m. a 7:00 p.m., domingo de 7:00 a.m. a 5:00 p.m." if is_es() else HOURS
+
+def hours_html():
+    return "Lunes a sábado de 7:00 a.m. a 7:00 p.m.<br>Domingo de 7:00 a.m. a 5:00 p.m." if is_es() else HOURS_HTML
+
+def after_hours():
+    if is_es():
+        return f"El servicio fuera de horario está disponible con arreglo previo y puede aplicar un cargo. Llame al {PHONE_LINK} para más información."
+    return AFTER_HOURS
+
+def cards_text():
+    return "Visa, Mastercard, American Express y Discover" if is_es() else CARDS
+
+def wingpoints():
+    if is_es():
+        return 'Participante del programa de recompensas Phillips 66 <a href="https://www.wingpoints.com/" rel="noopener">WingPoints</a>'
+    return WINGPOINTS
+
+def fuel_prices():
+    if is_es():
+        return f'Los precios actuales de Jet A y 100LL se publican en <a href="{AIRNAV}" rel="noopener">AirNav</a>.'
+    return FUEL_PRICES
+
+IMG_ALT_ES = {
+  "hero": "Avión bimotor de frente en la rampa del Aeropuerto Internacional de Nogales, con montañas al fondo",
+  "ramp-band": "Interior de un hangar en el Aeropuerto Internacional de Nogales",
+  "airfield": "Letrero de calle de rodaje junto al campo del Aeropuerto Internacional de Nogales, con montañas al fondo",
+  "taxiway-signs": "Letreros amarillos de dirección en calles de rodaje en el Aeropuerto Internacional de Nogales",
+  "fbo": "Aeronave en el interior de un hangar en el Aeropuerto Internacional de Nogales",
+  "cargo": "Letrero amarillo de CARGO junto al campo del Aeropuerto Internacional de Nogales",
+  "cargo-sign": "Primer plano de un letrero amarillo de CARGO en una calle de rodaje del Aeropuerto Internacional de Nogales",
+  "kols-guide": "Letrero rojo de la pista 22-4 en el Aeropuerto Internacional de Nogales",
+  "kols-sectional": "Carta seccional VFR de Phoenix de la FAA, centrada en el Aeropuerto Internacional de Nogales (KOLS)",
+  "training": "Letreros amarillos de dirección en calles de rodaje en el Aeropuerto Internacional de Nogales",
+  "charter": "La pista del Aeropuerto Internacional de Nogales al anochecer",
+  "aero-1920": "Fila de biplanos del 12th Aero Squadron en el pasto de Camp Stephen D. Little, cerca de Nogales, 1920 (U.S. Air Service, dominio público)",
+  "fuel": "Marcador de posición: foto de combustible próximamente",
+  "josh-berg": "Marcador de posición: Josh Berg, foto próximamente",
+  "rnav-gps-a": "Procedimiento de aproximación por instrumentos RNAV (GPS)-A de la FAA para el Aeropuerto Internacional de Nogales (KOLS)",
+  "vor-b": "Procedimiento de aproximación por instrumentos VOR-B de la FAA para el Aeropuerto Internacional de Nogales (KOLS)",
+  "airport-aerial": "Fotografía aérea del Aeropuerto Internacional de Nogales (KOLS) que muestra la pista 04/22, la calle de rodaje A y la rampa",
+}
+
+GALLERY_I18N = {
+  "ww-airplane": ("Premio al mejor avión, primer Wings & Wheels de Copper Mountain Air en KOLS, 8 de noviembre de 2026.",
+                  "Premio al mejor avión, entregado en la terminal en el primer Wings & Wheels de Copper Mountain Air en el Aeropuerto Internacional de Nogales"),
+  "ww-car": ("Premio al mejor auto, Wings & Wheels en KOLS, 8 de noviembre de 2026.",
+             "Ganador del premio al mejor auto, junto a un Chevrolet Camaro clásico naranja en la rampa del Aeropuerto Internacional de Nogales, con montañas al fondo"),
+  "ww-motorcycle": ("Premio a la mejor motocicleta, Wings & Wheels en KOLS, 8 de noviembre de 2026.",
+                    "Ganador del premio a la mejor motocicleta, junto a una motocicleta negra en la rampa del Aeropuerto Internacional de Nogales, con montañas al fondo"),
+  "airfield": ("Letrero de las calles de rodaje A y D, hacia la pista y las montañas del valle de Santa Cruz.",
+               "Letrero de las calles de rodaje A y D junto a la pista del Aeropuerto Internacional de Nogales, con montañas a lo lejos"),
+  "taxiway-signs": ("Letreros de dirección de las calles de rodaje D y A en el campo de KOLS.",
+                    "Letreros amarillos de dirección de las calles de rodaje D y A en el Aeropuerto Internacional de Nogales"),
+  "runway-22": ("Letrero de ubicación de la pista 22-4 en el Aeropuerto Internacional de Nogales.",
+                "Letrero rojo de ubicación de la pista 22-4 en el Aeropuerto Internacional de Nogales"),
+  "taxiway-ad": ("Letreros de las calles de rodaje A y D a lo largo de la pista en KOLS.",
+                 "Letreros amarillos de las calles de rodaje A y D junto a la pista del Aeropuerto Internacional de Nogales, con montañas al fondo"),
+  "cargo-field": ("Letrero de CARGO junto al campo, hacia los hangares de KOLS.",
+                  "Letrero amarillo de CARGO junto al campo del Aeropuerto Internacional de Nogales, con hangares y montañas a lo lejos"),
+  "runway-dusk": ("Pista 4/22 al anochecer, con luces de borde y el manga de viento.",
+                  "Pista del Aeropuerto Internacional de Nogales al anochecer, con luces de borde y una manga de viento"),
+  "fbo-night": ("Letrero de FBO en la calle de rodaje y luces de rodaje de noche.",
+                "Letrero iluminado de FBO y luces de calle de rodaje en el Aeropuerto Internacional de Nogales de noche"),
+  "term-night": ("Letrero de la terminal en la calle de rodaje y luces del campo de noche.",
+                 "Letrero iluminado de la terminal y luces del campo en el Aeropuerto Internacional de Nogales de noche"),
+}
+
+def gallery_copy(item, field):
+    if is_es() and item.get("id") in GALLERY_I18N:
+        cap, alt = GALLERY_I18N[item["id"]]
+        return cap if field == "caption" else alt
+    return item[field]
 
 # Home is reached from the logo; Cargo has its own page (Seth, Nov 19, 2026).
 NAV = [("services.html","Services"),("fuel-fbo.html","Fuel &amp; FBO"),
        ("flight-training.html","Flight Training"),("cargo.html","Cargo"),("charter.html","Charter"),("about.html","About"),
        ("gallery.html","Gallery"),("blog/index.html","Blog")]
+NAV_ES = [("services.html","Servicios"),("fuel-fbo.html","Combustible y FBO"),
+       ("flight-training.html","Instrucción de vuelo"),("cargo.html","Carga"),("charter.html","Chárter"),("about.html","Nosotros"),
+       ("gallery.html","Galería"),("blog/index.html","Blog")]
 # Page-specific assets. Leaflet 1.9.4 is vendored in assets/vendor/leaflet (BSD-2-Clause) so the map never depends on a CDN.
 PAGE_CSS = {"about.html": ["assets/css/pages.css"], "flight-training.html": ["assets/vendor/leaflet/leaflet.css", "assets/css/pages.css"], "cargo.html": ["assets/css/pages.css"]}
 PAGE_JS = {
@@ -161,25 +294,33 @@ JSONLD_BIZ = {
 }
 
 def head(title, desc, path, p, extra_ld=None, og_type="website", og_img=None, og_w=1200, og_h=630):
-    pre = (f'<link rel="preload" as="image" type="image/avif" imagesrcset="{srcset("hero", p, "avif")}" imagesizes="100vw" fetchpriority="high">\n') if path == "index.html" else ""
-    url = SITE_URL + ("" if path == "index.html" else path)
+    pre = (f'<link rel="preload" as="image" type="image/avif" imagesrcset="{srcset("hero", p, "avif")}" imagesizes="100vw" fetchpriority="high">\n') if en_path(path) == "index.html" else ""
+    url = canonical_url(path)
     og = SITE_URL + "assets/img/" + (og_img or "og-image.jpg")
-    ld = [JSONLD_BIZ] + ([extra_ld] if extra_ld else [])
+    biz = json.loads(json.dumps(JSONLD_BIZ))
+    if is_es():
+        biz["description"] = "Combustible (Jet A y 100LL), servicios de FBO, instrucción de vuelo FAA Part 61, y carga aérea y terrestre en el Aeropuerto Internacional de Nogales (KOLS) en Nogales, Arizona."
+    ld = [biz] + ([extra_ld] if extra_ld else [])
     robots = '<meta name="robots" content="noindex, nofollow">\n' if (PREVIEW or path.startswith("preview/")) else ''
+    locale = "es_MX" if is_es() else "en_US"
+    locale_alt = "en_US" if is_es() else "es_MX"
+    hreflang = hreflang_tags(path)
     return f"""<!doctype html>
-<html lang="en" class="no-js">
+<html lang="{'es' if is_es() else 'en'}" class="no-js">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{title}</title>
 <meta name="description" content="{html.escape(desc)}">
 {robots}<link rel="canonical" href="{url}">
-<meta name="theme-color" content="#0a141b">
+{hreflang}<meta name="theme-color" content="#0a141b">
 <link rel="icon" href="{p}assets/img/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="{p}assets/img/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="{p}assets/img/apple-touch-icon.png">
 <meta property="og:type" content="{og_type}">
 <meta property="og:site_name" content="Copper Mountain Air">
+<meta property="og:locale" content="{locale}">
+<meta property="og:locale:alternate" content="{locale_alt}">
 <meta property="og:title" content="{title}">
 <meta property="og:description" content="{html.escape(desc)}">
 <meta property="og:url" content="{url}">
@@ -194,26 +335,36 @@ def head(title, desc, path, p, extra_ld=None, og_type="website", og_img=None, og
 <meta name="geo.placename" content="Nogales, Arizona">
 <link rel="preload" href="{p}assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="{p}assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
-{pre}<link rel="stylesheet" href="{p}assets/css/site.css">{''.join(f'\n<link rel="stylesheet" href="{p}{c}">' for c in PAGE_CSS.get(path, []))}
+{pre}<link rel="stylesheet" href="{p}assets/css/site.css">{''.join(f'\n<link rel="stylesheet" href="{p}{c}">' for c in PAGE_CSS.get(en_path(path), []))}
 <script>document.documentElement.className="js";</script>
 <script type="application/ld+json">{json.dumps(ld if len(ld)>1 else ld[0], ensure_ascii=False)}</script>
 {GA_HEAD}</head>"""
 
 def header(path, p):
+    nav = NAV_ES if is_es() else NAV
+    contact_label = "Contacto" if is_es() else "Contact"
+    menu_label = "Menú" if is_es() else "Menu"
+    skip = "Ir al contenido" if is_es() else "Skip to content"
+    home_label = "Copper Mountain Air, inicio" if is_es() else "Copper Mountain Air home"
+    nav_label = "Principal" if is_es() else "Primary"
     items = []
-    for href, label in NAV:
-        cur = ' aria-current="page"' if (href == path or (href == "blog/index.html" and path.startswith("blog/"))) else ""
-        items.append(f'<li><a href="{p}{href}"{cur}>{label}</a></li>')
-    contact_cur = ' aria-current="page"' if path == "contact.html" else ""
-    items.append(f'<li><a class="nav-cta" href="{p}contact.html"{contact_cur}>Contact</a></li>')
+    cur_path = en_path(path)
+    for href, label in nav:
+        cur = ' aria-current="page"' if (href == cur_path or (href == "blog/index.html" and cur_path.startswith("blog/"))) else ""
+        items.append(f'<li><a href="{LP}{href}"{cur}>{label}</a></li>')
+    contact_cur = ' aria-current="page"' if cur_path == "contact.html" else ""
+    items.append(f'<li><a class="nav-cta" href="{LP}contact.html"{contact_cur}>{contact_label}</a></li>')
     bar = ('<div class="preview-bar"><strong>Preview draft.</strong> Not yet published.</div>') if PREVIEW else ""
     return f"""<body>
-<a class="skip" href="#main">Skip to content</a>
+<a class="skip" href="#main">{skip}</a>
 {bar}
 <header class="site-header"><div class="wrap">
-  <a class="brand" href="{p}index.html" aria-label="Copper Mountain Air home"><img src="{p}assets/img/logo-light.svg" alt="Copper Mountain Air" width="305" height="40"></a>
-  <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">Menu</button>
-  <nav id="site-nav" class="site-nav" aria-label="Primary"><ul>{''.join(items)}</ul></nav>
+  <a class="brand" href="{LP}index.html" aria-label="{home_label}"><img src="{p}assets/img/logo-light.svg" alt="Copper Mountain Air" width="305" height="40"></a>
+  <div class="header-tools">
+    {lang_switch_html(path)}
+    <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">{menu_label}</button>
+  </div>
+  <nav id="site-nav" class="site-nav" aria-label="{nav_label}"><ul>{''.join(items)}</ul></nav>
 </div></header>
 <main id="main">"""
 
@@ -227,36 +378,83 @@ SOCIAL = (
 )
 
 def social_links():
+    on = "en" if is_es() else "on"
+    group = "Copper Mountain Air en redes sociales" if is_es() else "Copper Mountain Air on social media"
     items = []
     for name, href, path in SOCIAL:
+        label = f"Copper Mountain Air {on} {name}" if is_es() else f"Copper Mountain Air on {name}"
         items.append(
-            f'<a href="{href}" target="_blank" rel="noopener" aria-label="Copper Mountain Air on {name}">'
+            f'<a href="{href}" target="_blank" rel="noopener" aria-label="{label}">'
             f'<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">{path}</svg></a>'
         )
-    return f'<nav class="social social-links" aria-label="Copper Mountain Air on social media">{"".join(items)}</nav>'
+    return f'<nav class="social social-links" aria-label="{group}">{"".join(items)}</nav>'
+
 
 def footer(p):
+    if is_es():
+        blurb = "Combustible, FBO y carga en el Aeropuerto Internacional de Nogales (KOLS), al servicio de Nogales y el condado de Santa Cruz, Arizona."
+        visit, contact, explore = "Visítanos", "Contacto", "Explorar"
+        send = "Enviar un mensaje"
+        legal_note = "El servicio de chárter bajo demanda estará disponible pronto y aún no se ofrece."
+        privacy = "Privacidad"
+        hours = hours_html()
+        links = (
+            f'<li><a href="{LP}services.html">Servicios</a></li>'
+            f'<li><a href="{LP}fuel-fbo.html">Combustible y FBO</a></li>'
+            f'<li><a href="{LP}flight-training.html">Instrucción de vuelo</a></li>'
+            f'<li><a href="{LP}cargo.html">Carga</a></li>'
+            f'<li><a href="{LP}charter.html">Chárter</a></li>'
+            f'<li><a href="{LP}trip-request.html">Solicite una cotización</a></li>'
+            f'<li><a href="{LP}about.html">Nosotros</a></li>'
+            f'<li><a href="{LP}gallery.html">Galería</a></li>'
+            f'<li><a href="{LP}blog/index.html">Blog</a></li>'
+        )
+        send_li = f'<li><a href="{LP}contact.html">{send}</a></li><li><a href="{LP}trip-request.html">Solicite un viaje / cotización</a></li>'
+    else:
+        blurb = "Fuel, FBO and cargo at Nogales International Airport (KOLS), serving Nogales and Santa Cruz County, Arizona."
+        visit, contact, explore = "Visit", "Contact", "Explore"
+        legal_note = "On-demand charter is coming soon and is not yet offered."
+        privacy = "Privacy"
+        hours = HOURS_HTML
+        links = (
+            f'<li><a href="{p}services.html">Services</a></li>'
+            f'<li><a href="{p}fuel-fbo.html">Fuel &amp; FBO</a></li>'
+            f'<li><a href="{p}flight-training.html">Flight training</a></li>'
+            f'<li><a href="{p}cargo.html">Cargo</a></li>'
+            f'<li><a href="{p}charter.html">Charter</a></li>'
+            f'<li><a href="{p}trip-request.html">Request a quote</a></li>'
+            f'<li><a href="{p}about.html">About</a></li>'
+            f'<li><a href="{p}gallery.html">Gallery</a></li>'
+            f'<li><a href="{p}blog/index.html">Blog</a></li>'
+        )
+        send_li = f'<li><a href="{p}contact.html">Send a message</a></li><li><a href="{p}trip-request.html">Request a trip / quote</a></li>'
     return f"""</main>
 <footer class="site-footer"><div class="wrap">
   <div class="cols">
     <div><img src="{p}assets/img/logo-stacked-light.svg" alt="Copper Mountain Air" width="138" height="120" loading="lazy" style="height:120px;width:auto;margin-bottom:1rem">
-      <p>Fuel, FBO and cargo at Nogales International Airport (KOLS), serving Nogales and Santa Cruz County, Arizona.</p>
+      <p>{blurb}</p>
       {social_links()}</div>
-    <div><h3>Visit</h3><p>Copper Mountain Air, LLC<br>Nogales International Airport (KOLS)<br>{STREET}<br>Nogales, AZ 85621</p></div>
-    <div><h3>Contact</h3><ul><li>Phone: {PHONE_LINK}</li><li><a href="mailto:{CONTACT_TO}">{CONTACT_TO}</a></li><li>Hours: {HOURS_HTML}</li><li><a href="{p}contact.html">Send a message</a></li><li><a href="{p}trip-request.html">Request a trip / quote</a></li></ul></div>
-    <div><h3>Explore</h3><ul><li><a href="{p}services.html">Services</a></li><li><a href="{p}fuel-fbo.html">Fuel &amp; FBO</a></li><li><a href="{p}flight-training.html">Flight training</a></li><li><a href="{p}cargo.html">Cargo</a></li><li><a href="{p}charter.html">Charter</a></li><li><a href="{p}trip-request.html">Request a quote</a></li><li><a href="{p}about.html">About</a></li><li><a href="{p}gallery.html">Gallery</a></li><li><a href="{p}blog/index.html">Blog</a></li></ul></div>
+    <div><h3>{visit}</h3><p>Copper Mountain Air, LLC<br>Nogales International Airport (KOLS)<br>{STREET}<br>Nogales, AZ 85621</p></div>
+    <div><h3>{contact}</h3><ul><li>{"Teléfono" if is_es() else "Phone"}: {PHONE_LINK}</li><li><a href="mailto:{CONTACT_TO}">{CONTACT_TO}</a></li><li>{"Horario" if is_es() else "Hours"}: {hours}</li>{send_li}</ul></div>
+    <div><h3>{explore}</h3><ul>{links}</ul></div>
   </div>
-  <div class="legal"><span>© 2026 Copper Mountain Air, LLC</span><span>On-demand charter is coming soon and is not yet offered.</span><a href="{p}privacy.html">Privacy</a></div>
+  <div class="legal"><span>© 2026 Copper Mountain Air, LLC</span><span>{legal_note}</span><a href="{LP}privacy.html">{privacy}</a></div>
 </div></footer>
 <script src="{p}assets/js/site.js" defer></script>
 </body>
 </html>
 """
 
-def page(path, title, desc, body, extra_ld=None, og_type="website", og_img=None, og_w=1200, og_h=630):
+def page(path, title, desc, body, extra_ld=None, og_type="website", og_img=None, og_w=1200, og_h=630, lang="en"):
+    global LANG, LP
+    if lang == "es" and not path.startswith("es/"):
+        path = "es/" + path
+    LANG = lang
     p = "../" * path.count("/")
+    depth = path.count("/") - (1 if path.startswith("es/") else 0)
+    LP = "../" * depth
     out = head(title, desc, path, p, extra_ld, og_type, og_img, og_w, og_h) + "\n" + header(path, p) + "\n" + body(p) + "\n" + footer(p)
-    js = "".join(f'<script src="{p}{s}" defer></script>\n' for s in PAGE_JS.get(path, []))
+    js = "".join(f'<script src="{p}{s}" defer></script>\n' for s in PAGE_JS.get(en_path(path), []))
     if js: out = out.replace(f'<script src="{p}assets/js/site.js" defer></script>\n', f'<script src="{p}assets/js/site.js" defer></script>\n{js}', 1)
     full = os.path.join(OUT, path)
     os.makedirs(os.path.dirname(full), exist_ok=True)
@@ -269,8 +467,14 @@ ARROW = '<span class="arrow" aria-hidden="true">→</span>'
 def page_hero(eyebrow, h1, lede, badge=""):
     return f'<div class="page-hero"><div class="wrap">{badge}<p class="eyebrow">{eyebrow}</p><h1>{h1}</h1><p>{lede}</p></div></div>'
 
-def cta(p, h="Need fuel, a ramp spot or a freight quote?", t="Tell us what you need and we'll get back to you."):
-    return f'<section><div class="wrap"><div class="cta-band reveal"><div><h2>{h}</h2><p>{t}</p></div><div style="display:flex;gap:.6rem;flex-wrap:wrap"><a class="btn btn-dark" href="{p}contact.html">Contact us {ARROW}</a><a class="btn" href="{p}trip-request.html">Request a trip / quote {ARROW}</a></div></div></div></section>'
+def cta(p, h=None, t=None):
+    if h is None:
+        h = "¿Necesita combustible, un lugar en rampa o una cotización de flete?" if is_es() else "Need fuel, a ramp spot or a freight quote?"
+    if t is None:
+        t = "Cuéntenos qué necesita y le responderemos." if is_es() else "Tell us what you need and we'll get back to you."
+    label = "Contáctenos" if is_es() else "Contact us"
+    quote = "Solicite un viaje / cotización" if is_es() else "Request a trip / quote"
+    return f'<section><div class="wrap"><div class="cta-band reveal"><div><h2>{h}</h2><p>{t}</p></div><div style="display:flex;gap:.6rem;flex-wrap:wrap"><a class="btn btn-dark" href="{LP}contact.html">{label} {ARROW}</a><a class="btn" href="{LP}trip-request.html">{quote} {ARROW}</a></div></div></div></section>'
 
 AIRNAV = 'https://www.airnav.com/airport/KOLS'
 # Official FAA Defense Internet NOTAM Service query, pre-filled for KOLS.
@@ -287,7 +491,34 @@ AIRPORT_FACTS = f"""<div class="facts reveal">
 </div>
 <p class="source">Source: FAA airport data via <a href="{AIRNAV}" rel="noopener">AirNav (KOLS)</a>, effective 29 Oct 2026. Not for navigation. Check current <a href="{NOTAMS}" target="_blank" rel="noopener">KOLS NOTAMs on the FAA site</a>.</p>"""
 
+
+def airport_facts():
+    if not is_es():
+        return AIRPORT_FACTS
+    return f"""<div class="facts reveal">
+ <div class="fact"><span class="k">Pista</span><span class="v">4/22</span><span class="s">7,200 × 100 ft de asfalto</span></div>
+ <div class="fact"><span class="k">Elevación</span><span class="v">3,955 ft</span><span class="s">MSL, levantada</span></div>
+ <div class="fact"><span class="k">CTAF / UNICOM</span><span class="v">122.8</span><span class="s">Aeródromo sin torre</span></div>
+ <div class="fact"><span class="k">ASOS</span><span class="v">121.125</span><span class="s">Meteorología</span></div>
+ <div class="fact"><span class="k">Nogales VOR/DME</span><span class="v">114.65</span><span class="s">Ident OLS, en el campo</span></div>
+ <div class="fact"><span class="k">Combustible en el campo</span><span class="v">Jet A · 100LL</span><span class="s">Con Copper Mountain Air</span></div>
+ <div class="fact"><span class="k">Estatus</span><span class="v">Aeropuerto de entrada</span><span class="s">Internacional, según datos de la FAA</span></div>
+</div>
+<p class="source">Fuente: datos de aeropuerto de la FAA a través de <a href="{AIRNAV}" rel="noopener">AirNav (KOLS)</a>, vigentes al 29 de oct. de 2026. No usar para navegación. Consulte los <a href="{NOTAMS}" target="_blank" rel="noopener">NOTAM vigentes de KOLS en el sitio de la FAA</a>.</p>"""
+
 def notams_panel():
+    if is_es():
+        return f"""
+<div class="kols-notams reveal" id="notams" data-endpoint="{NOTAMS_ENDPOINT}" data-official="{NOTAMS}">
+  <div class="fuel-notam-banner" data-notams="fuel-banner" hidden></div>
+  <h3>NOTAM activos para KOLS</h3>
+  <p class="notams-updated" data-notams="updated" hidden></p>
+  <p class="notams-status" data-notams="status">Cargando los NOTAM vigentes de KOLS…</p>
+  <ul class="notam-list" data-notams="list"></ul>
+  <p class="notams-more" data-notams="more-wrap" hidden><button type="button" class="notams-toggle" data-notams="toggle" aria-expanded="false">Ver todos los NOTAM</button></p>
+  <p class="source">No usar para planificación de vuelo: verifique con las fuentes oficiales de la FAA. <a href="{NOTAMS}" target="_blank" rel="noopener">Ver los NOTAM de KOLS en el sitio de la FAA</a>.</p>
+</div>
+"""
     return f"""
 <div class="kols-notams reveal" id="notams" data-endpoint="{NOTAMS_ENDPOINT}" data-official="{NOTAMS}">
   <div class="fuel-notam-banner" data-notams="fuel-banner" hidden></div>
@@ -299,6 +530,7 @@ def notams_panel():
   <p class="source">Not for flight planning — verify with official FAA sources. <a href="{NOTAMS}" target="_blank" rel="noopener">View KOLS NOTAMs on the FAA site</a>.</p>
 </div>
 """
+
 FUEL_PRICES = f'Current Jet A and 100LL prices are posted on <a href="{AIRNAV}" rel="noopener">AirNav</a>.'
 
 def _days(n):
@@ -308,23 +540,28 @@ def _days(n):
 def climate_panel():
     data = json.load(open(os.path.join(ROOT, "assets", "data", "kols-climatology.json")))
     a = data["averageDaysPerYear"]
+    months_es = {"Jan":"Ene","Feb":"Feb","Mar":"Mar","Apr":"Abr","May":"May","Jun":"Jun","Jul":"Jul","Aug":"Ago","Sep":"Sep","Oct":"Oct","Nov":"Nov","Dec":"Dic"}
+    cat_labels = (("VFR", "Días VFR al año"), ("MVFR", "Días MVFR al año"), ("IFR", "Días IFR al año"), ("LIFR", "Días LIFR al año")) if is_es() else (("VFR", "VFR days / year"), ("MVFR", "MVFR days / year"), ("IFR", "IFR days / year"), ("LIFR", "LIFR days / year"))
     cats = []
-    for key, label in (("VFR", "VFR days / year"), ("MVFR", "MVFR days / year"), ("IFR", "IFR days / year"), ("LIFR", "LIFR days / year")):
+    for key, label in cat_labels:
         cats.append(f'<div class="climate-cat" data-cat="{key}"><b>{_days(a[key])}</b><span>{label}</span></div>')
     cols = []
     for m in data["monthly"]:
+        name = months_es.get(m["name"], m["name"]) if is_es() else m["name"]
         segs = []
         for key, cls in (("LIFR", "lifr"), ("IFR", "ifr"), ("MVFR", "mvfr"), ("VFR", "vfr")):
             h = max(0.0, float(m[key]) / 31.0 * 100.0)
             if h <= 0:
                 continue
-            segs.append(f'<span class="bar {cls}" style="height:{h:.2f}%" title="{m["name"]} {key} {_days(m[key])} days"></span>')
-        cols.append(f'<div class="climate-col"><div class="bars">{"".join(segs)}</div><span class="mo">{m["name"]}</span></div>')
+            unit = "días" if is_es() else "days"
+            segs.append(f'<span class="bar {cls}" style="height:{h:.2f}%" title="{name} {key} {_days(m[key])} {unit}"></span>')
+        cols.append(f'<div class="climate-col"><div class="bars">{"".join(segs)}</div><span class="mo">{name}</span></div>')
     rows = []
     for m in data["monthly"]:
+        name = months_es.get(m["name"], m["name"]) if is_es() else m["name"]
         rows.append(
             "<tr>"
-            f'<th scope="row">{m["name"]}</th>'
+            f'<th scope="row">{name}</th>'
             f'<td class="c-vfr">{_days(m["VFR"])}</td>'
             f'<td class="c-mvfr">{_days(m["MVFR"])}</td>'
             f'<td class="c-ifr">{_days(m["IFR"])}</td>'
@@ -333,10 +570,46 @@ def climate_panel():
             f'<td>{_days(m["cloudy"])}</td>'
             "</tr>"
         )
-    method = html.escape(data["method"])
     years = html.escape(data["yearLabel"])
-    src = html.escape(data["source"])
+    src_name = html.escape(data["source"])
     src_url = html.escape(data["sourceUrl"], quote=True)
+    if is_es():
+        method = (
+            "La categoría de vuelo de un día es la categoría más restrictiva de la FAA entre las observaciones horarias rutinarias del ASOS de 7:00 a.m. a 7:00 p.m., hora de Arizona "
+            "(America/Phoenix; LIFR &gt; IFR &gt; MVFR &gt; VFR). Categorías de la FAA: VFR es techo por encima de 3,000 ft y visibilidad por encima de 5 SM; "
+            "MVFR es techo de 1,000–3,000 ft o visibilidad de 3–5 SM; IFR es techo de 500 a menos de 1,000 ft o visibilidad de 1 a menos de 3 SM; "
+            "LIFR es techo por debajo de 500 ft o visibilidad por debajo de 1 SM. Se omiten los días sin una observación usable de visibilidad diurna, por lo que los totales anuales suman un poco menos de 365. "
+            "Un día se cuenta como despejado o soleado si más de la mitad de esas observaciones diurnas son CLR, SKC o FEW; de lo contrario se cuenta como nublado (SCT, BKN, OVC o VV)."
+        )
+        outage = "Las cifras son días observados sin escalar, así que los años con interrupciones del ASOS (en particular huecos en 2022) suman un poco menos de 365. Solo para conciencia situacional, no para planificación de vuelo."
+        return (
+            f'<div class="wx-climate" id="climatology">'
+            f'<div class="section-head reveal">'
+            f'<p class="eyebrow">Climatología de KOLS &middot; {years}</p>'
+            f'<h2>¿Con qué frecuencia se puede volar?</h2>'
+            f'<p>Promedio de días al año en cada categoría de vuelo de la FAA, a partir de seis años completos de observaciones horarias oficiales del ASOS en el Aeropuerto Internacional de Nogales.</p>'
+            f'</div>'
+            f'<div class="climate-cats">{"".join(cats)}</div>'
+            f'<div class="climate-sky">'
+            f'<div><b>{_days(a["clear"])}</b><span>días despejados / soleados al año</span></div>'
+            f'<div><b>{_days(a["cloudy"])}</b><span>días nublados al año</span></div>'
+            f'</div>'
+            f'<p class="wx-now-kicker" style="margin:0 0 .55rem">Promedio de días al mes</p>'
+            f'<div class="climate-chart" aria-hidden="true">{"".join(cols)}</div>'
+            f'<ul class="climate-legend" aria-hidden="true">'
+            f'<li><i style="background:var(--vfr)"></i>VFR</li>'
+            f'<li><i style="background:var(--mvfr)"></i>MVFR</li>'
+            f'<li><i style="background:var(--ifr)"></i>IFR</li>'
+            f'<li><i style="background:var(--lifr)"></i>LIFR</li>'
+            f'</ul>'
+            f'<table class="climate-table">'
+            f'<caption class="visually-hidden">Promedio de días al mes en KOLS por categoría de vuelo y cobertura del cielo, {years}</caption>'
+            f'<thead><tr><th>Mes</th><th>VFR</th><th>MVFR</th><th>IFR</th><th>LIFR</th><th>Despejado</th><th>Nublado</th></tr></thead>'
+            f'<tbody>{"".join(rows)}</tbody></table>'
+            f'<p class="wx-foot">{method} Fuente: <a href="{src_url}" target="_blank" rel="noopener">{src_name}</a>. '
+            f'{outage}</p></div>'
+        )
+    method = html.escape(data["method"])
     return (
         f'<div class="wx-climate" id="climatology">'
         f'<div class="section-head reveal">'
@@ -361,12 +634,39 @@ def climate_panel():
         f'<caption class="visually-hidden">Average days per month at KOLS by flight category and sky cover, {years}</caption>'
         f'<thead><tr><th>Month</th><th>VFR</th><th>MVFR</th><th>IFR</th><th>LIFR</th><th>Clear</th><th>Cloudy</th></tr></thead>'
         f'<tbody>{"".join(rows)}</tbody></table>'
-        f'<p class="wx-foot">{method} Source: <a href="{src_url}" target="_blank" rel="noopener">{src}</a>. '
+        f'<p class="wx-foot">{method} Source: <a href="{src_url}" target="_blank" rel="noopener">{src_name}</a>. '
         f'Figures are unscaled observed days, so years with ASOS outages (notably gaps in 2022) sum to a little under 365. '
         f'For situational awareness only — not for flight planning.</p></div>'
     )
 
 def wx_now_and_radar():
+    if is_es():
+        return (
+            '<div class="wx-now-grid">'
+            '<article class="wx-now glass" aria-label="Clima actual en KOLS">'
+            '<div class="wx-now-top">'
+            '<div class="wx-icon" data-wx="icon" aria-hidden="true"></div>'
+            '<div>'
+            '<p class="wx-now-kicker">Ahora en KOLS</p>'
+            '<div class="wx-badge" data-wx="cat">—</div>'
+            '<p class="wx-now-time">Observado <span data-wx="time">—</span></p>'
+            '</div></div>'
+            '<ul class="wx-now-stats">'
+            '<li><span>Viento</span><b data-wx="wind">—</b></li>'
+            '<li><span>Visibilidad</span><b><span data-wx="vis">—</span> SM</b></li>'
+            '<li><span>Cielo / techo</span><b data-wx="sky">—</b></li>'
+            '<li><span>Temperatura</span><b data-wx="temp">—</b></li>'
+            '<li><span>Altímetro</span><b data-wx="alt">—</b></li>'
+            '<li><span>Altitud de densidad</span><b data-wx="da">—</b></li>'
+            '</ul>'
+            '<pre class="wx-now-raw"><code data-wx="metar">Cargando el METAR más reciente de KOLS…</code></pre>'
+            '</article>'
+            '<div class="wx-radar glass">'
+            '<h3>Radar meteorológico <small>Centrado en Nogales</small></h3>'
+            '<div id="wx-radar-map" role="region" aria-label="Radar meteorológico centrado en Nogales"></div>'
+            '<p class="wx-foot">Imágenes de radar de <a href="https://www.rainviewer.com/" target="_blank" rel="noopener">RainViewer</a>; se cargan al llegar a este mapa. Solo para conciencia situacional, no para planificación de vuelo.</p>'
+            '</div></div>'
+        )
     return (
         '<div class="wx-now-grid">'
         '<article class="wx-now glass" aria-label="Current KOLS weather">'
@@ -413,13 +713,36 @@ UNLISTED = []
 def kols_link(p, text):
     """Only link the KOLS guide once that post is published (or in a local --drafts build)."""
     if any(x["slug"] == "kols-pilot-guide" for x in POSTS):
-        return f'<p style="margin-top:1.5rem"><a class="btn btn-ghost" href="{p}blog/kols-pilot-guide.html">{text} {ARROW}</a></p>'
+        return f'<p style="margin-top:1.5rem"><a class="btn btn-ghost" href="{LP}blog/kols-pilot-guide.html">{text} {ARROW}</a></p>'
     return ""
-
 
 def flight_plan_widget():
     """Deep links to plan a flight into KOLS. Formats documented in assets/js/flightplan.js."""
     sky_apt = "https://skyvector.com/airport/OLS/Nogales-International-Airport"
+    if is_es():
+        return f"""
+<div class="flightplan reveal" id="plan-flight">
+  <div class="flightplan-card">
+    <p class="eyebrow">Planificación de vuelo</p>
+    <h2>Planifique su vuelo a KOLS.</h2>
+    <p>Ingrese su aeropuerto de salida para abrir una ruta al Aeropuerto Internacional de Nogales (KOLS) en ForeFlight, Garmin Pilot o SkyVector. Déjelo en blanco para abrir solo KOLS.</p>
+    <form id="flightplan-form" class="flightplan-form" action="#plan-flight" method="get">
+      <div class="field">
+        <label for="dep-icao">Aeropuerto de salida <span class="hint">(ICAO, opcional)</span></label>
+        <input id="dep-icao" name="dep" type="text" inputmode="text" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="8" placeholder="ej. KTUS" aria-describedby="dep-hint flightplan-error">
+        <p id="dep-hint" class="hint">Use un identificador de 3 o 4 caracteres, como KTUS. El destino siempre es KOLS.</p>
+        <p id="flightplan-error" class="flightplan-error" role="alert" hidden></p>
+      </div>
+      <div class="flightplan-actions">
+        <a class="btn btn-primary" id="fp-foreflight" href="foreflightmobile://maps/search?q=KOLS">Abrir en ForeFlight</a>
+        <a class="btn btn-dark" id="fp-garmin" href="garminpilot://airport?id=KOLS">Abrir en Garmin Pilot</a>
+        <a class="btn btn-dark" id="fp-skyvector" href="{sky_apt}" target="_blank" rel="noopener">Abrir en SkyVector</a>
+      </div>
+    </form>
+    <p class="note">ForeFlight se abre en la app en iPad/iPhone. Garmin Pilot se abre en la app en iPad, iPhone o Android. SkyVector se abre en el navegador, en cualquier dispositivo.</p>
+    <p class="note">Garmin Pilot no publica un esquema oficial de URL; el enlace de ruta es un formato de uso común y puede no cargar en todas las versiones. Si no funciona, arme el plan en la app o use SkyVector. Estos enlaces son solo para planificación y no son un briefing ni un plan de vuelo presentado.</p>
+  </div>
+</div>"""
     return f"""
 <div class="flightplan reveal" id="plan-flight">
   <div class="flightplan-card">
@@ -660,7 +983,7 @@ def wind_rose():
 <text class="rwy-end" data-rwy="22" x="{x22:.1f}" y="{y22 + 5:.1f}" text-anchor="middle" transform="rotate(217 {x22:.1f} {y22:.1f})">22</text>
 <g id="wind-arrow" opacity="0" style="transition:transform .8s cubic-bezier(.2,.7,.2,1)"><line x1="160" y1="22" x2="160" y2="112" stroke="#e9a06a" stroke-width="5" stroke-linecap="round" marker-end="url(#ah)"/><circle cx="160" cy="22" r="6" fill="#e9a06a"/></g>
 <circle cx="160" cy="160" r="4" fill="#e9a06a"/>
-<text id="wind-label" x="160" y="331" text-anchor="middle" font-size="12" fill="#e6edf1">LOADING…</text>
+<text id="wind-label" x="160" y="331" text-anchor="middle" font-size="12" fill="#e6edf1">{"CARGANDO…" if is_es() else "LOADING…"}</text>
 <text x="300" y="20" text-anchor="end" font-size="10" fill="#9fb0ba">MAG</text>
 </svg>'''
 
@@ -1125,7 +1448,7 @@ def gallery_picture(item, p, sizes="(min-width: 900px) 33vw, (min-width: 600px) 
         f'<source type="image/avif" srcset="{srcset_custom(p, directory, prefix, widths, "avif")}" sizes="{sizes}">'
         f'<source type="image/webp" srcset="{srcset_custom(p, directory, prefix, widths, "webp")}" sizes="{sizes}">'
         f'<img src="{p}{directory}/{prefix}-{mid[0]}.jpg" srcset="{srcset_custom(p, directory, prefix, widths, "jpg")}" sizes="{sizes}" '
-        f'alt="{html.escape(item["alt"])}" width="{item["w"]}" height="{item["h"]}" {load} decoding="async">'
+        f'alt="{html.escape(gallery_copy(item, "alt"))}" width="{item["w"]}" height="{item["h"]}" {load} decoding="async">'
         f'</picture>'
     )
 
@@ -1156,33 +1479,49 @@ def gallery_full_url(item, p):
 
 def gallery(p):
     items = gallery_items()
-    groups = ["Wings & Wheels", "At the field"]
-    intro = {
-        "Wings & Wheels": "Copper Mountain Air's first Wings &amp; Wheels was held at Nogales International Airport on November 8, 2026.",
-        "At the field": "Taxiway signs, night lighting, and an aerial view of the field at KOLS.",
-    }
+    if is_es():
+        groups = [("Wings & Wheels", "Wings & Wheels"), ("At the field", "En el campo")]
+        intro = {
+            "Wings & Wheels": "El primer Wings &amp; Wheels de Copper Mountain Air se celebró en el Aeropuerto Internacional de Nogales el 8 de noviembre de 2026.",
+            "At the field": "Letreros de calles de rodaje, iluminación nocturna y una vista del campo en KOLS.",
+        }
+        hero = page_hero("Galería · KOLS", "En el campo de Nogales.",
+                         "Fotografías del Aeropuerto Internacional de Nogales y del primer Wings &amp; Wheels de Copper Mountain Air, el 8 de noviembre de 2026.")
+        help_txt = "La galería abre una imagen más grande en un cuadro de diálogo. Use las flechas para pasar de una foto a otra y Escape para cerrar."
+        eyebrow = "Galería"
+    else:
+        groups = [("Wings & Wheels", "Wings & Wheels"), ("At the field", "At the field")]
+        intro = {
+            "Wings & Wheels": "Copper Mountain Air's first Wings &amp; Wheels was held at Nogales International Airport on November 8, 2026.",
+            "At the field": "Taxiway signs, night lighting, and an aerial view of the field at KOLS.",
+        }
+        hero = page_hero("Gallery · KOLS", "On the field at Nogales.",
+                         "Photographs from Nogales International Airport and Copper Mountain Air's first Wings &amp; Wheels on November 8, 2026.")
+        help_txt = "The gallery opens a larger image in a dialog. Use the arrow keys to move between photos, and Escape to close."
+        eyebrow = "Gallery"
     sections = []
-    for i, group in enumerate(groups):
+    for i, (group, heading) in enumerate(groups):
         subset = [x for x in items if x["group"] == group]
         figures = []
         for j, item in enumerate(subset):
             full = gallery_full_url(item, p)
             eager = i == 0 and j < 3
+            cap = gallery_copy(item, "caption")
+            alt = gallery_copy(item, "alt")
             figures.append(
-                f'<li><a class="gallery-item" href="{full}" data-caption="{html.escape(item["caption"])}" data-alt="{html.escape(item["alt"])}">'
+                f'<li><a class="gallery-item" href="{full}" data-caption="{html.escape(cap)}" data-alt="{html.escape(alt)}">'
                 f'{gallery_picture(item, p, eager=eager)}'
-                f'<span class="gallery-cap">{html.escape(item["caption"])}</span></a></li>'
+                f'<span class="gallery-cap">{html.escape(cap)}</span></a></li>'
             )
         sections.append(
             f'<section class="{"sand" if i else ""}" id="{ "wings-and-wheels" if group == "Wings & Wheels" else "at-the-field" }">'
             f'<div class="wrap">'
-            f'<div class="section-head reveal"><p class="eyebrow">Gallery</p><h2>{html.escape(group)}</h2><p>{intro[group]}</p></div>'
+            f'<div class="section-head reveal"><p class="eyebrow">{eyebrow}</p><h2>{html.escape(heading)}</h2><p>{intro[group]}</p></div>'
             f'<ul class="photo-grid" data-gallery>{"".join(figures)}</ul>'
             f'</div></section>'
         )
-    return page_hero("Gallery · KOLS", "On the field at Nogales.",
-                     "Photographs from Nogales International Airport and Copper Mountain Air's first Wings &amp; Wheels on November 8, 2026.") + "".join(sections) + f"""
-<p class="sr-only" id="gallery-help">The gallery opens a larger image in a dialog. Use the arrow keys to move between photos, and Escape to close.</p>
+    return hero + "".join(sections) + f"""
+<p class="sr-only" id="gallery-help">{help_txt}</p>
 """
 
 # hook used below — gallery.ld is set when gallery() is first called; main() will call a wrapper.
@@ -1193,14 +1532,15 @@ def gallery_schema():
         images.append({
             "@type": "ImageObject",
             "contentUrl": SITE_URL + gallery_full_url(x, ""),
-            "caption": x["caption"],
-            "name": x["alt"],
+            "caption": gallery_copy(x, "caption"),
+            "name": gallery_copy(x, "alt"),
         })
     return {
         "@context": "https://schema.org",
         "@type": "ImageGallery",
-        "name": "Photo gallery | Copper Mountain Air at Nogales International Airport (KOLS)",
-        "url": SITE_URL + "gallery.html",
+        "name": ("Galería fotográfica | Copper Mountain Air en el Aeropuerto Internacional de Nogales (KOLS)" if is_es()
+                 else "Photo gallery | Copper Mountain Air at Nogales International Airport (KOLS)"),
+        "url": SITE_URL + ("es/gallery.html" if is_es() else "gallery.html"),
         "isPartOf": {"@id": SITE_URL + "#business"},
         "associatedMedia": images,
     }
@@ -1239,15 +1579,29 @@ def load_posts():
 
 def blog_index(posts):
     def f(p):
+        if is_es():
+            read_draft, read_more = "Leer el borrador", "Leer más"
+            draft_badge = "Borrador · no publicado"
+            hero = page_hero("Blog", "Desde la rampa.", "Noticias del aeropuerto, información para pilotos y consejos de flete desde el Aeropuerto Internacional de Nogales (KOLS) y el condado de Santa Cruz.")
+            banner = '<div class="draft-banner">COMPILACIÓN LOCAL DE REVISIÓN: las notas marcadas como Borrador no están en el sitio en vivo.</div>'
+        else:
+            read_draft, read_more = "Read the draft", "Read more"
+            draft_badge = "Draft · not published"
+            hero = page_hero("Blog", "From the ramp.", "Airport news, pilot info and freight tips from Nogales International Airport (KOLS) and Santa Cruz County.")
+            banner = '<div class="draft-banner">LOCAL DRAFT REVIEW BUILD: posts marked Draft are not on the live site.</div>'
         cards = "".join(f"""<article class="card post-card reveal"><div class="media">{img(x["image"], p, sizes="card")}</div><div class="body">
-{'<span class="badge draft">Draft · not published</span>' if x["draft"] else ''}{f'<p class="meta">{html.escape(fmt_date(x["date"]))}</p>' if x.get("date") and not x["date"].startswith("[") else ''}
-<h3><a href="{p}blog/{x["slug"]}.html" style="color:inherit;text-decoration:none">{html.escape(x["title"])}</a></h3><p>{html.escape(x["description"])}</p>
-<a class="more" href="{p}blog/{x["slug"]}.html">{"Read the draft" if x["draft"] else "Read more"} {ARROW}</a></div></article>""" for x in posts)
-        return page_hero("Blog", "From the ramp.", "Airport news, pilot info and freight tips from Nogales International Airport (KOLS) and Santa Cruz County.") + f"""
-<section><div class="wrap">{'<div class="draft-banner">LOCAL DRAFT REVIEW BUILD: posts marked Draft are not on the live site.</div>' if SHOW_DRAFTS else ''}{f'<div class="post-list">{cards}</div>' if posts else EMPTY_BLOG(p)}</div></section>"""
+{'<span class="badge draft">' + draft_badge + '</span>' if x["draft"] else ''}{f'<p class="meta">{html.escape(fmt_date(x["date"]))}</p>' if x.get("date") and not x["date"].startswith("[") else ''}
+<h3><a href="{LP}blog/{x["slug"]}.html" style="color:inherit;text-decoration:none">{html.escape(x["title"])}</a></h3><p>{html.escape(x["description"])}</p>
+<a class="more" href="{LP}blog/{x["slug"]}.html">{read_draft if x["draft"] else read_more} {ARROW}</a></div></article>""" for x in posts)
+        return hero + f"""
+<section><div class="wrap">{banner if SHOW_DRAFTS else ''}{f'<div class="post-list">{cards}</div>' if posts else EMPTY_BLOG(p)}</div></section>"""
     return f
 
 def EMPTY_BLOG(p):
+    if is_es():
+        return f"""<div class="split reveal"><div class="frame">{img("kols-guide", p)}</div><div><span class="badge soon">La primera nota, pronto</span>
+<h2>Notas nuevas cada mes.</h2><p>Publicamos una nota cada mes: actualizaciones del aeropuerto KOLS, información para pilotos y consejos de flete para el condado de Santa Cruz. Vuelva pronto.</p>
+<a class="btn btn-dark" href="{LP}fuel-fbo.html">Información de combustible y FBO {ARROW}</a></div></div>"""
     return f"""<div class="split reveal"><div class="frame">{img("kols-guide", p)}</div><div><span class="badge soon">First post coming soon</span>
 <h2>New posts every month.</h2><p>We publish a new post each month: KOLS airport updates, pilot info, and freight tips for Santa Cruz County. Check back soon.</p>
 <a class="btn btn-dark" href="{p}fuel-fbo.html">Fuel &amp; FBO info {ARROW}</a></div></div>"""
@@ -1266,7 +1620,7 @@ def chart_fig(cid, cap, p):
             f'<source type="image/avif" srcset="{srcset_custom(p, d, prefix, widths, "avif")}" sizes="{sz}">'
             f'<source type="image/webp" srcset="{srcset_custom(p, d, prefix, widths, "webp")}" sizes="{sz}">'
             f'<img src="{p}{d}/{prefix}-{mid[0]}.jpg" srcset="{srcset_custom(p, d, prefix, widths, "jpg")}" sizes="{sz}" '
-            f'alt="{html.escape(meta["alt"])}" width="{meta["w"]}" height="{meta["h"]}" loading="lazy" decoding="async">'
+            f'alt="{html.escape(slot_alt(cid.strip(), meta["alt"]))}" width="{meta["w"]}" height="{meta["h"]}" loading="lazy" decoding="async">'
             f'</picture>'
         )
         return (f'<figure class="article-fig">'
@@ -1275,7 +1629,7 @@ def chart_fig(cid, cap, p):
     return (f'<figure class="chart-fig">'
             f'<a href="{src}.png" target="_blank" rel="noopener">'
             f'<picture><source type="image/webp" srcset="{src}.webp">'
-            f'<img src="{src}.png" alt="{html.escape(meta["alt"])}" width="{meta["w"]}" height="{meta["h"]}" loading="lazy" decoding="async">'
+            f'<img src="{src}.png" alt="{html.escape(slot_alt(cid.strip(), meta["alt"]))}" width="{meta["w"]}" height="{meta["h"]}" loading="lazy" decoding="async">'
             f'</picture></a><figcaption>{cap.strip()}</figcaption></figure>')
 
 def expand(body, p):
@@ -1292,24 +1646,88 @@ def expand(body, p):
     return re.sub(r"\{\{CHARTS:([^}]*)\}\}", grid, body)
 
 def fmt_date(d):
-    """'2026-11-19' -> 'November 19, 2026' for display; anything else passes through."""
+    """'2026-11-19' -> 'November 19, 2026' (or Spanish equivalent); anything else passes through."""
     import datetime
-    try: return datetime.date.fromisoformat(d).strftime("%B %-d, %Y")
-    except (ValueError, TypeError): return d
+    try:
+        dt = datetime.date.fromisoformat(d)
+    except (ValueError, TypeError):
+        return d
+    if is_es():
+        months = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"]
+        return f"{dt.day} de {months[dt.month-1]} de {dt.year}"
+    return dt.strftime("%B %-d, %Y")
 
 def blog_post(x):
     def f(p):
-        return f"""<div class="page-hero"><div class="wrap">{'<span class="badge draft">Draft · for review</span>' if x["draft"] else ''}<p class="eyebrow"><a href="{p}blog/index.html" style="color:inherit">Blog</a></p><h1 style="text-transform:none;font-size:clamp(2rem,5vw,3.4rem)">{html.escape(x["title"])}</h1><p class="post-meta">Copper Mountain Air{" · " + html.escape(fmt_date(x["date"])) if x.get("date") and not x["date"].startswith("[") else ""}</p></div></div>
+        if is_es():
+            eyebrow = f'<p class="eyebrow"><a href="{LP}blog/index.html" style="color:inherit">Blog</a></p>'
+            draft = "Borrador · para revisión"
+            unlisted_banner = "VISTA PREVIA NO LISTADA — no está enlazada en ninguna parte del sitio y está oculta para los buscadores. Comparta este enlace solo con quienes revisan la nota."
+            draft_banner = f'BORRADOR — no publicada. Seth debe revisar y aprobar antes de que se publique. Archivo fuente: <code>{x["source"]}</code>'
+            back = "← Todas las notas"
+            untranslated = '<div class="draft-banner">Esta nota está disponible por ahora en inglés.</div>' if x.get("untranslated") else ""
+        else:
+            eyebrow = f'<p class="eyebrow"><a href="{p}blog/index.html" style="color:inherit">Blog</a></p>'
+            draft = "Draft · for review"
+            unlisted_banner = "UNLISTED PREVIEW — not linked anywhere on the site and hidden from search engines. Share this link only with people reviewing the post."
+            draft_banner = f'DRAFT — not published. Seth to review and approve before this goes live. Source file: <code>{x["source"]}</code>'
+            back = "← All posts"
+            untranslated = ""
+        return f"""<div class="page-hero"><div class="wrap">{'<span class="badge draft">' + draft + '</span>' if x["draft"] else ''}{eyebrow}<h1 style="text-transform:none;font-size:clamp(2rem,5vw,3.4rem)">{html.escape(x["title"])}</h1><p class="post-meta">Copper Mountain Air{" · " + html.escape(fmt_date(x["date"])) if x.get("date") and not x["date"].startswith("[") else ""}</p></div></div>
 <section style="padding-top:0"><div class="wrap"><article class="article">
 <div class="article-hero">{img(x["image"], p, eager=True, sizes="article")}</div>
-{'<div class="draft-banner">UNLISTED PREVIEW — not linked anywhere on the site and hidden from search engines. Share this link only with people reviewing the post.</div>' if x.get("unlisted") == "true" else ''}{f'<div class="draft-banner">DRAFT — not published. Seth to review and approve before this goes live. Source file: <code>{x["source"]}</code></div>' if x["draft"] else ''}
+{untranslated}{'<div class="draft-banner">' + unlisted_banner + '</div>' if x.get("unlisted") == "true" else ''}{f'<div class="draft-banner">{draft_banner}</div>' if x["draft"] else ''}
 {expand(x["body"], p)}
-<p style="margin-top:2.5rem"><a class="btn btn-dark" href="{p}blog/index.html">← All posts</a></p>
+<p style="margin-top:2.5rem"><a class="btn btn-dark" href="{LP}blog/index.html">{back}</a></p>
 </article></div></section>"""
     return f
 
+
+def parse_post_file(path, source):
+    raw = open(path).read()
+    m = re.match(r"---\n(.*?)\n---\n(.*)", raw, re.S)
+    fm = {}
+    for line in m.group(1).splitlines():
+        if not line.strip() or line.lstrip().startswith("#"): continue
+        k, v = line.split(":", 1); v = re.sub(r"\s+#.*$", "", v.strip()) if not v.strip().startswith('"') else v.strip()
+        fm[k.strip()] = v.strip().strip('"')
+    body = markdown.markdown(m.group(2), extensions=["tables"])
+    body = re.sub(r"<p>\{\{gallery:([^}]*)\}\}</p>", lambda mm: "{{GALLERY:" + mm.group(1).strip() + "}}", body)
+    body = re.sub(r"<p>\{\{figure:([^|}]*)\|([^}]*)\}\}</p>", lambda mm: "{{FIGURE:" + mm.group(1).strip() + "|" + mm.group(2).strip() + "}}", body)
+    body = re.sub(r"<p>\{\{chart:([^|}]*)\|([^}]*)\}\}</p>", lambda mm: "{{CHART:" + mm.group(1).strip() + "|" + mm.group(2).strip() + "}}", body)
+    body = re.sub(r"<p>\{\{charts:([^}]*)\}\}</p>", lambda mm: "{{CHARTS:" + mm.group(1).strip() + "}}", body)
+    fm["body"] = re.sub(r"\[([A-Z0-9][^\]<]*)\]", lambda mm: ph(mm.group(1)), body)
+    fm["source"] = source
+    fm["draft"] = fm.get("published", "false").lower() != "true"
+    return fm
+
+def load_translated_posts(posts):
+    """Match published English posts to posts/es translations; fall back to English with a notice."""
+    es_dir = os.path.join(ROOT, "posts", "es")
+    by_slug = {}
+    if os.path.isdir(es_dir):
+        for fn in os.listdir(es_dir):
+            if not fn.endswith(".md") or fn.startswith("_"): continue
+            fm = parse_post_file(os.path.join(es_dir, fn), "posts/es/" + fn)
+            by_slug[fm["slug"]] = fm
+    out = []
+    for x in posts:
+        if x["slug"] in by_slug:
+            tr = dict(by_slug[x["slug"]])
+            tr["draft"] = x["draft"]
+            tr["date"] = x.get("date") or tr.get("date")
+            tr["image"] = tr.get("image") or x.get("image")
+            tr["unlisted"] = x.get("unlisted")
+            out.append(tr)
+        else:
+            y = dict(x)
+            y["untranslated"] = True
+            out.append(y)
+    return out
+
 def main():
     global POSTS
+    import pages_es
     if os.path.isdir(OUT): shutil.rmtree(OUT)
     os.makedirs(OUT)
     shutil.copytree(os.path.join(ROOT, "assets"), os.path.join(OUT, "assets"), ignore=shutil.ignore_patterns("README.md", "manifest.json"))
@@ -1367,15 +1785,85 @@ def main():
     for x in UNLISTED:
         page(f"preview/{x['unlisted_token']}/{x.get('unlisted_file') or x['slug']}.html",
              f"PREVIEW: {x['title']} | Copper Mountain Air", x["description"], blog_post(x), None, "article")
-    # 404
-    page("404.html", "Page not found | Copper Mountain Air", "Page not found.",
-         lambda p: page_hero("404", "Off the chart.", "That page isn't here.") + f'<section><div class="wrap"><a class="btn btn-dark" href="{SITE_URL}">Back to home</a></div></section>')
+    # Spanish pages
+    es_posts = load_translated_posts(posts)
+    page("index.html", "Copper Mountain Air | Combustible, FBO, instrucción de vuelo y carga en el Aeropuerto Internacional de Nogales (KOLS)",
+         "Combustible Jet A y 100LL, servicios de FBO, instrucción de vuelo FAA Part 61, y carga aérea y terrestre en el Aeropuerto Internacional de Nogales (KOLS) en Nogales, condado de Santa Cruz, Arizona.", pages_es.home, lang="es")
+    page("services.html", "Servicios | Carga, combustible, FBO e instrucción de vuelo en Nogales, AZ | Copper Mountain Air",
+         "Carga aérea y terrestre, combustible Jet A y 100LL, servicios de FBO e instrucción de vuelo FAA Part 61 en el Aeropuerto Internacional de Nogales (KOLS), al servicio del condado de Santa Cruz, Arizona.", pages_es.services, lang="es")
+    page("fuel-fbo.html", "Combustible Jet A y 100LL y FBO en KOLS | Copper Mountain Air",
+         "Jet A y 100LL Avgas, rampa y amarre, hangares y atención en tierra en el Aeropuerto Internacional de Nogales (KOLS), Nogales, AZ.", pages_es.fuel_fbo, lang="es")
+    page("flight-training.html", "Instrucción de vuelo en Nogales, AZ | Copper Mountain Air",
+         "Instrucción de vuelo monomotor FAA Part 61 en el Aeropuerto Internacional de Nogales (KOLS), con clima en vivo del ASOS de KOLS, un mapa de instrucción en la seccional de la FAA y programación en FlightCircle. Multimotor en breve; Part 141 en proceso.", pages_es.flight_training, lang="es")
+    page("cargo.html", "Carga y flete expedito desde Nogales, AZ (KOLS) | Copper Mountain Air",
+         "Carga expedita terrestre y de aire a tierra desde el Aeropuerto Internacional de Nogales (KOLS): un camión de caja Hino 268 de 26 ft a altura de andén con elevador, una van Ford E-150 y transferencias de rampa a camión.", pages_es.cargo, lang="es")
+    page("charter.html", "Chárter desde Nogales, AZ (próximamente) | Copper Mountain Air",
+         "El chárter bajo demanda desde el Aeropuerto Internacional de Nogales (KOLS) estará disponible pronto. Únase a la lista de interés.", pages_es.coming_soon_charter, lang="es")
+    page("about.html", "Nosotros | Copper Mountain Air | Aeropuerto Internacional de Nogales (KOLS)",
+         "Copper Mountain Air, LLC ofrece combustible, servicios de FBO, instrucción de vuelo FAA Part 61 y carga en el Aeropuerto Internacional de Nogales, en el condado de Santa Cruz, Arizona.", pages_es.about, lang="es")
+    page("trip-request.html", "Solicite un viaje o cotización | Copper Mountain Air, Nogales (KOLS)",
+         "Solicite una cotización de flete o de chárter a Copper Mountain Air en el Aeropuerto Internacional de Nogales (KOLS). El servicio de chárter aún no se ofrece.", pages_es.trip_request, lang="es")
+    page("contact.html", "Contacto | Copper Mountain Air | Nogales, AZ (KOLS)",
+         "Contacte a Copper Mountain Air en el Aeropuerto Internacional de Nogales (KOLS) para combustible, rampa, hangares, instrucción de vuelo y cotizaciones de flete.", pages_es.contact, lang="es")
+    page("privacy.html", "Privacidad | Copper Mountain Air",
+         "Cómo Copper Mountain Air usa cookies y Google Analytics en coppermountainair.com, y cómo contactarnos sobre este aviso.", pages_es.privacy, lang="es")
+    page("gallery.html", "Galería fotográfica | Copper Mountain Air en el Aeropuerto Internacional de Nogales (KOLS)",
+         "Fotografías del Aeropuerto Internacional de Nogales (KOLS) y del primer Wings & Wheels de Copper Mountain Air, el 8 de noviembre de 2026.",
+         gallery_page, gallery_schema(), "website", lang="es")
+    page("blog/index.html", "Blog | Copper Mountain Air, Aeropuerto Internacional de Nogales (KOLS)",
+         "Noticias del aeropuerto, información para pilotos y consejos de flete de Copper Mountain Air en el Aeropuerto Internacional de Nogales (KOLS), Arizona.", blog_index(es_posts), lang="es")
+    for x in es_posts:
+        og_img, og_w, og_h = None, 1200, 630
+        slot = x.get("image")
+        if slot in MANIFEST:
+            m = MANIFEST[slot]
+            og_w = min(m["widths"], key=lambda n: abs(n-1200))
+            og_h = round(m["h"] * og_w / m["w"])
+            og_img = f"photos/{slot}-{og_w}.jpg"
+        elif slot in IMG and isinstance(IMG[slot], dict) and IMG[slot].get("chart_dir"):
+            v = IMG[slot]
+            og_w = min(v["widths"], key=lambda n: abs(n-1200))
+            og_h = round(v["h"] * og_w / v["w"])
+            og_img = f"charts/{v['prefix']}-{og_w}.jpg"
+        image_url = SITE_URL + "assets/img/" + (og_img or "og-image.jpg")
+        post_url = SITE_URL + "es/blog/" + x["slug"] + ".html"
+        ld = {"@context":"https://schema.org","@type":"BlogPosting","headline":x["title"],"description":x["description"],
+              "inLanguage":"es-MX",
+              "author":{"@type":"Organization","name":"Copper Mountain Air, LLC"},"publisher":{"@id":SITE_URL+"#business"},
+              "datePublished":"" if x["draft"] else x["date"],
+              "dateModified":"" if x["draft"] else x["date"],
+              "image": image_url,
+              "url": post_url,
+              "mainEntityOfPage": {"@type":"WebPage","@id": post_url}}
+        prefix = "BORRADOR: " if x["draft"] else ""
+        page(f"blog/{x['slug']}.html", f"{prefix}{x['title']} | Copper Mountain Air", x["description"], blog_post(x), ld, "article", og_img, og_w, og_h, lang="es")
+    # 404 (GitHub Pages always serves the root 404.html; keep it bilingual)
+    def not_found(p):
+        return (
+            page_hero("404", "Off the chart. / Fuera de carta.", "That page isn't here. / Esa página no está aquí.")
+            + f'<section><div class="wrap" style="display:flex;gap:.8rem;flex-wrap:wrap">'
+              f'<a class="btn btn-dark" href="{SITE_URL}">Back to home</a>'
+              f'<a class="btn btn-ghost" href="{SITE_URL}es/">Volver al inicio</a>'
+              f'</div></section>'
+        )
+    page("404.html", "Page not found | Copper Mountain Air", "Page not found. / Página no encontrada.", not_found)
     f404 = os.path.join(OUT, "404.html"); t = open(f404).read()
     open(f404, "w").write(t.replace('<meta charset="utf-8">', f'<meta charset="utf-8">\n<base href="{SITE_URL}">', 1))
-    # sitemap + robots
+    # sitemap + robots, with hreflang alternates
     urls = [u for u in PAGES if u != "404.html" and not u.startswith("preview/")]
-    sm = ['<?xml version="1.0" encoding="UTF-8"?>','<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
-    sm += [f"  <url><loc>{SITE_URL}{'' if u=='index.html' else u}</loc></url>" for u in urls]
+    sm = ['<?xml version="1.0" encoding="UTF-8"?>',
+          '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">']
+    for u in urls:
+        loc = canonical_url(u)
+        sm.append(f"  <url>")
+        sm.append(f"    <loc>{loc}</loc>")
+        ep = en_path(u)
+        en_url = SITE_URL if ep == "index.html" else SITE_URL + ep
+        es_url = SITE_URL + "es/" if ep == "index.html" else SITE_URL + "es/" + ep
+        sm.append(f'    <xhtml:link rel="alternate" hreflang="en" href="{en_url}"/>')
+        sm.append(f'    <xhtml:link rel="alternate" hreflang="es" href="{es_url}"/>')
+        sm.append(f'    <xhtml:link rel="alternate" hreflang="x-default" href="{en_url}"/>')
+        sm.append(f"  </url>")
     sm.append("</urlset>")
     open(os.path.join(OUT, "sitemap.xml"), "w").write("\n".join(sm) + "\n")
     robots = ("# PREVIEW: block all crawlers until launch. Remove the Disallow line at launch.\nUser-agent: *\nDisallow: /\n" if PREVIEW

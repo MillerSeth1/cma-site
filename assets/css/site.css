@@ -35,9 +35,16 @@ p{margin:0 0 1em}
 
 /* Header */
 .site-header{position:sticky;top:0;z-index:50;background:rgba(10,20,27,.86);backdrop-filter:saturate(1.4) blur(12px);-webkit-backdrop-filter:saturate(1.4) blur(12px);border-bottom:1px solid rgba(233,160,106,.18)}
-.site-header .wrap{display:flex;align-items:center;justify-content:space-between;gap:1rem;min-height:68px}
+.site-header .wrap{display:flex;align-items:center;gap:1rem;min-height:68px}
 .brand img{height:40px;width:auto}
 @media (max-width:520px){.brand img{height:28px}}
+.site-nav{margin-left:auto}
+.header-tools{display:flex;align-items:center;gap:.65rem;flex-shrink:0}
+.lang-switch{display:flex;align-items:center;gap:.3rem;font:700 .82rem var(--body);letter-spacing:.06em;white-space:nowrap}
+.lang-switch a{color:var(--sand);text-decoration:none;padding:.3rem .25rem;opacity:.72;border-radius:6px}
+.lang-switch a:hover{opacity:1;color:#fff}
+.lang-switch a[aria-current=true],.lang-switch a[aria-current=page]{opacity:1;color:#fff}
+.lang-sep{opacity:.45;padding:0 .05rem}
 .nav-toggle{display:none;background:none;border:1px solid rgba(244,231,214,.35);color:var(--sand);border-radius:10px;padding:.5rem .75rem;font:600 .9rem var(--body);cursor:pointer}
 .site-nav ul{list-style:none;margin:0;padding:0;display:flex;align-items:center;gap:.25rem}
 .site-nav a{display:block;color:var(--sand);text-decoration:none;font-weight:600;font-size:.92rem;padding:.5rem .7rem;border-radius:999px}
@@ -46,7 +53,8 @@ p{margin:0 0 1em}
 .site-nav a.nav-cta:hover,.site-nav a.nav-cta[aria-current=page]{background:var(--copper-2);color:var(--ink)}
 @media (max-width:1220px){
   .js .nav-toggle{display:inline-flex}
-  .js .site-nav{position:absolute;left:0;right:0;top:100%;background:var(--night);border-bottom:1px solid rgba(233,160,106,.25);display:none}
+  .js .header-tools{margin-left:auto}
+  .js .site-nav{margin-left:0;position:absolute;left:0;right:0;top:100%;background:var(--night);border-bottom:1px solid rgba(233,160,106,.25);display:none}
   .js .site-nav.open{display:block}
   .site-nav ul{flex-direction:column;align-items:stretch;padding:.75rem 1.25rem 1.25rem;gap:.1rem}
   .no-js .site-nav ul{flex-wrap:wrap;flex-direction:row}

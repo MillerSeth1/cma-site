@@ -1,4 +1,7 @@
 (function(){
+  var ES = document.documentElement.lang === "es";
+  var T = ES ? {viewer:"Visor de fotos",close:"Cerrar",prev:"Foto anterior",next:"Foto siguiente",of:" de "}
+             : {viewer:"Photo viewer",close:"Close",prev:"Previous photo",next:"Next photo",of:" of "};
   var root=document.querySelector("[data-gallery]");
   if(!root) return;
   var items=Array.prototype.slice.call(document.querySelectorAll("a.gallery-item"));
@@ -8,13 +11,13 @@
   dialog.className="lightbox";
   dialog.setAttribute("role","dialog");
   dialog.setAttribute("aria-modal","true");
-  dialog.setAttribute("aria-label","Photo viewer");
+  dialog.setAttribute("aria-label",T.viewer);
   dialog.hidden=true;
   dialog.innerHTML='<div class="lightbox-inner">'+
-    '<button type="button" class="lightbox-close" aria-label="Close">&times;</button>'+
-    '<button type="button" class="lightbox-prev" aria-label="Previous photo">&#10094;</button>'+
+    '<button type="button" class="lightbox-close" aria-label="'+T.close+'">&times;</button>'+
+    '<button type="button" class="lightbox-prev" aria-label="'+T.prev+'">&#10094;</button>'+
     '<figure><img alt=""><figcaption></figcaption></figure>'+
-    '<button type="button" class="lightbox-next" aria-label="Next photo">&#10095;</button>'+
+    '<button type="button" class="lightbox-next" aria-label="'+T.next+'">&#10095;</button>'+
     '<p class="lightbox-count" aria-live="polite"></p>'+
     '</div>';
   document.body.appendChild(dialog);
@@ -32,7 +35,7 @@
     img.src=a.getAttribute("href");
     img.alt=a.getAttribute("data-alt")||"";
     cap.textContent=a.getAttribute("data-caption")||"";
-    countEl.textContent=(idx+1)+" of "+items.length;
+    countEl.textContent=(idx+1)+T.of+items.length;
   }
   function open(i){
     lastFocus=document.activeElement;

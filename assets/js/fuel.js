@@ -1,4 +1,34 @@
 (function(){
+  var ES = document.documentElement.lang === "es";
+  var locale = ES ? "es-MX" : "en-US";
+  var T = ES ? {
+    call: "Llame para el precio actual",
+    callBadge: "Llame para el precio actual · (520) 287-9120",
+    callCard: "Llame al (520) 287-9120 para el precio actual.",
+    service: "Servicio completo",
+    perGal: " / gal",
+    updated: "Actualizado {t} según AirNav",
+    posted: "Según lo publicado en AirNav",
+    guaranteed: "Precio garantizado por AirNav",
+    checked: "Consultado {t}",
+    az: "hora de AZ",
+    badgeOk: "100LL {a}  ·  Jet A {j}  / gal",
+    cardOk: "100LL {a} y Jet A {j} por galón, servicio completo."
+  } : {
+    call: "Call for current price",
+    callBadge: "Call for current price · (520) 287-9120",
+    callCard: "Call for current price at (520) 287-9120.",
+    service: "Full service",
+    perGal: " / gal",
+    updated: "Updated {t} as reported by AirNav",
+    posted: "As posted on AirNav",
+    guaranteed: "AirNav guaranteed",
+    checked: "Checked {t}",
+    az: "AZ time",
+    badgeOk: "100LL {a}  ·  Jet A {j}  / gal",
+    cardOk: "100LL {a} and Jet A {j} per gallon, full service."
+  };
+
   function roots(){
     var nodes=document.querySelectorAll("[data-fuel][data-endpoint], [data-endpoint][data-fuel], [data-fuel-endpoint]");
     var list=[];
@@ -23,38 +53,40 @@
     return null;
   }
   function money(row){
-    if(!row) return "Call for current price";
-    return row.display||"Call for current price";
+    if(!row) return T.call;
+    return row.display||T.call;
   }
   function service(row){
-    return row && row.service ? row.service : "Full service";
+    var s = row && row.service ? row.service : T.service;
+    if(ES && /^full\s*service$/i.test(s)) return T.service;
+    return s;
   }
   function formatChecked(iso){
     if(!iso) return "";
     var d=new Date(iso);
     if(isNaN(d.getTime())) return "";
     try{
-      var fmt=new Intl.DateTimeFormat("en-US",{timeZone:"America/Phoenix",month:"short",day:"numeric",year:"numeric",hour:"numeric",minute:"2-digit",hour12:true});
-      return fmt.format(d).replace(/,/g,"")+" AZ time";
+      var fmt=new Intl.DateTimeFormat(locale,{timeZone:"America/Phoenix",month:"short",day:"numeric",year:"numeric",hour:"numeric",minute:"2-digit",hour12:true});
+      return fmt.format(d).replace(/,/g,"")+" "+T.az;
     }catch(e){return "";}
   }
   function updatedLine(data){
     var bits=[];
     if(data.reportedAtLabel||data.reportedAt){
-      bits.push("Updated "+(data.reportedAtLabel||data.reportedAt)+" as reported by AirNav");
+      bits.push(T.updated.replace("{t}", data.reportedAtLabel||data.reportedAt));
     }else{
-      bits.push("As posted on AirNav");
+      bits.push(T.posted);
     }
-    if(data.guaranteed) bits.push("AirNav guaranteed");
+    if(data.guaranteed) bits.push(T.guaranteed);
     var checked=formatChecked(data.fetchedAt);
-    if(checked) bits.push("Checked "+checked);
+    if(checked) bits.push(T.checked.replace("{t}", checked));
     return bits.join(" · ");
   }
   function fill(data){
     var avgas=find("100ll", data.prices);
     var jeta=find("jet", data.prices);
-    document.querySelectorAll("[data-fuel='jeta-price']").forEach(function(el){el.textContent=money(jeta)+" / gal";});
-    document.querySelectorAll("[data-fuel='100ll-price']").forEach(function(el){el.textContent=money(avgas)+" / gal";});
+    document.querySelectorAll("[data-fuel='jeta-price']").forEach(function(el){el.textContent=money(jeta)+T.perGal;});
+    document.querySelectorAll("[data-fuel='100ll-price']").forEach(function(el){el.textContent=money(avgas)+T.perGal;});
     document.querySelectorAll("[data-fuel='jeta-service']").forEach(function(el){el.textContent=service(jeta);});
     document.querySelectorAll("[data-fuel='100ll-service']").forEach(function(el){el.textContent=service(avgas);});
     document.querySelectorAll("[data-fuel='updated']").forEach(function(el){
@@ -64,17 +96,17 @@
     document.querySelectorAll("[data-fuel='badge-text']").forEach(function(el){
       var a=money(avgas), j=money(jeta);
       if((!avgas||!avgas.usd)&&(!jeta||!jeta.usd)){
-        el.textContent="Call for current price · (520) 287-9120";
+        el.textContent=T.callBadge;
       }else{
-        el.textContent="100LL "+a+"  ·  Jet A "+j+"  / gal";
+        el.textContent=T.badgeOk.replace("{a}",a).replace("{j}",j);
       }
     });
     document.querySelectorAll("[data-fuel='card']").forEach(function(el){
       var a=money(avgas), j=money(jeta);
       if((!avgas||!avgas.usd)&&(!jeta||!jeta.usd)){
-        el.textContent="Call for current price at (520) 287-9120.";
+        el.textContent=T.callCard;
       }else{
-        el.textContent="100LL "+a+" and Jet A "+j+" per gallon, full service.";
+        el.textContent=T.cardOk.replace("{a}",a).replace("{j}",j);
       }
     });
   }

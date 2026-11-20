@@ -17,6 +17,8 @@ Static site for Copper Mountain Air, LLC at Nogales International Airport (KOLS)
 | `assets/img/` | Logo variants, favicons, share image, and optimized photos (`photos/`, AVIF/WebP/JPEG, no metadata). Originals stay outside the repo. See `assets/img/README.md`. |
 | `tools/optimize_images.py`, `tools/make_logo.py`, `tools/make_png.py`, `tools/make_art.py` | Rebuild photos, logo SVGs, favicons/OG image, and the remaining fuel placeholder. |
 
+Spanish pages live under `/es/` (for example `_site/es/index.html` and `https://coppermountainair.com/es/`). Every public page has an EN | ES toggle, `hreflang` alternates, and a matching sitemap entry. Page bodies for Spanish are in `tools/pages_es.py`; translated blog posts go in `posts/es/` with the same slug as the English post. Aviation terms that pilots use in both languages (VFR, NOTAM, METAR, 100LL, Jet A, CTAF, ASOS, VOR/DME) are kept as-is. Widgets pick up Spanish UI labels from `document.documentElement.lang`.
+
 Build locally: `pip install markdown && python3 tools/build.py` then open `_site/index.html`.
 Public contact details (address, phone, hours, after-hours fueling, amenities and payment cards) live as constants near the top of `tools/build.py`. Do not invent facts; confirm any new detail before adding it.
 

@@ -1,4 +1,45 @@
 (function () {
+  var ES = document.documentElement.lang === "es";
+  function tr(en) {
+    if (!ES) return en;
+    if (SUM[en]) return SUM[en];
+    var s = en;
+    var pairs = [
+      [/^(\S+) is currently unavailable$/, "$1 no está disponible en este momento"],
+      [/^Runway (.+) is closed$/, "La pista $1 está cerrada"],
+      [/^A runway is closed$/, "Una pista está cerrada"],
+      [/^Taxiway (.+) is closed$/, "La calle de rodaje $1 está cerrada"],
+      [/^A taxiway is closed$/, "Una calle de rodaje está cerrada"],
+      [/^The cargo apron is closed$/, "La plataforma de carga está cerrada"],
+      [/^An apron is closed$/, "Una plataforma está cerrada"],
+      [/^Construction work on the cargo apron$/, "Obras en la plataforma de carga"],
+      [/^Construction work on the apron$/, "Obras en la plataforma"],
+      [/^Construction work on the runway$/, "Obras en la pista"],
+      [/^Construction work on a taxiway$/, "Obras en una calle de rodaje"],
+      [/^Construction work on the field$/, "Obras en el campo"],
+      [/^Obstacle lighting is out of service$/, "La iluminación de un obstáculo está fuera de servicio"],
+      [/^An obstacle is reported near the airport$/, "Se reporta un obstáculo cerca del aeropuerto"],
+      [/^Tower lighting is out of service$/, "La iluminación de la torre está fuera de servicio"],
+      [/^Runway lighting is out of service$/, "La iluminación de pista está fuera de servicio"],
+      [/^A light is out of service$/, "Una luz está fuera de servicio"],
+      [/^Extensive parachute activity near the airport$/, "Actividad extensa de paracaidismo cerca del aeropuerto"],
+      [/^Unmanned aircraft activity in the area$/, "Actividad de aeronaves no tripuladas en la zona"],
+      [/^Temporary flight restriction in effect$/, "Restricción temporal de vuelo (TFR) en vigor"],
+      [/^A local airspace advisory is in effect$/, "Hay un aviso local de espacio aéreo en vigor"],
+      [/^See official FAA text for details\.$/, "Consulte el texto oficial de la FAA para más detalles."]
+    ];
+    for (var i = 0; i < pairs.length; i++) {
+      var m = s.match(pairs[i][0]);
+      if (m) return s.replace(pairs[i][0], pairs[i][1]);
+    }
+    return s;
+  }
+  var TAGS = ES ? {
+    Fuel: "Combustible", Runway: "Pista", Taxiway: "Calle de rodaje", Apron: "Plataforma",
+    Closed: "Cerrado", Construction: "Obras", Obstacle: "Obstáculo", Lighting: "Iluminación",
+    Airspace: "Espacio aéreo", Notice: "Aviso"
+  } : {};
+  var SUM = {};
   var root = document.getElementById("notams") || document.getElementById("kols-notams");
   var hero = document.getElementById("hero-notams");
   var endpoint = (root && root.getAttribute("data-endpoint")) || (hero && hero.getAttribute("data-endpoint"));
@@ -15,7 +56,7 @@
     if (statusEl) statusEl.textContent = message;
     if (listEl) listEl.replaceChildren();
     if (moreWrap) moreWrap.hidden = true;
-    setHero("KOLS NOTAMs", false);
+    setHero(ES ? "NOTAM de KOLS" : "KOLS NOTAMs", false);
     setFuelBanners([]);
   }
 
@@ -39,11 +80,11 @@
         return;
       }
       var parts = fuel.map(function (n) {
-        var kind = n._meta.fuelKind || "Fuel";
-        var num = n.number ? "FAA NOTAM " + n.number : "an FAA NOTAM";
-        return kind + " currently unavailable per " + num;
+        var kind = n._meta.fuelKind || (ES ? "El combustible" : "Fuel");
+        var num = n.number ? "FAA NOTAM " + n.number : (ES ? "un NOTAM de la FAA" : "an FAA NOTAM");
+        return ES ? (kind + " no está disponible, según " + num) : (kind + " currently unavailable per " + num);
       });
-      el.textContent = unique(parts).join("; ") + " — call ahead";
+      el.textContent = unique(parts).join("; ") + (ES ? " — llame antes de llegar" : " — call ahead");
       el.hidden = false;
     });
   }
@@ -54,7 +95,7 @@
 
   function tidy(text) {
     var s = String(text || "").replace(/\s+/g, " ").trim();
-    if (!s) return "See official FAA text for details.";
+    if (!s) return tr("See official FAA text for details.");
     s = s.replace(/^![A-Z0-9]{3}\s+\d{2}\/\d{3}\s+/i, "");
     var map = [
       [/\bCLSD\b/g, "closed"],
@@ -175,7 +216,8 @@
 
     if (!summary) summary = tidy(n.text);
     if (!tags.length) tag("Notice");
-    return { tags: tags, high: high, fuelOut: fuelOut, fuelKind: fuelKind, impact: impact, summary: summary };
+    var outTags = tags.map(function (tg) { return TAGS[tg] || tg; });
+    return { tags: outTags, high: high, fuelOut: fuelOut, fuelKind: fuelKind, impact: impact, summary: tr(summary) };
   }
 
   function endDate(n) {
@@ -189,23 +231,23 @@
 
   function expiresLabel(n) {
     var end = endDate(n);
-    if (end && end.perm) return "Permanent";
+    if (end && end.perm) return ES ? "Permanente" : "Permanent";
     if (!end || !end.date) return "";
     var ms = end.date.getTime() - Date.now();
-    if (ms <= 0) return "Expired";
+    if (ms <= 0) return ES ? "Vencido" : "Expired";
     var mins = Math.round(ms / 60000);
-    if (mins < 60) return "Expires in " + mins + " minute" + (mins === 1 ? "" : "s");
+    if (mins < 60) return ES ? ("Vence en " + mins + (mins === 1 ? " minuto" : " minutos")) : ("Expires in " + mins + " minute" + (mins === 1 ? "" : "s"));
     var hours = Math.round(ms / 3600000);
-    if (hours < 24) return "Expires in " + hours + " hour" + (hours === 1 ? "" : "s");
+    if (hours < 24) return ES ? ("Vence en " + hours + (hours === 1 ? " hora" : " horas")) : ("Expires in " + hours + " hour" + (hours === 1 ? "" : "s"));
     var days = Math.round(ms / 86400000);
-    return "Expires in " + days + " day" + (days === 1 ? "" : "s");
+    return ES ? ("Vence en " + days + (days === 1 ? " día" : " días")) : ("Expires in " + days + " day" + (days === 1 ? "" : "s"));
   }
 
   function formatAzIso(iso) {
     if (!iso) return "";
     var d = new Date(iso);
     if (isNaN(d.getTime())) return "";
-    var fmt = new Intl.DateTimeFormat("en-US", {
+    var fmt = new Intl.DateTimeFormat(ES ? "es-MX" : "en-US", {
       timeZone: "America/Phoenix",
       month: "short",
       day: "numeric",
@@ -214,7 +256,7 @@
       minute: "2-digit",
       hour12: true,
     });
-    return fmt.format(d).replace(/,/g, "") + " AZ time";
+    return fmt.format(d).replace(/,/g, "") + (ES ? " hora AZ" : " AZ time");
   }
 
   function el(tag, className, text) {
@@ -242,15 +284,15 @@
     li.appendChild(el("p", "notam-summary", n._meta.summary));
 
     var times = el("div", "notam-times");
-    var start = n.effectiveStart || "Unknown start";
-    var end = n.effectiveEnd || "Unknown end";
+    var start = n.effectiveStart || (ES ? "Inicio desconocido" : "Unknown start");
+    var end = n.effectiveEnd || (ES ? "Fin desconocido" : "Unknown end");
     var exp = expiresLabel(n);
-    times.textContent = "Effective " + start + " – " + end + (exp ? " · " + exp : "");
+    times.textContent = (ES ? "Vigente " : "Effective ") + start + " – " + end + (exp ? " · " + exp : "");
     li.appendChild(times);
 
     if (n.text) {
       var details = el("details", "notam-raw");
-      details.appendChild(el("summary", "", "Raw FAA text"));
+      details.appendChild(el("summary", "", ES ? "Texto oficial de la FAA" : "Raw FAA text"));
       details.appendChild(el("p", "notam-text", n.text));
       li.appendChild(details);
     }
@@ -282,13 +324,13 @@
       items = sortNotams(items);
 
       var highImpact = items.some(function (n) { return n._meta.high; });
-      setHero(items.length ? "KOLS NOTAMs (" + items.length + ")" : "KOLS NOTAMs", highImpact);
+      setHero(items.length ? (ES ? ("NOTAM de KOLS (" + items.length + ")") : ("KOLS NOTAMs (" + items.length + ")")) : (ES ? "NOTAM de KOLS" : "KOLS NOTAMs"), highImpact);
       setFuelBanners(items);
 
       if (updatedEl) {
         var when = formatAzIso(data.fetchedAt);
         if (when) {
-          updatedEl.textContent = "Updated " + when;
+          updatedEl.textContent = (ES ? "Actualizado " : "Updated ") + when;
           updatedEl.hidden = false;
         }
       }
@@ -296,15 +338,15 @@
       if (!root || !listEl || !statusEl) return;
 
       if (!items.length) {
-        fallback("No active NOTAMs found.");
-        setHero("KOLS NOTAMs (0)", false);
+        fallback(ES ? "No se encontraron NOTAM activos." : "No active NOTAMs found.");
+        setHero(ES ? "NOTAM de KOLS (0)" : "KOLS NOTAMs (0)", false);
         return;
       }
 
       var highCount = items.filter(function (n) { return n._meta.high; }).length;
       var lowCount = items.length - highCount;
       statusEl.textContent =
-        items.length === 1 ? "1 active NOTAM for KOLS." : items.length + " active NOTAMs for KOLS.";
+        ES ? (items.length === 1 ? "1 NOTAM activo para KOLS." : items.length + " NOTAM activos para KOLS.") : (items.length === 1 ? "1 active NOTAM for KOLS." : items.length + " active NOTAMs for KOLS.");
 
       var frag = document.createDocumentFragment();
       items.forEach(function (n) { frag.appendChild(renderItem(n)); });
@@ -317,8 +359,8 @@
           listEl.querySelectorAll(".notam-low").forEach(function (li) { li.hidden = !expanded; });
           toggleBtn.setAttribute("aria-expanded", expanded ? "true" : "false");
           toggleBtn.textContent = expanded
-            ? "Show only highlights"
-            : "Show all " + items.length + " NOTAMs";
+            ? (ES ? "Ver solo los destacados" : "Show only highlights")
+            : (ES ? ("Ver los " + items.length + " NOTAM") : ("Show all " + items.length + " NOTAMs"));
         }
         toggleBtn.onclick = function () {
           expanded = !expanded;
@@ -330,6 +372,6 @@
       }
     })
     .catch(function () {
-      fallback("Live NOTAMs couldn’t be loaded. Use the official FAA link below.");
+      fallback(ES ? "No se pudieron cargar los NOTAM en vivo. Use el enlace oficial de la FAA abajo." : "Live NOTAMs couldn’t be loaded. Use the official FAA link below.");
     });
 })();

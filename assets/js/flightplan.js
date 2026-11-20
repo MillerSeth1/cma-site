@@ -4,7 +4,11 @@
    Garmin Pilot: community-documented scheme (not officially published by Garmin). */
 (function(){
   "use strict";
+  var ES = document.documentElement.lang === "es";
   var DEST = "KOLS";
+  var BAD_ID = ES
+    ? "Ingrese un identificador de aeropuerto de 3 o 4 caracteres, como KTUS."
+    : "Enter a 3- or 4-character airport identifier, such as KTUS.";
   var form = document.getElementById("flightplan-form");
   var input = document.getElementById("dep-icao");
   var err = document.getElementById("flightplan-error");
@@ -65,7 +69,7 @@
     input.value = normalize(input.value);
     if(!updateHrefs()){
       e.preventDefault();
-      showError("Enter a 3- or 4-character airport identifier, such as KTUS.");
+      showError(BAD_ID);
       input.focus();
     }
   }
@@ -77,7 +81,7 @@
   input.addEventListener("change", function(){
     input.value = normalize(input.value);
     if(!updateHrefs() && normalize(input.value)){
-      showError("Enter a 3- or 4-character airport identifier, such as KTUS.");
+      showError(BAD_ID);
     }
   });
   form.addEventListener("submit", function(e){
@@ -86,7 +90,7 @@
     if(updateHrefs()){
       window.open(sv.getAttribute("href"), "_blank", "noopener");
     }else if(normalize(input.value)){
-      showError("Enter a 3- or 4-character airport identifier, such as KTUS.");
+      showError(BAD_ID);
       input.focus();
     }
   });
