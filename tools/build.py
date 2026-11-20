@@ -104,7 +104,11 @@ NAV = [("services.html","Services"),("fuel-fbo.html","Fuel &amp; FBO"),
        ("blog/index.html","Blog")]
 # Page-specific assets. Leaflet 1.9.4 is vendored in assets/vendor/leaflet (BSD-2-Clause) so the map never depends on a CDN.
 PAGE_CSS = {"about.html": ["assets/css/pages.css"], "flight-training.html": ["assets/vendor/leaflet/leaflet.css", "assets/css/pages.css"], "cargo.html": ["assets/css/pages.css"]}
-PAGE_JS = {"flight-training.html": ["assets/vendor/leaflet/leaflet.js", "assets/js/kols.js"]}
+PAGE_JS = {
+  "index.html": ["assets/js/flightplan.js"],
+  "fuel-fbo.html": ["assets/js/flightplan.js"],
+  "flight-training.html": ["assets/vendor/leaflet/leaflet.js", "assets/js/kols.js"],
+}
 
 JSONLD_BIZ = {
   "@context":"https://schema.org","@type":["LocalBusiness"],"@id":SITE_URL+"#business",
@@ -233,6 +237,34 @@ def kols_link(p, text):
         return f'<p style="margin-top:1.5rem"><a class="btn btn-ghost" href="{p}blog/kols-pilot-guide.html">{text} {ARROW}</a></p>'
     return ""
 
+
+def flight_plan_widget():
+    """Deep links to plan a flight into KOLS. Formats documented in assets/js/flightplan.js."""
+    sky_apt = "https://skyvector.com/airport/OLS/Nogales-International-Airport"
+    return f"""
+<div class="flightplan reveal" id="plan-flight">
+  <div class="flightplan-card">
+    <p class="eyebrow">Flight planning</p>
+    <h2>Plan your flight to KOLS.</h2>
+    <p>Enter your departure airport to open a route to Nogales International (KOLS) in ForeFlight, Garmin Pilot or SkyVector. Leave it blank to open KOLS on its own.</p>
+    <form id="flightplan-form" class="flightplan-form" action="#plan-flight" method="get">
+      <div class="field">
+        <label for="dep-icao">Departure airport <span class="hint">(ICAO, optional)</span></label>
+        <input id="dep-icao" name="dep" type="text" inputmode="text" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="8" placeholder="e.g. KTUS" aria-describedby="dep-hint flightplan-error">
+        <p id="dep-hint" class="hint">Use a 3- or 4-character identifier, such as KTUS. Destination is always KOLS.</p>
+        <p id="flightplan-error" class="flightplan-error" role="alert" hidden></p>
+      </div>
+      <div class="flightplan-actions">
+        <a class="btn btn-primary" id="fp-foreflight" href="foreflightmobile://maps/search?q=KOLS">Open in ForeFlight</a>
+        <a class="btn btn-dark" id="fp-garmin" href="garminpilot://airport?id=KOLS">Open in Garmin Pilot</a>
+        <a class="btn btn-dark" id="fp-skyvector" href="{sky_apt}" target="_blank" rel="noopener">Open in SkyVector</a>
+      </div>
+    </form>
+    <p class="note">ForeFlight opens in the app on iPad/iPhone. Garmin Pilot opens in the app on iPad, iPhone or Android. SkyVector opens in your browser on any device.</p>
+    <p class="note">Garmin Pilot does not publish an official URL scheme; the route link is a commonly used format and may not load in every version. If it does not, enter the plan in the app or use SkyVector. These links are for planning only and are not a briefing or a filed flight plan.</p>
+  </div>
+</div>"""
+
 # ---------- HOME ----------
 def home(p):
     return f"""
@@ -242,7 +274,7 @@ def home(p):
     <p class="eyebrow">Nogales International Airport · KOLS</p>
     <h1>Fuel, freight &amp; flight <span class="cu">on the border.</span></h1>
     <p class="lede">Copper Mountain Air keeps Southern Arizona moving: Jet A and Avgas on the ramp, FBO service at KOLS, Part 61 flight training, and air and ground cargo out of Nogales.</p>
-    <div class="actions"><a class="btn btn-primary" href="{p}contact.html">Get in touch {ARROW}</a><a class="btn btn-ghost" href="{p}fuel-fbo.html">Fuel &amp; FBO</a></div>
+    <div class="actions"><a class="btn btn-primary" href="{p}contact.html">Get in touch {ARROW}</a><a class="btn btn-ghost" href="{p}fuel-fbo.html">Fuel &amp; FBO</a><a class="btn btn-ghost" href="#plan-flight">Plan your flight</a></div>
     <div class="hero-strip"><span>Jet A</span><span>100LL Avgas</span><span>FBO</span><span>Flight training</span><span>Air &amp; ground cargo</span><span>Santa Cruz County, AZ</span></div>
   </div>
 </section>
@@ -261,6 +293,7 @@ def home(p):
 <section class="dark"><div class="wrap">
   <div class="section-head reveal"><p class="eyebrow">Flying in?</p><h2>Nogales International at a glance.</h2><p>A 7,200-foot runway at the foot of the Santa Cruz Valley, about 7 miles northeast of downtown Nogales.</p></div>
   {AIRPORT_FACTS}
+  {flight_plan_widget()}
   {kols_link(p, "Read the KOLS pilot guide")}
 </div></section>
 
@@ -362,6 +395,7 @@ def fuel_fbo(p):
 <section class="dark"><div class="wrap">
   <div class="section-head reveal"><p class="eyebrow">Airport info</p><h2>KOLS for pilots.</h2></div>
   {AIRPORT_FACTS}
+  {flight_plan_widget()}
   {kols_link(p, "Full KOLS pilot guide")}
 </div></section>
 {cta(p, "Inbound to KOLS?", f"Let us know your ETA and fuel needs. Phone: {PHONE_LINK}")}"""
