@@ -742,7 +742,7 @@ def history(p):
 <p>In <b>2022</b>, nearly <b>$2 million</b> in state grants funded a new LED rotating beacon, runway end identifier lights, runway edge lights, guidance signs and a new visual approach guidance system.</p>"""),
       ("now", "Today", "2024–present", "Copper Mountain Air at KOLS",
        fig("cargo", "The cargo sign on the field at KOLS today.") +
-       f"""<p>In <b>2024</b>, Copper Mountain Air became the full-service FBO at Nogales International Airport, bringing Phillips 66 fueling, flight training, and expedited cargo under one locally led roof on the field.</p>
+       f"""<p>In <b>2024</b>, Copper Mountain Air succeeded Tiffin Aviation as the full-service FBO at Nogales International Airport, bringing Phillips 66 fueling, flight training, and expedited cargo under one locally led roof on the field.</p>
 <p>With Santa Cruz County investing in a new airport fuel farm and ongoing airfield upgrades, KOLS is heading into its second century ready for the next generation of Southern Arizona aviation.</p>
 <p style="margin-top:1rem"><a class="btn btn-primary" href="{p}flight-training.html">Fly with us {ARROW}</a></p>"""),
     ]
