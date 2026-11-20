@@ -67,9 +67,13 @@ def img(slot, p, cls="", eager=False, sizes="half"):
 
 def ph(t): return f'<span class="ph">[{t}]</span>'
 
-NAV = [("index.html","Home"),("services.html","Services"),("fuel-fbo.html","Fuel &amp; FBO"),
-       ("flight-training.html","Flight Training"),("charter.html","Charter"),("about.html","About"),
+# Home is reached from the logo; Cargo has its own page (Seth, Nov 19, 2026).
+NAV = [("services.html","Services"),("fuel-fbo.html","Fuel &amp; FBO"),
+       ("flight-training.html","Flight Training"),("cargo.html","Cargo"),("charter.html","Charter"),("about.html","About"),
        ("blog/index.html","Blog")]
+# Page-specific assets. Leaflet 1.9.4 is vendored in assets/vendor/leaflet (BSD-2-Clause) so the map never depends on a CDN.
+PAGE_CSS = {"flight-training.html": ["assets/vendor/leaflet/leaflet.css", "assets/css/pages.css"], "cargo.html": ["assets/css/pages.css"]}
+PAGE_JS = {"flight-training.html": ["assets/vendor/leaflet/leaflet.js", "assets/js/kols.js"]}
 
 JSONLD_BIZ = {
   "@context":"https://schema.org","@type":["LocalBusiness"],"@id":SITE_URL+"#business",
@@ -119,7 +123,7 @@ def head(title, desc, path, p, extra_ld=None, og_type="website", og_img=None):
 <meta name="geo.placename" content="Nogales, Arizona">
 <link rel="preload" href="{p}assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="{p}assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
-{pre}<link rel="stylesheet" href="{p}assets/css/site.css">
+{pre}<link rel="stylesheet" href="{p}assets/css/site.css">{''.join(f'\n<link rel="stylesheet" href="{p}{c}">' for c in PAGE_CSS.get(path, []))}
 <script>document.documentElement.className="js";</script>
 <script type="application/ld+json">{json.dumps(ld if len(ld)>1 else ld[0], ensure_ascii=False)}</script>
 </head>"""
@@ -150,7 +154,7 @@ def footer(p):
       <p>Fuel, FBO and cargo at Nogales International Airport (KOLS), serving Nogales and Santa Cruz County, Arizona.</p></div>
     <div><h3>Visit</h3><p>Copper Mountain Air, LLC<br>Nogales International Airport (KOLS)<br>{STREET}<br>Nogales, AZ 85621</p></div>
     <div><h3>Contact</h3><ul><li>Phone: {PHONE_LINK}</li><li><a href="mailto:{CONTACT_TO}">{CONTACT_TO}</a></li><li>Hours: {HOURS_HTML}</li><li><a href="{p}contact.html">Send a message</a></li></ul></div>
-    <div><h3>Explore</h3><ul><li><a href="{p}services.html">Services</a></li><li><a href="{p}fuel-fbo.html">Fuel &amp; FBO</a></li><li><a href="{p}flight-training.html">Flight training</a></li><li><a href="{p}blog/index.html">Blog</a></li></ul></div>
+    <div><h3>Explore</h3><ul><li><a href="{p}services.html">Services</a></li><li><a href="{p}fuel-fbo.html">Fuel &amp; FBO</a></li><li><a href="{p}flight-training.html">Flight training</a></li><li><a href="{p}cargo.html">Cargo</a></li><li><a href="{p}charter.html">Charter</a></li><li><a href="{p}about.html">About</a></li><li><a href="{p}blog/index.html">Blog</a></li></ul></div>
   </div>
   <div class="legal"><span>© 2026 Copper Mountain Air, LLC</span><span>On-demand charter is coming soon and is not yet offered.</span></div>
 </div></footer>
@@ -162,6 +166,8 @@ def footer(p):
 def page(path, title, desc, body, extra_ld=None, og_type="website"):
     p = "../" * path.count("/")
     out = head(title, desc, path, p, extra_ld, og_type) + "\n" + header(path, p) + "\n" + body(p) + "\n" + footer(p)
+    js = "".join(f'<script src="{p}{s}" defer></script>\n' for s in PAGE_JS.get(path, []))
+    if js: out = out.replace(f'<script src="{p}assets/js/site.js" defer></script>\n', f'<script src="{p}assets/js/site.js" defer></script>\n{js}', 1)
     full = os.path.join(OUT, path)
     os.makedirs(os.path.dirname(full), exist_ok=True)
     open(full, "w").write(out)
@@ -215,7 +221,7 @@ def home(p):
   <div class="grid cards">
     <article class="card reveal"><div class="media">{img("fuel", p, sizes="card")}</div><div class="body"><span class="num">01</span><h3>Fuel</h3><p>Jet A and 100LL Avgas at Nogales International. {FUEL_PRICES}</p><a class="more" href="{p}fuel-fbo.html">Fuel details {ARROW}</a></div></article>
     <article class="card reveal"><div class="media">{img("fbo", p, sizes="card")}</div><div class="body"><span class="num">02</span><h3>FBO services</h3><p>Ground handling, ramp and tie-down parking, and hangar space on the field.</p><a class="more" href="{p}fuel-fbo.html#fbo">FBO services {ARROW}</a></div></article>
-    <article class="card reveal"><div class="media">{img("cargo", p, sizes="card")}</div><div class="body"><span class="num">03</span><h3>Cargo &amp; freight</h3><p>Time-critical freight out of Nogales by air and ground, including on-demand expedited freight.</p><a class="more" href="{p}services.html#cargo">Cargo services {ARROW}</a></div></article>
+    <article class="card reveal"><div class="media">{img("cargo", p, sizes="card")}</div><div class="body"><span class="num">03</span><h3>Cargo &amp; freight</h3><p>Time-critical freight out of Nogales by air and ground, including on-demand expedited freight.</p><a class="more" href="{p}cargo.html">Cargo services {ARROW}</a></div></article>
   </div>
 </div></section>
 
@@ -233,7 +239,7 @@ def home(p):
     <p>FAA Part 61 single-engine flight training is available now at Nogales International Airport. Multi-engine training is arriving shortly, and FAA Part 141 flight school certification is in process.</p>
     <p>On-demand charter is coming soon and is not yet offered.</p>
     <p><a class="btn btn-dark" href="{p}contact.html?topic=Flight%20training">Start flight training {ARROW}</a></p>
-    <p><a href="{p}flight-training.html">Flight training</a> · <a href="{p}charter.html">Charter</a></p></div>
+    <p><a href="{p}flight-training.html">Flight training</a> · <a href="{p}cargo.html">Cargo</a> · <a href="{p}charter.html">Charter</a></p></div>
 </div></section>
 {cta(p)}
 """
@@ -249,7 +255,7 @@ def services(p):
       <li>On-demand expedited freight</li>
       <li>Air cargo coordination and ramp handling at KOLS</li>
     </ul>
-    <a class="btn btn-dark" href="{p}contact.html?topic=Cargo%20%2F%20freight">Request a freight quote {ARROW}</a></div>
+    <p style="display:flex;gap:.6rem;flex-wrap:wrap"><a class="btn btn-dark" href="{p}cargo.html">Cargo &amp; fleet details {ARROW}</a><a class="btn" style="border-color:#d9c9b5;color:var(--ink)" href="{p}contact.html?topic=Cargo%20%2F%20freight">Request a freight quote</a></p></div>
 </div>
 <div class="wrap" style="padding-top:0">
   <div class="section-head reveal"><p class="eyebrow">Fleet</p><h2>Our trucks.</h2><p>Two trucks for on-demand moves, from smaller van loads to dock-height freight.</p></div>
@@ -265,9 +271,10 @@ def services(p):
     </div></article>
     <article class="card reveal"><div class="body">
       <h3>Hino 268 Box Truck</h3>
-      <p>26-foot dock-height</p>
+      <p>26-foot dock-height with liftgate</p>
       <ul class="checks">
         <li>Cargo box length: 26 ft (dock-height)</li>
+        <li>Liftgate for ground-level loading and delivery</li>
         <li>GVWR: 25,999 lbs (16,500 lbs empty weight)</li>
         <li>Max payload: up to 9,499 lbs theoretical (actual usable payload accounts for driver, fuel, equipment, and axle limits)</li>
       </ul>
@@ -328,20 +335,349 @@ def fuel_fbo(p):
 </div></section>
 {cta(p, "Inbound to KOLS?", f"Let us know your ETA and fuel needs. Phone: {PHONE_LINK}")}"""
 
+# ---------- FLIGHT TRAINING + CARGO (aviation pages) ----------
+# KOLS data verified 2026-11-19 against the FAA Chart Supplement (SW, 29 Oct–24 Dec 2026, p. 68) and AirNav KOLS.
+# Destination airports: coordinates from AirNav (FAA data); airspace/tower from the same Chart Supplement cycle.
+# Distances are great-circle NM from the KOLS ARP; magnetic course uses KOLS 9°E variation. Not for navigation.
+FLIGHTCIRCLE = "https://www.flightcircle.com/v1/"
+KOLS = {"lat": 31.4177222, "lon": -110.8478889, "elev": "3,955"}
+XC = [
+  ("KFHU", "Sierra Vista Muni–Libby AAF", 31.5884611, -110.3443750, True,  "Class D (Libby Tower 124.95, weekday hours; Class G other times)", "Closest towered field: joint civil/military Class D practice."),
+  ("KTUS", "Tucson International",        32.1170703, -110.9414625, True,  "Class C (Tucson Tower 118.3)", "Class C radar services and big-airport towered ops."),
+  ("E95",  "Benson Muni",                 31.9994444, -110.3579722, False, "Non-towered · CTAF/UNICOM 122.8", "Non-towered cross-country stop in the San Pedro Valley."),
+  ("KRYN", "Ryan Field",                  32.1422111, -111.1745792, True,  "Class D 6 a.m.–8 p.m. MST (Tower 125.8)", "Towered Class D practice west of Tucson."),
+  ("KAVQ", "Marana Regional",             32.4095556, -111.2183889, False, "Non-towered · CTAF/UNICOM 123.0", "More than 50 NM straight-line: a qualifying long cross-country leg."),
+  ("KDUG", "Bisbee Douglas International", 31.4689444, -109.6037500, False, "Non-towered · CTAF/UNICOM 123.0 (Class E 6 a.m.–9 p.m. MST)", "More than 50 NM straight-line: a qualifying long cross-country leg."),
+]
+def _gc(lat1, lon1, lat2, lon2):
+    import math
+    p1, p2 = math.radians(lat1), math.radians(lat2); dl = math.radians(lon2 - lon1)
+    d = 2 * 3440.065 * math.asin(math.sqrt(math.sin((p2 - p1) / 2) ** 2 + math.cos(p1) * math.cos(p2) * math.sin(dl / 2) ** 2))
+    b = (math.degrees(math.atan2(math.sin(dl) * math.cos(p2), math.cos(p1) * math.sin(p2) - math.sin(p1) * math.cos(p2) * math.cos(dl))) + 360) % 360
+    return d, b
+def xc_data():
+    out = []
+    for i, n, la, lo, twr, asp, why in XC:
+        d, b = _gc(KOLS["lat"], KOLS["lon"], la, lo)
+        out.append({"id": i, "name": n, "lat": la, "lon": lo, "towered": twr, "airspace": asp, "why": why,
+                    "dist": round(d), "tc": f"{round(b) % 360:03d}", "mc": f"{round(b - 9) % 360:03d}"})
+    return out
+
+def ico(name):
+    P = {
+      "phone": '<path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/>',
+      "mail": '<rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/>',
+      "runway": '<path d="M9 2 5 22M15 2l4 20M12 4v3M12 10v3M12 16v3"/>',
+      "mountain": '<path d="m3 20 6-11 4 6 2-3 6 8z"/><path d="M9 9 7.5 12"/>',
+      "tower": '<path d="M8 22h8M10 22l1-11h2l1 11M7 8h10l-1 3H8zM12 2v6M9 5h6"/>',
+      "sun": '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+      "compass": '<circle cx="12" cy="12" r="10"/><path d="m16.2 7.8-2.1 6.3-6.3 2.1 2.1-6.3z"/>',
+      "fuel": '<path d="M3 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18M3 22h12M3 10h12M15 13h2a2 2 0 0 1 2 2v3a1.5 1.5 0 0 0 3 0V9l-3-3"/>',
+      "plane": '<path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/>',
+      "truck": '<path d="M1 4h14v12H1zM15 9h4l3 3v4h-7z"/><circle cx="5.5" cy="18.5" r="2"/><circle cx="18.5" cy="18.5" r="2"/>',
+      "map": '<path d="m1 6 7-4 8 4 7-4v16l-7 4-8-4-7 4z"/><path d="M8 2v16M16 6v16"/>',
+      "clock": '<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',
+      "box": '<path d="m21 16-9 5-9-5V8l9-5 9 5z"/><path d="m3.3 7 8.7 5 8.7-5M12 22V12"/>',
+      "ext": '<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/>',
+    }
+    return f'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{P[name]}</svg>'
+
+def wind_rose():
+    import math
+    c, R = 160, 140
+    ticks = []
+    for d in range(0, 360, 10):
+        r1 = R - (14 if d % 30 == 0 else 7)
+        a = math.radians(d)
+        ticks.append(f'<line x1="{c + R*math.sin(a):.1f}" y1="{c - R*math.cos(a):.1f}" x2="{c + r1*math.sin(a):.1f}" y2="{c - r1*math.cos(a):.1f}" stroke="{"#e9a06a" if d % 90 == 0 else "rgba(230,237,241,.45)"}" stroke-width="{2 if d % 30 == 0 else 1}"/>')
+    labels = []
+    for d in range(0, 360, 30):
+        a = math.radians(d); r = R - 28
+        t = {0: "N", 90: "E", 180: "S", 270: "W"}.get(d, f"{d//10:02d}")
+        labels.append(f'<text x="{c + r*math.sin(a):.1f}" y="{c - r*math.cos(a) + 5:.1f}" text-anchor="middle" font-size="{15 if d % 90 == 0 else 11}" fill="{"#e9a06a" if d % 90 == 0 else "#9fb0ba"}">{t}</text>')
+    def at(b, r):
+        a = math.radians(b); return c + r*math.sin(a), c - r*math.cos(a)
+    x04, y04 = at(217, 70); x22, y22 = at(37, 70)
+    return f'''<svg class="rose" viewBox="0 0 320 336" role="img" aria-label="Wind rose for KOLS Runway 04/22, drawn to magnetic north, with the live wind direction">
+<defs><radialGradient id="rg" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#14303f"/><stop offset="1" stop-color="#071017"/></radialGradient>
+<marker id="ah" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="#e9a06a"/></marker></defs>
+<circle cx="160" cy="160" r="150" fill="url(#rg)" stroke="rgba(233,160,106,.35)"/>
+<circle cx="160" cy="160" r="70" fill="none" stroke="rgba(230,237,241,.08)"/>
+{''.join(ticks)}{''.join(labels)}
+<g transform="rotate(37 160 160)"><rect x="146" y="66" width="28" height="188" rx="2" fill="#2a3640" stroke="#c9d4da" stroke-width="1.2"/>
+<line x1="160" y1="104" x2="160" y2="216" stroke="#fff" stroke-width="1.5" stroke-dasharray="8 7"/>
+<rect x="148" y="66" width="24" height="4" fill="#fff" opacity=".8"/><rect x="148" y="250" width="24" height="4" fill="#fff" opacity=".8"/></g>
+<text class="rwy-end" data-rwy="04" x="{x04:.1f}" y="{y04 + 5:.1f}" text-anchor="middle" transform="rotate(37 {x04:.1f} {y04:.1f})">04</text>
+<text class="rwy-end" data-rwy="22" x="{x22:.1f}" y="{y22 + 5:.1f}" text-anchor="middle" transform="rotate(217 {x22:.1f} {y22:.1f})">22</text>
+<g id="wind-arrow" opacity="0" style="transition:transform .8s cubic-bezier(.2,.7,.2,1)"><line x1="160" y1="22" x2="160" y2="112" stroke="#e9a06a" stroke-width="5" stroke-linecap="round" marker-end="url(#ah)"/><circle cx="160" cy="22" r="6" fill="#e9a06a"/></g>
+<circle cx="160" cy="160" r="4" fill="#e9a06a"/>
+<text id="wind-label" x="160" y="331" text-anchor="middle" font-size="12" fill="#e6edf1">LOADING…</text>
+<text x="300" y="20" text-anchor="end" font-size="10" fill="#9fb0ba">MAG</text>
+</svg>'''
+
 def flight_training(p):
-    return page_hero("Flight Training", "Learn to fly at KOLS.", "FAA Part 61 single-engine flight training is available now at Nogales International Airport (KOLS).") + f"""
-<section><div class="wrap split">
-  <div class="frame reveal">{img("training", p)}</div>
-  <div class="reveal"><p class="eyebrow">Available now</p><h2>Part 61 single-engine training.</h2>
-    <p>Copper Mountain Air offers FAA Part 61 single-engine flight training on the field at Nogales International Airport.</p>
-    <ul class="checks">
-      <li>FAA Part 61 single-engine flight training, available now</li>
-      <li>Multi-engine training arriving shortly</li>
-      <li>FAA Part 141 flight school certification in process</li>
-    </ul>
-    <p>To get started, or to join the list for multi-engine training and Part 141 updates, call {PHONE_LINK}, email <a href="mailto:{CONTACT_TO}">{CONTACT_TO}</a>, or send a note through the contact form.</p>
-    <a class="btn btn-dark" href="{p}contact.html?topic=Flight%20training">Get started {ARROW}</a></div>
-</div></section>{cta(p, "Ready to fly?", f"Call {PHONE_LINK} or email us and we'll help you get started.")}"""
+    xc = xc_data()
+    xc_json = json.dumps({"kols": KOLS, "dest": xc}).replace("</", "<\\/")
+    fc = f'<a class="btn btn-glass" href="{FLIGHTCIRCLE}" target="_blank" rel="noopener">Student portal · FlightCircle {ARROW}</a>'
+    xc_btns = "".join(f'<button class="xc" type="button" data-goto="{d["id"]}"><span class="id">{d["id"]}</span><span class="nm">{html.escape(d["name"])}</span><span class="d">{d["dist"]} NM<small>{d["mc"]}° mag</small></span><span class="as">{html.escape(d["airspace"])}</span></button>' for d in sorted(xc, key=lambda d: d["dist"]))
+    steps = [
+      ("01", "Discovery flight", "ask", "Call to schedule", "Your first lesson.", "Meet the airplane and fly it yourself with an instructor beside you, right here at KOLS. It's the easiest way to find out if flight training is for you.", ["Fly from a 7,200-ft runway", "See the Santa Cruz Valley from the air", "Talk through your goals, schedule and next steps"]),
+      ("02", "Private pilot", "now", "Part 61 · Enrolling now", "Earn your private pilot certificate.", "FAA Part 61 single-engine training, available now at Nogales International. Train at your own pace with a schedule built around you.", ["Ground and flight training toward the FAA private pilot certificate", "Cross-country flying across Southern Arizona", "Towered Class C and Class D practice within about 50 NM"]),
+      ("03", "Instrument rating", "ask", "Ask about availability", "Fly by the instruments.", "KOLS has a VOR/DME on the field plus RNAV (GPS)-A and VOR-B approaches, with Tucson Approach overhead. Ask us about instrument training.", ["On-field Nogales VOR/DME (114.65)", "Published RNAV (GPS)-A and VOR-B approaches", "Tucson Approach and Center services nearby"]),
+      ("04", "Commercial pilot", "ask", "Ask about availability", "Take the next step.", "Ask us about commercial pilot training under Part 61 and how it fits with what you've already logged.", ["Build on your private and instrument training", "Real high-elevation and mountain flying", "Long cross-country legs to KDUG and KAVQ"]),
+      ("05", "Multi-engine", "soon", "Arriving shortly", "Add a second engine.", "Multi-engine training is arriving shortly at Copper Mountain Air. Join the list and we'll reach out as soon as it opens.", ["Multi-engine add-on rating", "Join the interest list today", "Part 141 certification is in process"]),
+      ("06", "Flight reviews & proficiency", "ask", "Ask about availability", "Stay sharp and current.", "Already a pilot? Ask us about flight reviews, proficiency flying and getting comfortable at a high-elevation, non-towered airport.", ["Flight reviews and proficiency flights", "Density-altitude and mountain-airport practice", "Non-towered pattern work on Runway 04/22"]),
+    ]
+    tabs = "".join(f'<button class="tab" role="tab" id="tab-{n}" aria-controls="tp-{n}" aria-selected="{"true" if i == 1 else "false"}" tabindex="{0 if i == 1 else -1}"><span class="n">{n}</span>{t}</button>' for i, (n, t, *_r) in enumerate(steps))
+    panels = "".join(f'''<div class="tabpanel" role="tabpanel" id="tp-{n}" aria-labelledby="tab-{n}"{"" if i == 1 else " hidden"}>
+  <div class="tp-body"><span class="status-badge {st}">{stl}</span><h3 style="font-size:clamp(1.5rem,3vw,2.1rem)">{h}</h3><p style="color:var(--muted);font-size:1.08rem">{d}</p>
+    <p style="margin:1.4rem 0 0;display:flex;gap:.6rem;flex-wrap:wrap"><a class="btn btn-dark" href="{p}contact.html?topic=Flight%20training">Ask about {t.lower()} {ARROW}</a><a class="btn" style="border-color:#d9c9b5;color:var(--ink)" href="{PHONE_HREF}">Call {PHONE}</a></p></div>
+  <div class="tp-side" data-step="{n}"><h4>What it looks like at KOLS</h4><ul>{"".join(f"<li>{x}</li>" for x in li)}</ul></div>
+</div>''' for i, (n, t, st, stl, h, d, li) in enumerate(steps))
+    return f"""
+<section class="xhero" aria-label="Flight training at KOLS">
+  <div class="hero-media">{img("charter", p, eager=True, sizes="full")}</div><div class="grid-lines" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="xhero-inner">
+      <div>
+        <ul class="chips" aria-label="Training status">
+          <li class="chip live"><i></i>FAA Part 61 · Enrolling now</li><li class="chip"><i></i>Single-engine · Active</li>
+          <li class="chip soon"><i></i>Multi-engine · Arriving soon</li><li class="chip proc"><i></i>Part 141 · In process</li></ul>
+        <p class="eyebrow">Flight Training · Nogales International · KOLS</p>
+        <h1>Learn to fly <span class="cu">where the sky opens up.</span></h1>
+        <p class="lede">FAA Part 61 single-engine flight training on a 7,200-foot runway at the foot of the Santa Cruz Valley. Non-towered, high-elevation and minutes from Tucson's Class C airspace, so you build real-world airmanship from your very first lesson.</p>
+        <div class="actions"><a class="btn btn-primary" href="{p}contact.html?topic=Flight%20training" id="start-training">Start flight training {ARROW}</a>{fc}</div>
+      </div>
+      <aside class="livecard" aria-label="Live KOLS field status">
+        <div class="top"><span class="tag">Live field status</span><span class="status" data-wx="status">Loading live KOLS data…</span></div>
+        <div class="catbig"><span class="c" data-wx="cat">—</span><span class="w">Flight category</span></div>
+        <div class="pill"><span class="led"></span><span data-wx="pill">KOLS · ASOS 121.125</span></div>
+        <div class="mini"><div><span>Wind</span><b data-wx="wind">—</b></div><div><span>Visibility</span><b><span data-wx="vis">—</span> SM</b></div><div><span>Density alt</span><b data-wx="da">—</b></div></div>
+        <a class="more" href="#conditions">Full ASOS panel ↓</a>
+      </aside>
+    </div>
+    <div class="qstrip">
+      <div><span>Field elevation</span><b>3,955 ft</b><small>MSL, surveyed</small></div>
+      <div><span>Runway 04/22</span><b>7,200 × 100</b><small>ft · asphalt · MIRL</small></div>
+      <div><span>CTAF / UNICOM</span><b>122.8</b><small>Non-towered field</small></div>
+      <div><span>ASOS</span><b>121.125</b><small>520-287-9332</small></div>
+      <div><span>Tucson Approach</span><b>118.75</b><small>App / Dep</small></div>
+    </div>
+  </div>
+</section>
+
+<section class="cockpit" id="conditions" aria-label="Live KOLS conditions"><div class="wrap" id="wx">
+  <div class="section-head reveal"><p class="eyebrow">Live conditions · KOLS ASOS</p><h2>What the field is doing right now.</h2><p>Live observations from the Nogales International ASOS, refreshed every five minutes, with flight category, runway wind components and density altitude worked out for you.</p></div>
+  <div class="catbar" role="list" aria-label="FAA flight categories">
+    <div class="cat" role="listitem" data-cat="VFR"><b>VFR</b><span>Ceiling above 3,000 ft and visibility above 5 SM</span></div>
+    <div class="cat" role="listitem" data-cat="MVFR"><b>MVFR</b><span>Ceiling 1,000–3,000 ft or visibility 3–5 SM</span></div>
+    <div class="cat" role="listitem" data-cat="IFR"><b>IFR</b><span>Ceiling 500 to below 1,000 ft or visibility 1 to below 3 SM</span></div>
+    <div class="cat" role="listitem" data-cat="LIFR"><b>LIFR</b><span>Ceiling below 500 ft or visibility below 1 SM</span></div>
+  </div>
+  <div class="panel-grid">
+    <div class="glass"><h3>Runway 04/22 wind <small>Drawn to magnetic north</small></h3>
+      {wind_rose()}
+      <div class="comps"><div><span>Favored</span><b data-wx="rwy">—</b></div><div><span>Head / tail</span><b data-wx="head">—</b></div><div><span>Crosswind</span><b data-wx="cross">—</b></div></div>
+      <p class="comps-sub" data-wx="rwy-sub"></p>
+    </div>
+    <div class="glass"><h3>ASOS readouts <small data-wx="ago"></small></h3>
+      <div class="readouts">
+        <div class="ro"><span>Wind</span><b data-wx="wind">—</b><small data-wx="wind-sub">&nbsp;</small></div>
+        <div class="ro"><span>Visibility</span><b><span data-wx="vis">—</span> SM</b><small>Statute miles</small></div>
+        <div class="ro"><span>Sky / ceiling</span><b data-wx="sky">—</b><small data-wx="sky-sub">&nbsp;</small></div>
+        <div class="ro"><span>Temperature</span><b data-wx="temp">—</b><small data-wx="dew">&nbsp;</small></div>
+        <div class="ro"><span>Altimeter</span><b data-wx="alt">—</b><small data-wx="alt-sub">inHg</small></div>
+        <div class="ro hl"><span>Density altitude</span><b data-wx="da">—</b><small data-wx="da-sub">From field elevation, altimeter and temperature</small></div>
+      </div>
+      <div class="metar">
+        <div><code data-wx="metar">Loading the latest KOLS METAR…</code><div class="meta">Observed <b data-wx="time">—</b> · <span data-wx="status"></span> <span data-wx="src"></span></div><div class="meta" data-wx="sample"></div></div>
+        <div class="btns"><button class="mbtn" type="button" id="wx-refresh">↻ Refresh</button><button class="mbtn" type="button" id="wx-copy">Copy METAR</button><a class="mbtn" href="https://aviationweather.gov/data/metar/?ids=KOLS&amp;hours=0&amp;include_taf=yes" target="_blank" rel="noopener">AviationWeather.gov</a></div>
+      </div>
+    </div>
+  </div>
+  <div class="infocard">
+    <div class="glass"><h3>KOLS airfield <small>FAA Chart Supplement, 29 Oct 2026 cycle</small></h3>
+      <dl class="dl">
+        <dt>Runway</dt><dd><b>04/22</b> · 7,200 × 100 ft asphalt · 1.6% up to the northeast · magnetic headings 037° / 217°</dd>
+        <dt>Lighting</dt><dd>Medium-intensity runway lights (MIRL), pilot-activated on CTAF 122.8 · REIL both ends · rotating beacon</dd>
+        <dt>Glidepath</dt><dd>4-light PAPI on the left: 3.0° Runway 04, 4.0° Runway 22</dd>
+        <dt>Pattern</dt><dd>Left traffic both runways · Runway 22 is the calm-wind runway · Runway 22 threshold displaced 899 ft · Runway 04 touch-and-go not authorized</dd>
+        <dt>Elevation</dt><dd>3,955 ft MSL (surveyed) · variation 9° E</dd>
+        <dt>Approaches</dt><dd>RNAV (GPS)-A · VOR-B · Nogales VOR/DME (OLS) 114.65 on the field</dd>
+        <dt>On field</dt><dd>Phillips 66 Jet A and 100LL, full service from Copper Mountain Air · {WINGPOINTS} · attended 7 a.m.–7 p.m.</dd>
+        <dt>Entry</dt><dd>International airport of entry (U.S. Customs and Border Protection)</dd>
+      </dl>
+    </div>
+    <div class="glass"><h3>Frequencies &amp; phones</h3>
+      <div class="freqs">
+        <div class="freq"><span>ASOS</span><b>121.125</b><small><a href="tel:+15202879332">520-287-9332</a></small></div>
+        <div class="freq"><span>CTAF / UNICOM</span><b>122.8</b><small>Pilot-controlled lighting</small></div>
+        <div class="freq"><span>Tucson App / Dep</span><b>118.75</b><small>Clearance: <a href="tel:+15208296121">520-829-6121</a></small></div>
+        <div class="freq"><span>Prescott Radio</span><b>122.4</b><small>RCO · close flight plans</small></div>
+      </div>
+      <p class="wx-foot">Weather: FAA ASOS via the <a href="https://www.weather.gov/documentation/services-web-api" target="_blank" rel="noopener">National Weather Service API</a> and the <a href="https://mesonet.agron.iastate.edu/" target="_blank" rel="noopener">Iowa Environmental Mesonet</a>. Airport data: FAA Chart Supplement and <a href="{AIRNAV}" target="_blank" rel="noopener">AirNav KOLS</a>. For situational awareness and training preview only. Not for navigation; get an official briefing before every flight.</p>
+    </div>
+  </div>
+</div></section>
+
+<section class="mapsec" id="map" aria-label="Training area map"><div class="wrap">
+  <div class="section-head reveal"><p class="eyebrow">FAA VFR Sectional · Training corridor</p><h2>Your classroom is Southern Arizona.</h2><p>Live FAA charts centered on Nogales International. Switch between the VFR Sectional, IFR Enroute Low, satellite and terrain, and tap a destination to see the cross-country leg.</p></div>
+  <div class="mapwrap">
+    <div><div id="kols-map" role="region" aria-label="Interactive FAA sectional chart map centered on KOLS"></div>
+      <div class="legend"><span><i style="background:var(--copper)"></i>KOLS · home base</span><span><i style="background:#1d4ed8"></i>Towered (Class C/D)</span><span><i style="background:#7c3aed"></i>Non-towered</span><span><i class="ring"></i>25 / 50 NM rings</span></div>
+      <div class="disclaimer">⚠ <span>Situational awareness and planning preview only. Not for navigation. Use current FAA charts and an official weather briefing for flight planning.</span></div>
+    </div>
+    <div class="xc-list" aria-label="Cross-country destinations">
+      <button class="xc" type="button" data-goto="KOLS"><span class="id">KOLS</span><span class="nm">Nogales International · home base</span><span class="d">0 NM<small>3,955 ft</small></span><span class="as">Non-towered · CTAF 122.8 · ASOS 121.125</span></button>
+      {xc_btns}
+      <p class="wx-foot" style="margin:0">Straight-line distance and magnetic course from KOLS (9° E variation). Airspace and tower hours per the FAA Chart Supplement.</p>
+    </div>
+  </div>
+</div>
+<script type="application/json" id="xc-data">{xc_json}</script>
+</section>
+
+<section aria-label="Pilot training pathway"><div class="wrap">
+  <div class="section-head reveal"><p class="eyebrow">Your pathway</p><h2>From first flight to the right seat.</h2><p>Pick where you are today. Part 61 single-engine training is available now; tap a step to see what it looks like at KOLS.</p></div>
+  <div class="tabs" role="tablist" aria-label="Training steps">{tabs}</div>
+  {panels}
+  <div class="road" aria-hidden="true"><div><b>Discovery</b>First lesson</div><div><b>Private</b>Part 61 · now</div><div><b>Instrument</b>Ask us</div><div><b>Commercial</b>Ask us</div><div class="soon"><b>Multi-engine</b>Arriving shortly</div><div><b>Proficiency</b>Ask us</div></div>
+  <div class="matrix">
+    <div class="mx now"><span class="st">● Available now</span><h3>FAA Part 61 single-engine</h3><p>Flight training on the field at Nogales International Airport (KOLS).</p></div>
+    <div class="mx soon"><span class="st">● Arriving shortly</span><h3>Multi-engine training</h3><p>Join the interest list and we'll reach out when it opens.</p></div>
+    <div class="mx proc"><span class="st">● In process</span><h3>FAA Part 141 flight school</h3><p>Part 141 certification is currently in process.</p></div>
+  </div>
+</div></section>
+
+<section class="dark" aria-label="Why train at KOLS"><div class="wrap">
+  <div class="section-head reveal"><p class="eyebrow">Why Nogales?</p><h2>Why train at KOLS.</h2><p>Real-world flying from day one, without the congestion of a big-city airport.</p></div>
+  <div class="why reveal">
+    <div><span class="ic">{ico("runway")}</span><h3>A 7,200-ft runway, no tower lines</h3><p>Non-towered with <b>7,200 × 100 ft</b> of asphalt, so more of your lesson is spent flying and less waiting in line to take off.</p></div>
+    <div><span class="ic">{ico("mountain")}</span><h3>High-elevation airmanship</h3><p>At <b>3,955 ft</b> field elevation with mountains all around, you learn density altitude and mountain flying for real, not just from a textbook.</p></div>
+    <div><span class="ic">{ico("tower")}</span><h3>Towered airspace next door</h3><p>Sierra Vista (Class D) is <b>{xc[0]["dist"]} NM</b> away and Tucson International (Class C) is <b>{next(d for d in xc if d["id"]=="KTUS")["dist"]} NM</b>, an easy hop for radio and towered-airport practice.</p></div>
+    <div><span class="ic">{ico("compass")}</span><h3>Instrument-ready field</h3><p>A <b>VOR/DME on the field</b>, published RNAV (GPS)-A and VOR-B approaches, and Tucson Approach overhead.</p></div>
+    <div><span class="ic">{ico("sun")}</span><h3>Desert flying weather</h3><p>Southern Arizona's dry climate means flyable weather much of the year, and the live panel above shows you exactly what it's doing today.</p></div>
+    <div><span class="ic">{ico("fuel")}</span><h3>Full-service FBO on the field</h3><p>Phillips 66 Jet A and 100LL, a pilot lounge and flight-planning desk, all from Copper Mountain Air at KOLS.</p></div>
+  </div>
+</div></section>
+
+<figure class="photo-band">{img("kols-guide", p, sizes="full")}<figcaption>Runway 4-22 at KOLS</figcaption></figure>
+
+<section aria-label="Student portal"><div class="wrap">
+  <div class="fcband reveal">
+    <div><p class="eyebrow">Students · FlightCircle</p><h2>Schedule and manage your training online.</h2><p>Copper Mountain Air uses FlightCircle for flight school scheduling and student accounts. Current students can sign in any time. New students: call or email us and we'll get your FlightCircle account set up.</p></div>
+    <div class="btns"><a class="btn btn-primary" href="{FLIGHTCIRCLE}" target="_blank" rel="noopener">Sign in to FlightCircle {ARROW}</a><a class="btn btn-ghost" href="{p}contact.html?topic=Flight%20training">New student? Start here</a></div>
+  </div>
+</div></section>
+{cta(p, "Ready to fly?", f'Call {PHONE_LINK} or email <a href="mailto:{CONTACT_TO}">{CONTACT_TO}</a> and we’ll help you get started at KOLS.')}"""
+
+def truck_svg(kind):
+    if kind == "box":
+        return '''<svg viewBox="0 0 520 210" role="img" aria-label="Illustration of a 26-foot box truck with a liftgate">
+<defs><linearGradient id="bx" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#f4e7d6"/><stop offset="1" stop-color="#d9c4aa"/></linearGradient><linearGradient id="cb" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#e9a06a"/><stop offset="1" stop-color="#c4703d"/></linearGradient></defs>
+<ellipse cx="260" cy="192" rx="250" ry="8" fill="rgba(0,0,0,.45)"/>
+<rect x="18" y="26" width="350" height="136" rx="6" fill="url(#bx)"/>
+<rect x="18" y="26" width="350" height="12" rx="4" fill="#c9b293"/>
+<g stroke="rgba(13,27,36,.12)" stroke-width="2">''' + "".join(f'<line x1="{x}" y1="40" x2="{x}" y2="160"/>' for x in range(60, 368, 44)) + '''</g>
+<text x="193" y="104" text-anchor="middle" font-family="Archivo,Arial" font-weight="900" font-size="26" fill="#0d1b24" letter-spacing="3">26 FT BOX</text>
+<rect x="6" y="160" width="20" height="12" fill="#3a4a55"/><rect x="0" y="170" width="44" height="6" rx="2" fill="#86efac"/>
+<text x="22" y="200" text-anchor="middle" font-family="Inter,Arial" font-weight="700" font-size="11" fill="#86efac">LIFTGATE</text>
+<path d="M372 70h70c14 0 22 6 30 18l26 38c5 7 8 14 8 22v14H372z" fill="url(#cb)"/>
+<path d="M386 82h52c8 0 13 3 18 10l18 28h-88z" fill="#0d1b24" opacity=".85"/>
+<rect x="368" y="160" width="142" height="12" rx="3" fill="#2a3640"/><rect x="18" y="160" width="350" height="10" fill="#2a3640"/>
+<g fill="#0d1b24"><circle cx="90" cy="174" r="22"/><circle cx="140" cy="174" r="22"/><circle cx="440" cy="174" r="22"/></g>
+<g fill="#9fb0ba"><circle cx="90" cy="174" r="9"/><circle cx="140" cy="174" r="9"/><circle cx="440" cy="174" r="9"/></g>
+<rect x="496" y="134" width="12" height="8" rx="2" fill="#fde68a"/>
+</svg>'''
+    return '''<svg viewBox="0 0 520 210" role="img" aria-label="Illustration of a full-size cargo van">
+<defs><linearGradient id="vn" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#f4e7d6"/><stop offset="1" stop-color="#d9c4aa"/></linearGradient></defs>
+<ellipse cx="260" cy="192" rx="210" ry="8" fill="rgba(0,0,0,.45)"/>
+<path d="M60 52c0-10 8-18 18-18h250c14 0 24 5 32 14l50 52c22 4 46 10 54 20 6 8 8 18 8 30v22H60z" fill="url(#vn)"/>
+<path d="M340 52h12c8 0 14 3 19 8l40 44h-71z" fill="#0d1b24" opacity=".85"/>
+<line x1="230" y1="40" x2="230" y2="158" stroke="rgba(13,27,36,.18)" stroke-width="2"/><line x1="335" y1="44" x2="335" y2="158" stroke="rgba(13,27,36,.18)" stroke-width="2"/>
+<rect x="60" y="120" width="412" height="8" fill="#c4703d"/>
+<text x="150" y="100" text-anchor="middle" font-family="Archivo,Arial" font-weight="900" font-size="22" fill="#0d1b24" letter-spacing="3">HOT SHOT</text>
+<rect x="56" y="156" width="420" height="14" rx="4" fill="#2a3640"/>
+<g fill="#0d1b24"><circle cx="130" cy="172" r="22"/><circle cx="400" cy="172" r="22"/></g>
+<g fill="#9fb0ba"><circle cx="130" cy="172" r="9"/><circle cx="400" cy="172" r="9"/></g>
+<rect x="462" y="130" width="12" height="8" rx="2" fill="#fde68a"/>
+</svg>'''
+
+def cargo(p):
+    q = f"{p}contact.html?topic=Cargo%20%2F%20freight"
+    return f"""
+<section class="xhero cargo-hero" aria-label="Cargo from KOLS" style="min-height:min(86vh,820px)">
+  <div class="hero-media">{img("cargo-sign", p, eager=True, sizes="full")}</div><div class="grid-lines" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="xhero-inner" style="grid-template-columns:1fr">
+      <div>
+        <ul class="chips" aria-label="Cargo capabilities"><li class="chip live"><i></i>Dispatch from KOLS</li><li class="chip"><i></i>Liftgate box truck</li><li class="chip"><i></i>Cargo van hot shots</li><li class="chip"><i></i>Ramp-to-truck</li></ul>
+        <p class="eyebrow">Cargo · Nogales International Airport · KOLS</p>
+        <h1>Freight that <span class="cu">can't wait.</span></h1>
+        <p class="lede">Expedited ground and air-to-ground cargo from Nogales International Airport, right on the Nogales, Rio Rico and Santa Cruz County border corridor. Dock-to-dock, liftgate and ramp-to-truck moves, dispatched by our own team at KOLS.</p>
+        <div class="actions"><a class="btn btn-primary" href="{PHONE_HREF}">Call dispatch · {PHONE} {ARROW}</a><a class="btn btn-glass" href="{q}">Request a freight quote</a></div>
+      </div>
+    </div>
+    <div class="qstrip">
+      <div><span>Box truck</span><b>Hino 268</b><small>26-ft dock-height · liftgate</small></div>
+      <div><span>Cargo van</span><b>Ford E-150</b><small>Hot-shot and small loads</small></div>
+      <div><span>Based at</span><b>KOLS</b><small>Nogales, AZ 85621</small></div>
+      <div><span>Hours</span><b>7 days</b><small>Mon–Sat 7–7 · Sun 7–5</small></div>
+    </div>
+  </div>
+</section>
+
+<section aria-label="Cargo capabilities"><div class="wrap">
+  <div class="section-head reveal"><p class="eyebrow">What we move</p><h2>Ramp, dock and door.</h2><p>When a shipment can't wait for the next scheduled truck, call us. We handle time-critical freight out of Nogales by ground and coordinate air cargo on the ramp at KOLS.</p></div>
+  <div class="caps">
+    <article class="cap reveal"><span class="ic">{ico("plane")}</span><h3>Ramp-to-truck at KOLS</h3><p>Air cargo coordination and ramp handling on the field, with freight moved straight from the aircraft to our truck.</p></article>
+    <article class="cap reveal"><span class="ic">{ico("box")}</span><h3>Nogales &amp; Rio Rico pickups</h3><p>Warehouse, plant and dock pickups across Nogales, Rio Rico and Santa Cruz County.</p></article>
+    <article class="cap reveal"><span class="ic">{ico("map")}</span><h3>Southern Arizona &amp; beyond</h3><p>On-demand expedited ground moves across Southern Arizona and beyond.</p></article>
+    <article class="cap reveal"><span class="ic">{ico("phone")}</span><h3>Direct dispatch</h3><p>Talk to our operations team at KOLS directly. No call centers, just the people moving your freight.</p></article>
+  </div>
+</div></section>
+
+<section class="dark" id="fleet" aria-label="Fleet"><div class="wrap">
+  <div class="section-head reveal"><p class="eyebrow">Fleet</p><h2>Two trucks, ready to roll.</h2><p>From a single urgent pallet to a full dock-height load.</p></div>
+  <div class="fleet">
+    <article class="truck reveal">
+      <div class="art">{truck_svg("box")}</div>
+      <div class="tb"><span class="kick">Box truck</span><h3>Hino 268</h3><p class="lead">26-foot dock-height box with a liftgate, for loading docks and ground-level deliveries alike.</p>
+        <span class="feature">✓ Liftgate</span><span class="feature cu">✓ Dock-height</span>
+        <div class="specs">
+          <div><span>Cargo box</span><b>26 ft</b><small>Dock-height</small></div>
+          <div><span>Liftgate</span><b>Yes</b><small>Ground-level loading &amp; delivery</small></div>
+          <div><span>GVWR</span><b>25,999 lb</b><small>16,500 lb empty weight</small></div>
+          <div><span>Max payload</span><b>Up to 9,499 lb</b><small>Theoretical</small></div>
+        </div>
+        <p class="note">Actual usable payload accounts for driver, fuel, equipment and axle limits.</p></div>
+    </article>
+    <article class="truck reveal">
+      <div class="art">{truck_svg("van")}</div>
+      <div class="tb"><span class="kick">Cargo van</span><h3>Ford E-150</h3><p class="lead">Ideal for urgent hot-shot runs and time-critical small shipments.</p>
+        <span class="feature cu">✓ Hot-shot ready</span>
+        <div class="specs">
+          <div><span>Usable cargo length</span><b>108 in</b><small>9 ft</small></div>
+          <div><span>Door opening width</span><b>≈ 55 in</b><small>Approx.</small></div>
+          <div><span>Max cargo height</span><b>40 in</b><small>&nbsp;</small></div>
+          <div><span>Max payload</span><b>≈ 1,600 lb</b><small>Approx.</small></div>
+        </div></div>
+    </article>
+  </div>
+</div></section>
+
+<section aria-label="Request a quote"><div class="wrap split">
+  <div class="frame reveal">{img("cargo", p)}</div>
+  <div class="reveal"><p class="eyebrow">Get a quote</p><h2>What to send us.</h2>
+    <p>Send these details and we'll get back to you with a quote.</p>
+    <ul class="checks quote-list"><li>Pickup and delivery locations</li><li>Ready time and required delivery time</li><li>Pieces, dimensions and weight</li><li>Dock, liftgate or ramp handling needed</li><li>Any hazmat or special handling needs</li></ul>
+    <div class="dispatch">
+      <a href="{PHONE_HREF}"><span class="ic">{ico("phone")}</span><span><span class="lbl">Call dispatch</span><b>{PHONE}</b></span></a>
+      <a href="mailto:{CONTACT_TO}?subject=Freight%20quote"><span class="ic">{ico("mail")}</span><span><span class="lbl">Email</span><b>{CONTACT_TO}</b></span></a>
+    </div>
+  </div>
+</div></section>
+{cta(p, "Freight that can't wait?", f'Call dispatch at {PHONE_LINK} or email <a href="mailto:{CONTACT_TO}">{CONTACT_TO}</a>. Hours: {HOURS}.')}"""
 
 def coming_soon_charter(p):
     hero = page_hero("Charter", "Fly direct from KOLS.", "An FAA Part 135 on-demand charter program from Nogales International is in development. It is not offered yet.", '<span class="badge soon">Coming soon</span>')
@@ -471,7 +807,9 @@ def main():
     page("fuel-fbo.html", "Jet A & 100LL Fuel and FBO at KOLS | Copper Mountain Air",
          "Jet A and 100LL Avgas, ramp and tie-down parking, hangars and ground handling at Nogales International Airport (KOLS), Nogales, AZ.", fuel_fbo)
     page("flight-training.html", "Flight Training in Nogales, AZ | Copper Mountain Air",
-         "FAA Part 61 single-engine flight training is available now at Nogales International Airport (KOLS). Multi-engine training is arriving shortly, and Part 141 certification is in process.", flight_training)
+         "FAA Part 61 single-engine flight training at Nogales International Airport (KOLS), with live KOLS ASOS weather, an FAA sectional training map and FlightCircle scheduling. Multi-engine arriving shortly; Part 141 in process.", flight_training)
+    page("cargo.html", "Cargo & Expedited Freight from Nogales, AZ (KOLS) | Copper Mountain Air",
+         "Expedited ground and air-to-ground cargo from Nogales International Airport (KOLS): a 26-ft dock-height Hino 268 box truck with liftgate, a Ford E-150 cargo van, and ramp-to-truck transfers.", cargo)
     page("charter.html", "Charter from Nogales, AZ (Coming Soon) | Copper Mountain Air",
          "On-demand charter from Nogales International Airport (KOLS) is coming soon. Join the interest list.", coming_soon_charter)
     page("about.html", "About Copper Mountain Air | Nogales International Airport (KOLS)",

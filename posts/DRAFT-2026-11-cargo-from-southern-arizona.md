@@ -22,6 +22,7 @@ We run on-demand ground moves across Southern Arizona and beyond, including **on
 ### Hino 268 Box Truck (26-foot dock-height)
 
 - Cargo box length: 26 ft (dock-height)
+- Liftgate for ground-level loading and delivery
 - GVWR: 25,999 lbs (16,500 lbs empty weight)
 - Max payload: up to 9,499 lbs theoretical (actual usable payload accounts for driver, fuel, equipment, and axle limits)
 
