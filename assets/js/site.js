@@ -48,4 +48,50 @@
       });
     });
   }
+
+  // Cookie notice + GA4 Consent Mode v2 (defaults are set denied in <head>).
+  var CONSENT_KEY="cma-cookie-consent";
+  function consentValue(){try{return localStorage.getItem(CONSENT_KEY);}catch(e){return null;}}
+  function applyConsent(choice){
+    try{localStorage.setItem(CONSENT_KEY,choice);}catch(e){}
+    if(typeof gtag==="function"){
+      gtag("consent","update",{analytics_storage:choice==="granted"?"granted":"denied"});
+    }
+    document.querySelectorAll("[data-cookie=status]").forEach(function(el){
+      el.textContent=choice==="granted"?"Analytics is on for this browser.":"Analytics is off for this browser.";
+    });
+  }
+  function hideBar(){
+    var b=document.getElementById("cookie-bar");
+    if(b) b.remove();
+    document.body.classList.remove("cookie-open");
+  }
+  function showBar(){
+    if(document.getElementById("cookie-bar")) return;
+    var bar=document.createElement("div");
+    bar.id="cookie-bar";
+    bar.className="cookie-bar";
+    bar.setAttribute("role","region");
+    bar.setAttribute("aria-label","Cookie notice");
+    var privacy=document.querySelector('a[href$="privacy.html"]');
+    var href=privacy?privacy.getAttribute("href"):"privacy.html";
+    bar.innerHTML='<div class="inner"><p>We use cookies to measure how the site is used (Google Analytics). We do not use advertising cookies. <a href="'+href+'">Privacy</a></p><div class="actions"><button type="button" data-cookie="accept">Accept</button><button type="button" data-cookie="decline">Decline</button></div></div>';
+    document.body.appendChild(bar);
+    document.body.classList.add("cookie-open");
+  }
+  var saved=consentValue();
+  if(saved==="granted"||saved==="denied"){
+    document.querySelectorAll("[data-cookie=status]").forEach(function(el){
+      el.textContent=saved==="granted"?"Analytics is on for this browser.":"Analytics is off for this browser.";
+    });
+  }else{
+    showBar();
+  }
+  document.addEventListener("click",function(e){
+    var btn=e.target.closest("[data-cookie]");
+    if(!btn) return;
+    var act=btn.getAttribute("data-cookie");
+    if(act==="accept"){applyConsent("granted");hideBar();}
+    else if(act==="decline"){applyConsent("denied");hideBar();}
+  });
 })();

@@ -281,3 +281,23 @@ picture{display:contents}
 .dark .flightplan-card .btn-dark:hover{color:#fff}
 @media (max-width:520px){.flightplan-actions .btn{width:100%}}
 
+
+/* Cookie notice — every page, compact on phones */
+.cookie-bar{position:fixed;left:0;right:0;bottom:0;z-index:80;background:#0d1b24;color:var(--sand);border-top:1px solid rgba(233,160,106,.35);padding:.85rem 1.1rem calc(.85rem + env(safe-area-inset-bottom,0px));box-shadow:0 -10px 32px rgba(0,0,0,.35)}
+.cookie-bar .inner{max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;gap:.7rem 1rem;align-items:center;justify-content:space-between}
+.cookie-bar p{margin:0;font-size:.9rem;line-height:1.45;flex:1 1 16rem;color:#efe1d0}
+.cookie-bar p a{color:var(--copper-2);text-decoration:underline;text-underline-offset:2px}
+.cookie-bar .actions{display:flex;gap:.45rem;flex:none}
+.cookie-bar button{font:700 .88rem/1 var(--body);padding:.55rem .95rem;border-radius:999px;border:1px solid transparent;cursor:pointer;min-height:40px}
+.cookie-bar [data-cookie=accept]{background:var(--copper);color:#1a0d05;border-color:var(--copper)}
+.cookie-bar [data-cookie=accept]:hover{background:var(--copper-2)}
+.cookie-bar [data-cookie=decline]{background:transparent;color:var(--sand);border-color:rgba(244,231,214,.35)}
+.cookie-bar [data-cookie=decline]:hover{border-color:#fff;color:#fff}
+body.cookie-open{padding-bottom:6.5rem}
+@media (max-width:420px){
+  .cookie-bar .actions{width:100%}
+  .cookie-bar button{flex:1}
+  body.cookie-open{padding-bottom:8rem}
+}
+.cookie-prefs{display:flex;flex-wrap:wrap;gap:.7rem;align-items:center;margin-top:1.4rem}
+.cookie-pref-status{font-size:.9rem;color:var(--ink-2)}

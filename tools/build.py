@@ -14,6 +14,30 @@ CONTACT_TO = "operations@coppermountainair.com"
 # Contact form relay (Railway service cma-website-contact/contact-api) that emails CONTACT_TO via Resend.
 CONTACT_ENDPOINT = "https://contact-api-production-d6d93922.up.railway.app/contact"
 NOTAMS_ENDPOINT = "https://contact-api-production-d6d93922.up.railway.app/notams"
+METAR_ENDPOINT = "https://contact-api-production-d6d93922.up.railway.app/metar"
+GA_ID = "G-RXRN6HKGZM"
+GA_HEAD = """
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('consent', 'default', {
+  'analytics_storage': 'denied',
+  'ad_storage': 'denied',
+  'ad_user_data': 'denied',
+  'ad_personalization': 'denied'
+});
+try {
+  if (localStorage.getItem('cma-cookie-consent') === 'granted') {
+    gtag('consent', 'update', { 'analytics_storage': 'granted' });
+  }
+} catch (e) {}
+</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RXRN6HKGZM"></script>
+<script>
+gtag('js', new Date());
+gtag('config', 'G-RXRN6HKGZM');
+</script>
+"""
 # Verified public contact facts (sources recorded in the commit / site copy notes):
 # Address & phone: Seth's email signature; FAA airport manager record and CMA's AirNav FBO listing; Santa Cruz County airport page.
 # Hours: Santa Cruz County airport page; CMA's previous coppermountainair.com (Wayback, 2025-12-14 and 2026-07-11); iFlightPlanner and PilotGPT FBO listings.
@@ -164,7 +188,7 @@ def head(title, desc, path, p, extra_ld=None, og_type="website", og_img=None):
 {pre}<link rel="stylesheet" href="{p}assets/css/site.css">{''.join(f'\n<link rel="stylesheet" href="{p}{c}">' for c in PAGE_CSS.get(path, []))}
 <script>document.documentElement.className="js";</script>
 <script type="application/ld+json">{json.dumps(ld if len(ld)>1 else ld[0], ensure_ascii=False)}</script>
-</head>"""
+{GA_HEAD}</head>"""
 
 def header(path, p):
     items = []
@@ -213,7 +237,7 @@ def footer(p):
     <div><h3>Contact</h3><ul><li>Phone: {PHONE_LINK}</li><li><a href="mailto:{CONTACT_TO}">{CONTACT_TO}</a></li><li>Hours: {HOURS_HTML}</li><li><a href="{p}contact.html">Send a message</a></li></ul></div>
     <div><h3>Explore</h3><ul><li><a href="{p}services.html">Services</a></li><li><a href="{p}fuel-fbo.html">Fuel &amp; FBO</a></li><li><a href="{p}flight-training.html">Flight training</a></li><li><a href="{p}cargo.html">Cargo</a></li><li><a href="{p}charter.html">Charter</a></li><li><a href="{p}about.html">About</a></li><li><a href="{p}blog/index.html">Blog</a></li></ul></div>
   </div>
-  <div class="legal"><span>© 2026 Copper Mountain Air, LLC</span><span>On-demand charter is coming soon and is not yet offered.</span></div>
+  <div class="legal"><span>© 2026 Copper Mountain Air, LLC</span><span>On-demand charter is coming soon and is not yet offered.</span><a href="{p}privacy.html">Privacy</a></div>
 </div></footer>
 <script src="{p}assets/js/site.js" defer></script>
 </body>
@@ -267,6 +291,114 @@ def notams_panel():
 </div>
 """
 FUEL_PRICES = f'Current Jet A and 100LL prices are posted on <a href="{AIRNAV}" rel="noopener">AirNav</a>.'
+
+def _days(n):
+    n = float(n)
+    return str(int(n)) if n == int(n) else f"{n:.1f}"
+
+def climate_panel():
+    data = json.load(open(os.path.join(ROOT, "assets", "data", "kols-climatology.json")))
+    a = data["averageDaysPerYear"]
+    cats = []
+    for key, label in (("VFR", "VFR days / year"), ("MVFR", "MVFR days / year"), ("IFR", "IFR days / year"), ("LIFR", "LIFR days / year")):
+        cats.append(f'<div class="climate-cat" data-cat="{key}"><b>{_days(a[key])}</b><span>{label}</span></div>')
+    cols = []
+    for m in data["monthly"]:
+        segs = []
+        for key, cls in (("LIFR", "lifr"), ("IFR", "ifr"), ("MVFR", "mvfr"), ("VFR", "vfr")):
+            h = max(0.0, float(m[key]) / 31.0 * 100.0)
+            if h <= 0:
+                continue
+            segs.append(f'<span class="bar {cls}" style="height:{h:.2f}%" title="{m["name"]} {key} {_days(m[key])} days"></span>')
+        cols.append(f'<div class="climate-col"><div class="bars">{"".join(segs)}</div><span class="mo">{m["name"]}</span></div>')
+    rows = []
+    for m in data["monthly"]:
+        rows.append(
+            "<tr>"
+            f'<th scope="row">{m["name"]}</th>'
+            f'<td class="c-vfr">{_days(m["VFR"])}</td>'
+            f'<td class="c-mvfr">{_days(m["MVFR"])}</td>'
+            f'<td class="c-ifr">{_days(m["IFR"])}</td>'
+            f'<td class="c-lifr">{_days(m["LIFR"])}</td>'
+            f'<td>{_days(m["clear"])}</td>'
+            f'<td>{_days(m["cloudy"])}</td>'
+            "</tr>"
+        )
+    method = html.escape(data["method"])
+    years = html.escape(data["yearLabel"])
+    src = html.escape(data["source"])
+    src_url = html.escape(data["sourceUrl"], quote=True)
+    return (
+        f'<div class="wx-climate" id="climatology">'
+        f'<div class="section-head reveal">'
+        f'<p class="eyebrow">KOLS climatology &middot; {years}</p>'
+        f'<h2>How often is it flyable?</h2>'
+        f'<p>Average days per year in each FAA flight category, from six full years of official hourly ASOS observations at Nogales International.</p>'
+        f'</div>'
+        f'<div class="climate-cats">{"".join(cats)}</div>'
+        f'<div class="climate-sky">'
+        f'<div><b>{_days(a["clear"])}</b><span>clear / sunny days per year</span></div>'
+        f'<div><b>{_days(a["cloudy"])}</b><span>cloudy days per year</span></div>'
+        f'</div>'
+        f'<p class="wx-now-kicker" style="margin:0 0 .55rem">Average days per month</p>'
+        f'<div class="climate-chart" aria-hidden="true">{"".join(cols)}</div>'
+        f'<ul class="climate-legend" aria-hidden="true">'
+        f'<li><i style="background:var(--vfr)"></i>VFR</li>'
+        f'<li><i style="background:var(--mvfr)"></i>MVFR</li>'
+        f'<li><i style="background:var(--ifr)"></i>IFR</li>'
+        f'<li><i style="background:var(--lifr)"></i>LIFR</li>'
+        f'</ul>'
+        f'<table class="climate-table">'
+        f'<caption class="visually-hidden">Average days per month at KOLS by flight category and sky cover, {years}</caption>'
+        f'<thead><tr><th>Month</th><th>VFR</th><th>MVFR</th><th>IFR</th><th>LIFR</th><th>Clear</th><th>Cloudy</th></tr></thead>'
+        f'<tbody>{"".join(rows)}</tbody></table>'
+        f'<p class="wx-foot">{method} Source: <a href="{src_url}" target="_blank" rel="noopener">{src}</a>. '
+        f'Figures are unscaled observed days, so years with ASOS outages (notably gaps in 2022) sum to a little under 365. '
+        f'For situational awareness only — not for flight planning.</p></div>'
+    )
+
+def wx_now_and_radar():
+    return (
+        '<div class="wx-now-grid">'
+        '<article class="wx-now glass" aria-label="Current KOLS weather">'
+        '<div class="wx-now-top">'
+        '<div class="wx-icon" data-wx="icon" aria-hidden="true"></div>'
+        '<div>'
+        '<p class="wx-now-kicker">Now at KOLS</p>'
+        '<div class="wx-badge" data-wx="cat">—</div>'
+        '<p class="wx-now-time">Observed <span data-wx="time">—</span></p>'
+        '</div></div>'
+        '<ul class="wx-now-stats">'
+        '<li><span>Wind</span><b data-wx="wind">—</b></li>'
+        '<li><span>Visibility</span><b><span data-wx="vis">—</span> SM</b></li>'
+        '<li><span>Sky / ceiling</span><b data-wx="sky">—</b></li>'
+        '<li><span>Temperature</span><b data-wx="temp">—</b></li>'
+        '<li><span>Altimeter</span><b data-wx="alt">—</b></li>'
+        '<li><span>Density alt</span><b data-wx="da">—</b></li>'
+        '</ul>'
+        '<pre class="wx-now-raw"><code data-wx="metar">Loading the latest KOLS METAR…</code></pre>'
+        '</article>'
+        '<div class="wx-radar glass">'
+        '<h3>Weather radar <small>Centered on Nogales</small></h3>'
+        '<div id="wx-radar-map" role="region" aria-label="Weather radar centered on Nogales"></div>'
+        '<p class="wx-foot">Radar imagery from <a href="https://www.rainviewer.com/" target="_blank" rel="noopener">RainViewer</a>, loaded when you scroll to this map. For situational awareness only — not for flight planning.</p>'
+        '</div></div>'
+    )
+
+def privacy(p):
+    return page_hero("Privacy", "How we use this site.", "A short note on cookies, analytics and how to reach us.") + f"""
+<section><div class="wrap" style="max-width:42rem">
+  <p>Copper Mountain Air uses Google Analytics 4 to understand how visitors use coppermountainair.com — for example, which pages are read most often. Analytics cookies are not set until you accept the cookie notice, and we do not use advertising cookies or ads on this site.</p>
+  <p>If you decline, the site still works; we simply will not measure your visit with Google Analytics. You can change your choice anytime with the buttons below, or by clearing this site's stored data in your browser.</p>
+  <p>Questions about this notice can be sent to <a href="mailto:{CONTACT_TO}">{CONTACT_TO}</a>.</p>
+  <p class="cookie-prefs">
+    <button type="button" class="btn btn-primary" data-cookie="accept">Accept analytics</button>
+    <button type="button" class="btn btn-ghost" data-cookie="decline">Decline analytics</button>
+    <span class="cookie-pref-status" data-cookie="status"></span>
+  </p>
+</div></section>
+"""
+
 POSTS = []
 UNLISTED = []
 def kols_link(p, text):
@@ -573,8 +705,9 @@ def flight_training(p):
   </div>
 </section>
 
-<section class="cockpit" id="conditions" aria-label="Live KOLS conditions"><div class="wrap" id="wx">
+<section class="cockpit" id="conditions" aria-label="Live KOLS conditions"><div class="wrap" id="wx" data-metar-endpoint="{METAR_ENDPOINT}">
   <div class="section-head reveal"><p class="eyebrow">Live conditions · KOLS ASOS</p><h2>What the field is doing right now.</h2><p>Live observations from the Nogales International ASOS, refreshed every five minutes, with flight category, runway wind components and density altitude worked out for you.</p></div>
+  {wx_now_and_radar()}
   <div class="catbar" role="list" aria-label="FAA flight categories">
     <div class="cat" role="listitem" data-cat="VFR"><b>VFR</b><span>Ceiling above 3,000 ft and visibility above 5 SM</span></div>
     <div class="cat" role="listitem" data-cat="MVFR"><b>MVFR</b><span>Ceiling 1,000–3,000 ft or visibility 3–5 SM</span></div>
@@ -602,6 +735,7 @@ def flight_training(p):
       </div>
     </div>
   </div>
+  {climate_panel()}
   <div class="infocard">
     <div class="glass"><h3>KOLS airfield <small>FAA Chart Supplement, 29 Oct 2026 cycle</small></h3>
       <dl class="dl">
@@ -623,7 +757,7 @@ def flight_training(p):
         <div class="freq"><span>Tucson App / Dep</span><b>118.75</b><small>Clearance: <a href="tel:+15208296121">520-829-6121</a></small></div>
         <div class="freq"><span>Prescott Radio</span><b>122.4</b><small>RCO · close flight plans</small></div>
       </div>
-      <p class="wx-foot">Weather: FAA ASOS via the <a href="https://www.weather.gov/documentation/services-web-api" target="_blank" rel="noopener">National Weather Service API</a> and the <a href="https://mesonet.agron.iastate.edu/" target="_blank" rel="noopener">Iowa Environmental Mesonet</a>. Airport data: FAA Chart Supplement and <a href="{AIRNAV}" target="_blank" rel="noopener">AirNav KOLS</a>. For situational awareness and training preview only. Not for navigation; get an official briefing before every flight.</p>
+      <p class="wx-foot">Weather: FAA ASOS via <a href="https://aviationweather.gov/data/metar/?ids=KOLS&amp;hours=0&amp;include_taf=yes" target="_blank" rel="noopener">AviationWeather.gov</a>, the <a href="https://www.weather.gov/documentation/services-web-api" target="_blank" rel="noopener">National Weather Service API</a> and the <a href="https://mesonet.agron.iastate.edu/" target="_blank" rel="noopener">Iowa Environmental Mesonet</a>. Airport data: FAA Chart Supplement and <a href="{AIRNAV}" target="_blank" rel="noopener">AirNav KOLS</a>. For situational awareness and training preview only. Not for navigation; get an official briefing before every flight.</p>
     </div>
   </div>
 </div></section>
@@ -1057,6 +1191,8 @@ def main():
          "Copper Mountain Air, LLC provides fuel, FBO services, FAA Part 61 flight training and cargo at Nogales International Airport in Santa Cruz County, Arizona.", about)
     page("contact.html", "Contact Copper Mountain Air | Nogales, AZ (KOLS)",
          "Contact Copper Mountain Air at Nogales International Airport (KOLS) for fuel, ramp space, hangars, flight training and freight quotes.", contact)
+    page("privacy.html", "Privacy | Copper Mountain Air",
+         "How Copper Mountain Air uses cookies and Google Analytics on coppermountainair.com, and how to contact us about this notice.", privacy)
     posts = POSTS
     page("blog/index.html", "Blog | Copper Mountain Air, Nogales International Airport (KOLS)",
          "Airport news, pilot info and freight tips from Copper Mountain Air at Nogales International Airport (KOLS), Arizona.", blog_index(posts))

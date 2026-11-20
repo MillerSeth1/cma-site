@@ -116,6 +116,50 @@
   function mst(d){return TZ_FMT?TZ_FMT.format(d)+" MST":d.toISOString();}
   function ago(d){var m=Math.round((Date.now()-d.getTime())/60000);return m<1?"just now":(m<60?m+" min ago":Math.floor(m/60)+" h "+(m%60)+" min ago");}
 
+
+  function azHour(d){
+    try{
+      var p=new Intl.DateTimeFormat("en-GB",{timeZone:"America/Phoenix",hour:"2-digit",hour12:false}).formatToParts(d);
+      var h=p.filter(function(x){return x.type==="hour";})[0];
+      var n=h?parseInt(h.value,10):NaN;
+      if(n===24) n=0;
+      return isNaN(n)?d.getUTCHours()-7:n;
+    }catch(e){return d.getUTCHours()-7;}
+  }
+  var ICONS={
+    sun:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2" fill="currentColor" stroke="none"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M4.7 4.7l1.6 1.6M17.7 17.7l1.6 1.6M4.7 19.3l1.6-1.6M17.7 6.3l1.6-1.6"/></svg>',
+    moon:'<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M15.2 3.1a8.5 8.5 0 1 0 5.7 14.2 7 7 0 0 1-5.7-14.2z"/></svg>',
+    partly:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="9" r="3.2" fill="currentColor" stroke="none"/><path d="M9 3.2V4.6M3.2 9H4.6M4.3 4.3l1 1"/><path d="M8 15.5h8.2a3.3 3.3 0 0 0 .2-6.6 4.6 4.6 0 0 0-8.7 1.2" fill="currentColor" fill-opacity=".15"/><path d="M8 15.5h8.2a3.3 3.3 0 0 0 .2-6.6 4.6 4.6 0 0 0-8.7 1.2A3.1 3.1 0 0 0 8 15.5z"/></svg>',
+    cloudy:'<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8.2 18.5h9.3a4 4 0 0 0 .3-8 5.5 5.5 0 0 0-10.5 1.5 3.7 3.7 0 0 0 .9 6.5z" opacity=".95"/></svg>',
+    rain:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M7.8 13.2h8.6a3.5 3.5 0 0 0 .2-7 5 5 0 0 0-9.5 1.3A3.2 3.2 0 0 0 7.8 13.2z" fill="currentColor" fill-opacity=".15"/><path d="M8.5 16.2l-1 3M12 16.2l-1 3M15.5 16.2l-1 3"/></svg>',
+    thunder:'<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 13.2h8.4a3.4 3.4 0 0 0 .2-6.8 5 5 0 0 0-9.5 1.3A3.2 3.2 0 0 0 8 13.2z" opacity=".9"/><path d="M13.2 12.5 10 18h3l-1.5 4.2 4.6-6.7h-3l1.1-3z"/></svg>',
+    fog:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M7.5 11.2h8.8a3.3 3.3 0 0 0 .2-6.6 4.8 4.8 0 0 0-9.2 1.3A3.1 3.1 0 0 0 7.5 11.2z" fill="currentColor" fill-opacity=".12"/><path d="M5 14.5h14M6.5 17.2h11M8 19.8h8"/></svg>',
+    wind:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M4 10.5h11.5a2.5 2.5 0 1 0-2.5-2.5M4 14h13a2.5 2.5 0 1 1-2.5 2.5"/></svg>',
+    snow:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M7.8 12.8h8.6a3.5 3.5 0 0 0 .2-7 5 5 0 0 0-9.5 1.3A3.2 3.2 0 0 0 7.8 12.8z" fill="currentColor" fill-opacity=".12"/><path d="M8.5 16v3M12 16v3M15.5 16v3M7.5 17.5h2M11 17.5h2M14.5 17.5h2"/></svg>'
+  };
+  function iconKind(o, when){
+    var raw=(o&&o.raw)||"";
+    var body=raw.replace(/^(METAR|SPECI)\s+/,"").split(/\sRMK\s/)[0];
+    if(/\b(TS|VCTS)\b/.test(body)) return "thunder";
+    if(/\b(SN|SG|IC|PL|GR|GS)\b/.test(body)) return "snow";
+    if(/\b(RA|DZ|SHRA|SH)\b/.test(body)) return "rain";
+    if(/\b(FG|BR)\b/.test(body) || (o.vis!=null && o.vis<1)) return "fog";
+    if(o.wspd!=null && (o.wspd>=20 || (o.wgst!=null && o.wgst>=25))) return "wind";
+    var amt=o.clouds&&o.clouds[0]?o.clouds[0].amt:"";
+    if(/OVC|BKN|VV/.test(amt)) return "cloudy";
+    if(/SCT/.test(amt)) return "partly";
+    var night=when? (azHour(when)<6 || azHour(when)>=19):false;
+    if(/CLR|SKC|NSC|NCD|FEW/.test(amt) || !amt) return night?"moon":"sun";
+    return night?"moon":"sun";
+  }
+  function renderIcon(o, when){
+    var kind=iconKind(o,when);
+    $$("[data-wx=icon]").forEach(function(e){
+      e.innerHTML=ICONS[kind]||ICONS.sun;
+      e.setAttribute("data-kind",kind);
+    });
+  }
+
   /* ---------- rendering ---------- */
   var CATS={VFR:"VFR",MVFR:"MVFR",IFR:"IFR",LIFR:"LIFR"};
   function render(o, when, sample){
@@ -163,15 +207,19 @@
     $$(".rwy-end").forEach(function(e){e.classList.toggle("fav", wc && !wc.vrb && e.getAttribute("data-rwy")===wc.best);});
   }
   var last=null;
+  var METAR_API=(($("#wx")||{}).getAttribute&&$("#wx").getAttribute("data-metar-endpoint"))||"";
   var IEM = "https://mesonet.agron.iastate.edu/api/1/currents.json?station=OLS&network=AZ_ASOS";
   function getJSON(u){return fetch(u,{cache:"no-store"}).then(function(r){if(!r.ok)throw new Error("HTTP "+r.status);return r.json();});}
   function settle(pr){return pr.then(function(v){return {ok:true,v:v};},function(e){return {ok:false,e:e};});}
-  function load(manual){
-    if(!$("[data-wx]")) return;
-    document.documentElement.classList.add("wx-loading");
-    set("[data-wx=status]", manual?"Refreshing…":"Loading live KOLS data…");
-    // Two CORS-enabled public feeds of the same FAA ASOS: NWS API (official) and Iowa Environmental Mesonet (often posts the METAR sooner).
-    Promise.all([settle(getJSON(API)), settle(getJSON(IEM))]).then(function(rs){
+  function fromAwc(j){
+    if(!j||!j.ok||!j.raw) throw new Error("bad metar");
+    var raw=String(j.raw).replace(/^(METAR|SPECI)\s+/,"");
+    var when=j.observedAt?new Date(j.observedAt):new Date();
+    return {o:parseMetar(raw), when:when, src:"AWC", sample:""};
+  }
+  function fromNwsIem(){
+    // CORS-enabled public feeds of the same FAA ASOS: NWS API and Iowa Environmental Mesonet.
+    return Promise.all([settle(getJSON(API)), settle(getJSON(IEM))]).then(function(rs){
       var f = rs[0].ok ? (rs[0].v.features||[]).map(function(x){return x.properties;}) : [];
       var cands = [];
       for(var i=0;i<f.length;i++){ if(f[i].rawMessage){ cands.push({raw:f[i].rawMessage, t:new Date(f[i].timestamp), src:"NWS"}); break; } }
@@ -184,10 +232,20 @@
         if(tL && tL > when){ var s=fromProps(latest); if(s.wspd!=null) sample="Newer ASOS 5-minute sample at "+mst(tL)+": wind "+windText(s)+(s.temp!=null?", "+s.temp.toFixed(0)+"°C":"")+"."; }
       } else if(latest){ o = fromProps(latest); when = tL; src = "NWS"; }
       else throw new Error("No observations");
-      last=o; render(o, when, sample);
+      return {o:o, when:when, src:src, sample:sample};
+    });
+  }
+  function load(manual){
+    if(!$("[data-wx]")) return;
+    document.documentElement.classList.add("wx-loading");
+    set("[data-wx=status]", manual?"Refreshing…":"Loading live KOLS data…");
+    var primary = METAR_API ? getJSON(METAR_API).then(fromAwc) : Promise.reject(new Error("no metar proxy"));
+    primary.catch(function(){return fromNwsIem();}).then(function(r){
+      last=r.o; render(r.o, r.when, r.sample);
       document.documentElement.classList.remove("wx-loading","wx-error");
-      set("[data-wx=status]","Live · FAA ASOS"); set("[data-wx=src]","via "+(src==="IEM"?"Iowa Environmental Mesonet":"National Weather Service"));
-    }).catch(function(e){
+      var via = r.src==="AWC"?"AviationWeather.gov":(r.src==="IEM"?"Iowa Environmental Mesonet":"National Weather Service");
+      set("[data-wx=status]","Live · FAA ASOS"); set("[data-wx=src]","via "+via);
+    }).catch(function(){
       document.documentElement.classList.remove("wx-loading");document.documentElement.classList.add("wx-error");
       set("[data-wx=status]","Live data unavailable right now");
       set("[data-wx=pill]","KOLS · ASOS 121.125 · 520-287-9332");
@@ -252,6 +310,42 @@
     window.__kolsMap=map;
   }
 
+
+  /* ---------- weather radar (RainViewer tiles, lazy-loaded) ---------- */
+  function initRadar(){
+    var box=$("#wx-radar-map"); if(!box||!window.L) return;
+    var started=false;
+    function start(){
+      if(started) return; started=true;
+      fetch("https://api.rainviewer.com/public/weather-maps.json").then(function(r){if(!r.ok)throw new Error("radar "+r.status);return r.json();}).then(function(j){
+        var frames=(j.radar&&j.radar.past)||[];
+        var last=frames[frames.length-1];
+        if(!last) throw new Error("no frames");
+        var map=window.L.map(box,{scrollWheelZoom:false,zoomControl:true,attributionControl:true}).setView([31.4177,-110.8479],8);
+        window.L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",{
+          attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>',
+          maxZoom:16, subdomains:"abcd"
+        }).addTo(map);
+        window.L.tileLayer(j.host+last.path+"/256/{z}/{x}/{y}/2/1_1.png",{
+          opacity:0.75,
+          attribution:'<a href="https://www.rainviewer.com/" target="_blank" rel="noopener">RainViewer</a>'
+        }).addTo(map);
+        window.L.circleMarker([31.4177,-110.8479],{radius:6,color:"#e9a06a",fillColor:"#c4703d",fillOpacity:1,weight:2}).addTo(map).bindPopup("KOLS · Nogales International");
+        map.attributionControl.setPrefix('<a href="https://leafletjs.com" target="_blank" rel="noopener">Leaflet</a>');
+        box.addEventListener("click",function(){map.scrollWheelZoom.enable();});
+        box.addEventListener("mouseleave",function(){map.scrollWheelZoom.disable();});
+        setTimeout(function(){map.invalidateSize();},250);
+        window.__kolsRadar=map;
+      }).catch(function(){
+        box.innerHTML="<p class='wx-radar-fail'>Radar is unavailable right now.</p>";
+      });
+    }
+    if("IntersectionObserver" in window){
+      var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){start();io.disconnect();}});},{rootMargin:"240px"});
+      io.observe(box);
+    } else start();
+  }
+
   /* ---------- pathway tabs ---------- */
   function initTabs(){
     var tabs=$$("[role=tab]"); if(!tabs.length) return;
@@ -264,6 +358,6 @@
     });
   }
   window.__kolsParse={metar:parseMetar,category:category,wind:windComponents,da:densityAlt};
-  function boot(){initWx();initMap();initTabs();}
+  function boot(){initWx();initMap();initRadar();initTabs();}
   if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",boot); else boot();
 })();

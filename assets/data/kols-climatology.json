@@ -1,0 +1,231 @@
+{
+  "station": "KOLS",
+  "iemStation": "OLS",
+  "source": "Iowa Environmental Mesonet / NWS ASOS",
+  "sourceUrl": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+  "years": [
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+  ],
+  "yearLabel": "2020\u20132025",
+  "timezone": "America/Phoenix",
+  "daytime": "07:00\u201319:00",
+  "method": "A day's flight category is the most restrictive FAA category among routine hourly ASOS observations from 7:00 a.m. to 7:00 p.m. Arizona time (America/Phoenix; LIFR > IFR > MVFR > VFR). FAA categories: VFR is ceiling above 3,000 ft and visibility above 5 SM; MVFR is ceiling 1,000\u20133,000 ft or visibility 3\u20135 SM; IFR is ceiling 500 to below 1,000 ft or visibility 1 to below 3 SM; LIFR is ceiling below 500 ft or visibility below 1 SM. Days without a usable daytime visibility observation are omitted, so yearly totals sum to a little under 365. A day is counted as clear or sunny if more than half of those daytime observations are CLR, SKC, or FEW; otherwise it is counted as cloudy (SCT, BKN, OVC, or VV).",
+  "observations": 50372,
+  "daytimeObservations": 25199,
+  "averageDaysPerYear": {
+    "VFR": 327.2,
+    "MVFR": 17.2,
+    "IFR": 6.7,
+    "LIFR": 4.3,
+    "classified": 355.3,
+    "clear": 313.5,
+    "cloudy": 42.0
+  },
+  "monthly": [
+    {
+      "month": 1,
+      "name": "Jan",
+      "VFR": 27.3,
+      "MVFR": 2.5,
+      "IFR": 0.5,
+      "LIFR": 0.7,
+      "clear": 25.8,
+      "cloudy": 5.2,
+      "classified": 31.0
+    },
+    {
+      "month": 2,
+      "name": "Feb",
+      "VFR": 25.2,
+      "MVFR": 2.5,
+      "IFR": 0.3,
+      "LIFR": 0.3,
+      "clear": 23.2,
+      "cloudy": 5.2,
+      "classified": 28.3
+    },
+    {
+      "month": 3,
+      "name": "Mar",
+      "VFR": 27.8,
+      "MVFR": 2.3,
+      "IFR": 0.3,
+      "LIFR": 0.0,
+      "clear": 25.2,
+      "cloudy": 5.5,
+      "classified": 30.5
+    },
+    {
+      "month": 4,
+      "name": "Apr",
+      "VFR": 29.3,
+      "MVFR": 0.7,
+      "IFR": 0.0,
+      "LIFR": 0.0,
+      "clear": 28.8,
+      "cloudy": 1.2,
+      "classified": 30.0
+    },
+    {
+      "month": 5,
+      "name": "May",
+      "VFR": 30.5,
+      "MVFR": 0.3,
+      "IFR": 0.0,
+      "LIFR": 0.0,
+      "clear": 29.5,
+      "cloudy": 1.3,
+      "classified": 30.8
+    },
+    {
+      "month": 6,
+      "name": "Jun",
+      "VFR": 29.0,
+      "MVFR": 0.3,
+      "IFR": 0.5,
+      "LIFR": 0.2,
+      "clear": 28.0,
+      "cloudy": 2.0,
+      "classified": 30.0
+    },
+    {
+      "month": 7,
+      "name": "Jul",
+      "VFR": 24.5,
+      "MVFR": 2.3,
+      "IFR": 1.0,
+      "LIFR": 0.8,
+      "clear": 24.0,
+      "cloudy": 4.7,
+      "classified": 28.7
+    },
+    {
+      "month": 8,
+      "name": "Aug",
+      "VFR": 23.3,
+      "MVFR": 2.5,
+      "IFR": 1.7,
+      "LIFR": 0.8,
+      "clear": 25.0,
+      "cloudy": 3.3,
+      "classified": 28.3
+    },
+    {
+      "month": 9,
+      "name": "Sep",
+      "VFR": 27.0,
+      "MVFR": 0.8,
+      "IFR": 1.0,
+      "LIFR": 0.3,
+      "clear": 24.5,
+      "cloudy": 4.7,
+      "classified": 29.2
+    },
+    {
+      "month": 10,
+      "name": "Oct",
+      "VFR": 27.8,
+      "MVFR": 0.3,
+      "IFR": 0.7,
+      "LIFR": 0.2,
+      "clear": 26.3,
+      "cloudy": 2.7,
+      "classified": 29.0
+    },
+    {
+      "month": 11,
+      "name": "Nov",
+      "VFR": 28.2,
+      "MVFR": 0.8,
+      "IFR": 0.0,
+      "LIFR": 0.5,
+      "clear": 27.0,
+      "cloudy": 2.5,
+      "classified": 29.5
+    },
+    {
+      "month": 12,
+      "name": "Dec",
+      "VFR": 27.2,
+      "MVFR": 1.7,
+      "IFR": 0.7,
+      "LIFR": 0.5,
+      "clear": 26.2,
+      "cloudy": 3.8,
+      "classified": 30.0
+    }
+  ],
+  "byYear": {
+    "2020": {
+      "VFR": 338,
+      "MVFR": 18,
+      "IFR": 7,
+      "LIFR": 3,
+      "clear": 326,
+      "cloudy": 40,
+      "classified": 366,
+      "calendarDays": 366,
+      "missingDays": 0
+    },
+    "2021": {
+      "VFR": 333,
+      "MVFR": 19,
+      "IFR": 5,
+      "LIFR": 8,
+      "clear": 314,
+      "cloudy": 51,
+      "classified": 365,
+      "calendarDays": 365,
+      "missingDays": 0
+    },
+    "2022": {
+      "VFR": 312,
+      "MVFR": 14,
+      "IFR": 7,
+      "LIFR": 4,
+      "clear": 295,
+      "cloudy": 43,
+      "classified": 337,
+      "calendarDays": 365,
+      "missingDays": 28
+    },
+    "2023": {
+      "VFR": 330,
+      "MVFR": 16,
+      "IFR": 6,
+      "LIFR": 2,
+      "clear": 314,
+      "cloudy": 40,
+      "classified": 354,
+      "calendarDays": 365,
+      "missingDays": 11
+    },
+    "2024": {
+      "VFR": 317,
+      "MVFR": 21,
+      "IFR": 6,
+      "LIFR": 5,
+      "clear": 318,
+      "cloudy": 31,
+      "classified": 349,
+      "calendarDays": 366,
+      "missingDays": 17
+    },
+    "2025": {
+      "VFR": 333,
+      "MVFR": 15,
+      "IFR": 9,
+      "LIFR": 4,
+      "clear": 314,
+      "cloudy": 47,
+      "classified": 361,
+      "calendarDays": 365,
+      "missingDays": 4
+    }
+  }
+}
