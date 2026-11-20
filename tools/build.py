@@ -11,6 +11,8 @@ SHOW_DRAFTS = "--drafts" in sys.argv
 SITE_URL = "https://coppermountainair.com/"
 PREVIEW = False                                         # True = noindex + preview banner
 CONTACT_TO = "operations@coppermountainair.com"
+# Contact form relay (Railway service cma-website-contact/contact-api) that emails CONTACT_TO via Resend.
+CONTACT_ENDPOINT = "https://contact-api-production-d6d93922.up.railway.app/contact"
 # Verified public contact facts (sources recorded in the commit / site copy notes):
 # Address & phone: Seth's email signature; FAA airport manager record and CMA's AirNav FBO listing; Santa Cruz County airport page.
 # Hours: Santa Cruz County airport page; CMA's previous coppermountainair.com (Wayback, 2025-12-14 and 2026-07-11); iFlightPlanner and PilotGPT FBO listings.
@@ -868,7 +870,7 @@ def contact(p):
     opts = ["Fuel", "FBO / ramp / hangar", "Cargo / freight", "Flight training", "Charter interest", "Billing / payment", "Other"]
     return page_hero("Contact", "Let's talk.", "Fuel, ramp space, a freight quote, or a question: send us a note.") + f"""
 <section><div class="wrap split" style="align-items:start">
-  <form class="form reveal" id="contact-form" data-to="{CONTACT_TO}" data-endpoint="https://formsubmit.co/ajax/{CONTACT_TO}" action="https://formsubmit.co/{CONTACT_TO}" method="POST">
+  <form class="form reveal" id="contact-form" data-to="{CONTACT_TO}" data-endpoint="{CONTACT_ENDPOINT}" action="{CONTACT_ENDPOINT}" method="POST">
     <div class="row"><div class="field"><label for="name">Name</label><input id="name" name="name" autocomplete="name" required></div>
     <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" required></div></div>
     <div class="row"><div class="field"><label for="phone">Phone <span class="hint">Optional</span></label><input id="phone" name="phone" type="tel" autocomplete="tel"></div>
