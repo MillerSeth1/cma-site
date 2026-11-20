@@ -13,6 +13,7 @@ PREVIEW = False                                         # True = noindex + previ
 CONTACT_TO = "operations@coppermountainair.com"
 # Contact form relay (Railway service cma-website-contact/contact-api) that emails CONTACT_TO via Resend.
 CONTACT_ENDPOINT = "https://contact-api-production-d6d93922.up.railway.app/contact"
+NOTAMS_ENDPOINT = "https://contact-api-production-d6d93922.up.railway.app/notams"
 # Verified public contact facts (sources recorded in the commit / site copy notes):
 # Address & phone: Seth's email signature; FAA airport manager record and CMA's AirNav FBO listing; Santa Cruz County airport page.
 # Hours: Santa Cruz County airport page; CMA's previous coppermountainair.com (Wayback, 2025-12-14 and 2026-07-11); iFlightPlanner and PilotGPT FBO listings.
@@ -107,8 +108,8 @@ NAV = [("services.html","Services"),("fuel-fbo.html","Fuel &amp; FBO"),
 # Page-specific assets. Leaflet 1.9.4 is vendored in assets/vendor/leaflet (BSD-2-Clause) so the map never depends on a CDN.
 PAGE_CSS = {"about.html": ["assets/css/pages.css"], "flight-training.html": ["assets/vendor/leaflet/leaflet.css", "assets/css/pages.css"], "cargo.html": ["assets/css/pages.css"]}
 PAGE_JS = {
-  "index.html": ["assets/js/flightplan.js"],
-  "fuel-fbo.html": ["assets/js/flightplan.js"],
+  "index.html": ["assets/js/flightplan.js", "assets/js/notams.js"],
+  "fuel-fbo.html": ["assets/js/flightplan.js", "assets/js/notams.js"],
   "flight-training.html": ["assets/vendor/leaflet/leaflet.js", "assets/js/kols.js"],
 }
 
@@ -252,6 +253,16 @@ AIRPORT_FACTS = f"""<div class="facts reveal">
  <div class="fact"><span class="k">Status</span><span class="v">Airport of entry</span><span class="s">International, per FAA data</span></div>
 </div>
 <p class="source">Source: FAA airport data via <a href="{AIRNAV}" rel="noopener">AirNav (KOLS)</a>, effective 29 Oct 2026. Not for navigation. Check current <a href="{NOTAMS}" target="_blank" rel="noopener">KOLS NOTAMs on the FAA site</a>.</p>"""
+
+def notams_panel():
+    return f"""
+<div class="kols-notams reveal" id="kols-notams" data-endpoint="{NOTAMS_ENDPOINT}" data-official="{NOTAMS}">
+  <h3>Active NOTAMs for KOLS</h3>
+  <p class="notams-status" data-notams="status">Loading current KOLS NOTAMs…</p>
+  <ul class="notam-list" data-notams="list"></ul>
+  <p class="source">Not for flight planning — verify with official FAA sources. <a href="{NOTAMS}" target="_blank" rel="noopener">View KOLS NOTAMs on the FAA site</a>.</p>
+</div>
+"""
 FUEL_PRICES = f'Current Jet A and 100LL prices are posted on <a href="{AIRNAV}" rel="noopener">AirNav</a>.'
 POSTS = []
 UNLISTED = []
@@ -317,6 +328,7 @@ def home(p):
 <section class="dark"><div class="wrap">
   <div class="section-head reveal"><p class="eyebrow">Flying in?</p><h2>Nogales International at a glance.</h2><p>A 7,200-foot runway at the foot of the Santa Cruz Valley, about 7 miles northeast of downtown Nogales.</p></div>
   {AIRPORT_FACTS}
+  {notams_panel()}
   {flight_plan_widget()}
   {kols_link(p, "Read the KOLS pilot guide")}
 </div></section>
@@ -419,6 +431,7 @@ def fuel_fbo(p):
 <section class="dark"><div class="wrap">
   <div class="section-head reveal"><p class="eyebrow">Airport info</p><h2>KOLS for pilots.</h2></div>
   {AIRPORT_FACTS}
+  {notams_panel()}
   {flight_plan_widget()}
   {kols_link(p, "Full KOLS pilot guide")}
 </div></section>
