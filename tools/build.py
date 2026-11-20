@@ -197,9 +197,9 @@ def social_links():
     for name, href, path in SOCIAL:
         items.append(
             f'<a href="{href}" target="_blank" rel="noopener" aria-label="Copper Mountain Air on {name}">'
-            f'<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">{path}</svg></a>'
+            f'<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">{path}</svg></a>'
         )
-    return f'<nav class="social-links" aria-label="Copper Mountain Air on social media">{"".join(items)}</nav>'
+    return f'<nav class="social social-links" aria-label="Copper Mountain Air on social media">{"".join(items)}</nav>'
 
 def footer(p):
     return f"""</main>
