@@ -786,7 +786,7 @@ def about(p):
 </section>"""
     return hero + f"""
 <section><div class="wrap split">
-  <figure class="frame reveal">{img("fbo", p)}</figure>
+  <figure class="frame reveal">{img("training", p)}</figure>
   <div class="reveal"><p class="eyebrow">Our story</p><h2>Rooted at KOLS.</h2>
     <p>Since 2024, Copper Mountain Air has been the fixed-base operator at Nogales International Airport (KOLS) in Santa Cruz County, Arizona, just north of the U.S.–Mexico border.</p>
     <p>We provide full-service Jet A and 100LL fueling, FBO ground support on the field, FAA Part 61 single-engine flight training, and on-demand expedited cargo by ground. Multi-engine training is arriving shortly, and FAA Part 141 flight school certification is in process. On-demand charter is in development and is not yet offered.</p>
