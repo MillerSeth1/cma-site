@@ -16,9 +16,9 @@ body{{margin:0;width:1200px;height:630px;position:relative;overflow:hidden;backg
 .sh{{position:absolute;inset:0;background:linear-gradient(90deg,rgba(10,20,27,.92) 0%,rgba(10,20,27,.7) 42%,rgba(10,20,27,.05) 75%)}}
 .t{{position:absolute;left:64px;top:70px;bottom:64px;display:flex;flex-direction:column;justify-content:space-between;color:#f4e7d6}}
 .e{{font:700 20px A;font-stretch:125%;letter-spacing:.2em;color:#e9a06a;text-transform:uppercase}}
-p{{font:800 34px/1.15 A;font-stretch:115%;margin:10px 0 0;max-width:520px}}
+p{{font:800 34px/1.15 A;font-stretch:115%;margin:10px 0 0;max-width:560px}}
 </style></head><body><div class="bg"></div><div class="sh"></div>
-<div class="t"><img src="{logo}" style="height:210px;width:auto;align-self:flex-start"><div><div class="e">Nogales International · KOLS</div><p>Fuel, FBO &amp; cargo in Nogales, Arizona</p></div></div></body></html>"""
+<div class="t"><img src="{logo}" style="height:210px;width:auto;align-self:flex-start"><div><div class="e">Nogales International · KOLS</div><p>Fuel, FBO, flight training<br>&amp; cargo at KOLS</p></div></div></body></html>"""
 with sync_playwright() as pw:
     b = pw.chromium.launch()
     pg = b.new_page(viewport={"width": 1200, "height": 630}); pg.set_content(og); pg.wait_for_timeout(500)

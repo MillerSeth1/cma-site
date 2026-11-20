@@ -1,10 +1,10 @@
-# Copper Mountain Air website (preview)
+# Copper Mountain Air website
 
 Static site for Copper Mountain Air, LLC at Nogales International Airport (KOLS), Nogales, AZ.
 
-- **Preview:** https://millerseth1.github.io/cma-site/ (noindex, robots Disallow — preview only)
-- **Hosting:** GitHub Pages (free), built by GitHub Actions from `tools/build.py` on every push to `main`.
-- **No custom domain yet.** There is intentionally no `CNAME` file. Do not add one, and do not change DNS: `coppermountainair.com` carries Microsoft 365 email (MX, autodiscover, SPF/DKIM/DMARC and related records). The domain switch waits for Seth's approval.
+- **Live site:** https://coppermountainair.com/
+- **Hosting:** GitHub Pages, built by GitHub Actions from `tools/build.py` on every push to `main`.
+- **DNS caution:** Point only the website records (apex `A`/`AAAA` and `www`) at GitHub Pages. Leave every Microsoft 365 email record untouched: MX, `autodiscover` CNAME, SPF/DKIM/DMARC TXT, `lyncdiscover`/`sip` CNAMEs, and related SRV records.
 
 ## Layout
 
@@ -32,10 +32,11 @@ Public contact details (address, phone, hours, after-hours fueling, amenities an
 
 Note: this repo is public (required for free GitHub Pages), so draft Markdown is readable on GitHub even though it is not on the site.
 
-## Going live later (needs Seth's approval)
+## Production settings
 
-1. Set `PREVIEW = False` and `SITE_URL` to the real domain in `tools/build.py` (removes noindex, opens robots.txt).
-2. Add the custom domain in repo Settings → Pages, and add **only** the website records at the DNS host (an `A`/`CNAME` for `www` and the apex). Leave every Microsoft 365 record (MX, autodiscover CNAME, SPF TXT, DKIM selector CNAMEs, DMARC, any `msoid`/`lyncdiscover`/SRV records) untouched.
+`tools/build.py` is set to production: `PREVIEW = False` and `SITE_URL = "https://coppermountainair.com/"`. Public pages are indexable; `robots.txt` allows crawlers and disallows `/preview/`. The build writes `_site/CNAME` with `coppermountainair.com` for GitHub Pages.
+
+To temporarily return to a noindex preview build, set `PREVIEW = True` and restore `SITE_URL` to the github.io preview URL. Do not change Microsoft 365 DNS records when updating website records at GoDaddy.
 
 ## Unlisted preview pages
 

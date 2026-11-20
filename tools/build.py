@@ -1,6 +1,6 @@
 """Build the Copper Mountain Air static site.  Run: python3 tools/build.py
-Pages are written to the repo root (GitHub Pages serves the root). Relative links only,
-so the site works under /cma-site/ on github.io and later on a custom domain."""
+Pages are written to _site/ (GitHub Actions deploys that folder). Relative links only,
+so the site works at the domain root on coppermountainair.com."""
 import os, re, json, html, shutil, sys
 import markdown
 
@@ -8,8 +8,8 @@ ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 OUT = os.path.join(ROOT, "_site")                       # build output (deployed by GitHub Actions)
 # --drafts renders unpublished posts too, for LOCAL review only. The deploy workflow never passes it.
 SHOW_DRAFTS = "--drafts" in sys.argv
-SITE_URL = "https://millerseth1.github.io/cma-site/"   # change when the custom domain goes live
-PREVIEW = True                                          # True = noindex + preview banner
+SITE_URL = "https://coppermountainair.com/"
+PREVIEW = False                                         # True = noindex + preview banner
 CONTACT_TO = "operations@coppermountainair.com"
 # Verified public contact facts (sources recorded in the commit / site copy notes):
 # Address & phone: Seth's email signature; FAA airport manager record and CMA's AirNav FBO listing; Santa Cruz County airport page.
@@ -933,8 +933,11 @@ def main():
     sm.append("</urlset>")
     open(os.path.join(OUT, "sitemap.xml"), "w").write("\n".join(sm) + "\n")
     robots = ("# PREVIEW: block all crawlers until launch. Remove the Disallow line at launch.\nUser-agent: *\nDisallow: /\n" if PREVIEW
-              else "User-agent: *\nAllow: /\n") + f"\nSitemap: {SITE_URL}sitemap.xml\n"
+              else "User-agent: *\nAllow: /\nDisallow: /preview/\n") + f"\nSitemap: {SITE_URL}sitemap.xml\n"
     open(os.path.join(OUT, "robots.txt"), "w").write(robots)
+    # Custom domain for GitHub Pages (workflow deploy uses the artifact, not the repo root).
+    if not PREVIEW:
+        open(os.path.join(OUT, "CNAME"), "w").write("coppermountainair.com\n")
     print("built", len(PAGES), "pages")
 
 if __name__ == "__main__":
