@@ -743,7 +743,7 @@ def history(p):
        """<p>From 2002 to 2011, nearly <b>$6 million</b> in FAA Airport Improvement Program grants funded perimeter fencing, guidance signs, runway and taxiway lighting, a runway rehabilitation, a new apron and taxiway work. Automated ASOS weather observations at the field are on record since at least 1999.</p>
 <p>In <b>2022</b>, nearly <b>$2 million</b> in state grants funded a new LED rotating beacon, runway end identifier lights, runway edge lights, guidance signs and a new visual approach guidance system.</p>"""),
       ("now", "Today", "2024–present", "Copper Mountain Air at KOLS",
-       fig("airfield", "Nogales International Airport today, with mountains behind.") +
+       fig("cargo", "The cargo sign on the field at KOLS today.") +
        f"""<p>On <b>June 14, 2024</b>, Santa Cruz County issued a request for proposals for a full-service FBO. Later that year, after Board of Supervisors approval, Copper Mountain Air succeeded Tiffin Aviation as the airport's full-service fixed-base operator, bringing:</p>
 <ul><li>Full-service Phillips 66 Jet A and 100LL, and Phillips 66 WingPoints rewards</li><li>FAA Part 61 single-engine flight training, with multi-engine arriving shortly and Part 141 certification in process</li><li>Expedited ground and air-to-ground cargo from the field</li></ul>
 <p>On <b>October 15, 2025</b>, the Board of Supervisors unanimously approved a <b>$1,571,000</b> contract with Kear Civil Corporation to replace the airport's fuel tanks with a new fuel farm. The work continues nearly a century of steady public investment at KOLS.</p>
@@ -769,9 +769,24 @@ def history(p):
 </div></section>"""
 
 def about(p):
-    return page_hero("About", "Southern Arizona's home field team.", "Copper Mountain Air, LLC is the full-service FBO at Nogales International Airport (KOLS), a Santa Cruz County airport serving the border since 1928.") + f"""
+    hero = f"""
+<section class="xhero about-hero" aria-label="About Copper Mountain Air" style="min-height:min(80vh,760px)">
+  <div class="hero-media">{img("airfield", p, eager=True, sizes="full")}</div><div class="grid-lines" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="xhero-inner" style="grid-template-columns:1fr">
+      <div>
+        <ul class="chips" aria-label="At a glance"><li class="chip"><i></i>Santa Cruz County airport since 1928</li><li class="chip"><i></i>International airport of entry</li><li class="chip"><i></i>Full-service FBO since 2024</li></ul>
+        <p class="eyebrow">About · Nogales International Airport · KOLS</p>
+        <h1>Southern Arizona's <span class="cu">home field team.</span></h1>
+        <p class="lede">Copper Mountain Air, LLC is the full-service FBO at Nogales International Airport (KOLS), a Santa Cruz County airport that has served this border community since 1928.</p>
+        <div class="actions"><a class="btn btn-primary" href="#history">Nearly a century of KOLS history {ARROW}</a><a class="btn btn-glass" href="{p}contact.html">Contact us</a></div>
+      </div>
+    </div>
+  </div>
+</section>"""
+    return hero + f"""
 <section><div class="wrap split">
-  <figure class="frame reveal">{img("training", p)}</figure>
+  <figure class="frame reveal">{img("fbo", p)}</figure>
   <div class="reveal"><p class="eyebrow">Our story</p><h2>Rooted at KOLS.</h2>
     <p>Since 2024, Copper Mountain Air has been the fixed-base operator at Nogales International Airport (KOLS) in Santa Cruz County, Arizona, just north of the U.S.–Mexico border.</p>
     <p>We provide full-service Jet A and 100LL fueling, FBO ground support on the field, FAA Part 61 single-engine flight training, and on-demand expedited cargo by ground. Multi-engine training is arriving shortly, and FAA Part 141 flight school certification is in process. On-demand charter is in development and is not yet offered.</p>
