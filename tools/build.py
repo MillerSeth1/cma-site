@@ -42,7 +42,9 @@ IMG = {
   "cargo-sign": "Close-up of a yellow CARGO taxiway sign at Nogales International Airport",
   "kols-guide": "Red runway 22-4 sign at Nogales International Airport",
   "training":   "Yellow taxiway direction signs at Nogales International Airport",
+  "aero-1920":  "Four U.S. Army Air Service de Havilland DH-4 biplanes of the 12th Aero Squadron at Camp Stephen D. Little near Nogales, Arizona, 1920 (U.S. Air Service public domain photograph)",
   "charter":    "The runway at Nogales International Airport at dusk",
+  "aero-1920":  "Row of 12th Aero Squadron biplanes on the grass at Camp Stephen D. Little near Nogales, 1920 (U.S. Air Service, public domain)",
   "fuel":       {"file": "fuel.svg", "alt": "Placeholder: fuel photo coming soon"},
   # Drop the real photo in as assets/img/josh-berg.jpg and change "file" below to "josh-berg.jpg".
   "josh-berg":  {"file": "josh-berg.svg", "alt": "Photo placeholder: Josh Berg, photo coming"},
@@ -72,7 +74,7 @@ NAV = [("services.html","Services"),("fuel-fbo.html","Fuel &amp; FBO"),
        ("flight-training.html","Flight Training"),("cargo.html","Cargo"),("charter.html","Charter"),("about.html","About"),
        ("blog/index.html","Blog")]
 # Page-specific assets. Leaflet 1.9.4 is vendored in assets/vendor/leaflet (BSD-2-Clause) so the map never depends on a CDN.
-PAGE_CSS = {"flight-training.html": ["assets/vendor/leaflet/leaflet.css", "assets/css/pages.css"], "cargo.html": ["assets/css/pages.css"]}
+PAGE_CSS = {"about.html": ["assets/css/pages.css"], "flight-training.html": ["assets/vendor/leaflet/leaflet.css", "assets/css/pages.css"], "cargo.html": ["assets/css/pages.css"]}
 PAGE_JS = {"flight-training.html": ["assets/vendor/leaflet/leaflet.js", "assets/js/kols.js"]}
 
 JSONLD_BIZ = {
@@ -689,19 +691,94 @@ def coming_soon_charter(p):
     <a class="btn btn-dark" href="{p}contact.html?topic=Charter%20interest">Join the interest list {ARROW}</a></div>
 </div></section>{cta(p, "Questions in the meantime?", "We're happy to talk. Fuel, FBO, cargo and Part 61 flight training are available today.")}"""
 
+# History copy follows /workspace/cma-kols-history-research.md (Nov 19, 2026); every clause is tied to a source listed in HISTORY_SOURCES.
+HISTORY_SOURCES = [
+  ('Coffman Associates, <em>Airport Master Plan, Nogales International Airport</em>, Santa Cruz County, February 2015 (history chapter and Table 1B, development history)', 'https://web.archive.org/web/20250305003134/https://apps.azdot.gov/files/Airports/MP_PDF/Nogales/Nogales-Master-Plan-2015.pdf'),
+  ('U.S. Army Corps of Engineers, Formerly Used Defense Sites: Camp Little; Camp Stephen D. Little historical marker (1978)', 'https://www.spl.usace.army.mil/Missions/Formerly-Used-Defense-Sites/Camp-Little/'),
+  ('12th Aero Squadron and the U.S. Army Border Air Patrol (unit lineage, citing Maurer, <em>Aviation in the U.S. Army, 1919–1939</em>)', 'https://en.wikipedia.org/wiki/12th_Reconnaissance_Squadron'),
+  ('U.S. Army Air Service photograph, 1920, “12th Aero Squadron at Camp Little near Nogales, Arizona” (public domain, Wikimedia Commons)', 'https://commons.wikimedia.org/wiki/File:12th_Aero_Squadron_-_Nogales_Arizona.jpg'),
+  ('Bureau of Air Commerce, <em>Descriptions of Airports and Landing Fields in the United States</em> (1937), via the Davis-Monthan Airfield Register', 'https://dmairfield.org/places/nogales_az/index.html'),
+  ('United States Code, 1946 supplement, airports of entry list; and 19 CFR § 122.13 (current)', 'https://www.ecfr.gov/current/title-19/chapter-I/part-122/subpart-B/section-122.13'),
+  ('Historic airline records: Cavalcade of Wings (Arizona Airways; Frontier Airlines); The Airport Historian (Douglas, AZ); Departed Flights, OLS timetable of April 1, 1981', 'https://www.departedflights.com/OLS81intro.html'),
+  ('<em>Nogales International</em>, “State grant to fund upgrades at Nogales International Airport,” January 28, 2022; and “Sky is the limit,” January 10, 2025', 'https://www.nogalesinternational.com/news/sky-is-the-limit-nogales-international-airport-lands-new-upgrades-management/article_e8215dc4-cd29-11ef-acd2-bf9c53f1ebae.html'),
+  ('Santa Cruz County, RFP #S-04-24-CO48, FBO Services at Nogales International Airport, June 14, 2024', 'https://az-santacruzcounty.civicplus.com/DocumentCenter/View/20143/Final-RFP-for-FBO-Services-S-04-24-CO48'),
+  ('Santa Cruz County Board of Supervisors agendas and minutes, July 2, 2025 and October 15, 2025', 'https://www.docketcity.com/az/santa-cruz-county/meeting/139964'),
+]
+
+def history(p):
+    def fig(slot, cap, cls="crop"):
+        return f'<figure class="tfig {cls}">{img(slot, p, sizes="(min-width: 980px) 560px, 100vw")}<figcaption>{cap}</figcaption></figure>'
+    items = [
+      ("pro", "Prologue", "1910–1933", "A border camp with an aviation field",
+       """<p>U.S. Army troops arrived at Nogales in <b>November 1910</b> as the Mexican Revolution began. On <b>December 14, 1915</b>, the post was named Camp Stephen D. Little, for a private killed in the November 1915 border clash. At its largest the camp spread across a cantonment, a target range and an <b>aviation field</b>, the earliest documented flying field in Nogales. The Army formally abandoned Camp Little on <b>May 5, 1933</b>.</p>
+<p class="note-pro">Camp Little stood at the north edge of the Nogales townsite. It was <b>not</b> today's airport, which sits 7 to 8 miles northeast of downtown on State Route 82.</p>"""),
+      ("pro", "Prologue", "1920–1921", "DH-4s on border patrol",
+       fig("aero-1920", "12th Aero Squadron aircraft at Camp Stephen D. Little's aviation field near Nogales, 1920. U.S. Air Service photo, public domain. This field predates today's SR 82 airport site by eight years.", "bw") +
+       """<p>After World War I the Army Air Service flew the Mexican Border Air Patrol. The <b>12th Aero Squadron</b> moved its headquarters to “Nogales Field” on <b>April 12, 1920</b> and flew Dayton-Wright DH-4 patrols along the line. Headquarters shifted to Douglas in February 1921, a flight stayed on at Nogales, and the squadron regrouped in Texas that September.</p>
+<p class="note-pro">This was the earlier military landing field near town, not the present airport.</p>"""),
+      ("", "Founding", "1928", "The community buys an airfield",
+       """<p>In <b>January 1928</b> the Santa Cruz County Chamber of Commerce bought land north of Nogales for a public airfield: the same property the airport occupies today. It opened in <b>March 1928</b> as a graded native-earth and grass rectangle, <b>1,980 by 4,180 feet</b>, where pilots could land in any direction.</p>
+<p>The land was deeded to Santa Cruz County on <b>October 3, 1928</b>, and the county still owns it. The airport was officially dedicated in <b>September 1929</b>.</p>"""),
+      ("", "Golden age", "1930s", "A short hop to the border",
+       """<p>Tucson's Davis-Monthan pilot register (1925–1936) logs dozens of flights to and from Nogales, with pilots based here and plenty headed south. In the Prohibition years, the international line was only minutes away.</p>
+<p>The county's 2015 Airport Master Plan identifies <b>Pickwick Airlines</b> as the field's first scheduled operator, with flights into Mexico. That service did not last.</p>"""),
+      ("", "Gateway", "1937", "An international airport of entry",
+       """<p>The federal government's 1937 airport handbook (Bureau of Air Commerce) already listed Nogales as an <b>international airport of entry</b>, then a gravel field. Nogales Municipal Airport appears on the 1946 U.S. Code list of airports of entry, and Nogales International Airport is still designated today under <b>19 CFR § 122.13</b>, with an on-field U.S. Customs and Border Protection port of entry.</p>"""),
+      ("", "World War II", "1942–1945", "Federal funds pave the field",
+       """<p>The remaining two parcels of land were deeded to the county in <b>December 1942</b>. The Master Plan records that the airport hosted a Navy V-5 training program and the Civil Air Patrol during the war.</p>
+<p>On <b>March 31, 1944</b>, federally funded construction gave the airport its first paved runways:</p>
+<ul><li>The original north–south grass strip was paved (500 × 2,500 ft).</li><li>A new <b>6,000-foot</b> northeast–southwest asphalt runway was built with a parallel taxiway and drainage. It is the backbone of today's Runway 04/22.</li></ul>
+<p>A lighted apron followed in August 1944, and runway contact lights in June 1945.</p>"""),
+      ("", "Airline era", "1946–1953", "DC-3s on the Nogales route",
+       """<p><b>Arizona Airways</b>, flying Douglas DC-3s out of Phoenix, included Nogales on its route to Bisbee and Douglas from 1946 until statewide service ended on <b>March 1, 1948</b>.</p>
+<p>On <b>June 1, 1950</b>, newly formed <b>Frontier Airlines</b> began DC-3 service on the Phoenix–Tucson–Nogales–Bisbee–Douglas route. The temporary route authority was not renewed in 1953.</p>"""),
+      ("", "Mid-century", "1956–1981", "Fuel, a VOR and a small airline",
+       """<ul><li><b>1956:</b> taxiway strips and tie-down hardstands.</li><li><b>1965:</b> the 6,000-foot runway is resurfaced and marked.</li><li><b>1967:</b> a fueling facility opens on the field.</li><li><b>1975:</b> a VOR/DME navigation aid, access road and power service are installed.</li></ul>
+<p><b>Copper State Airlines</b> appears on an <b>April 1, 1981</b> timetable, flying a Piper Cherokee from Nogales to Sierra Vista/Fort Huachuca and Tucson.</p>"""),
+      ("", "Modern field", "1984–1996", "Today's 7,200-foot runway",
+       fig("kols-guide", "Runway 4-22 sign at Nogales International Airport today.") +
+       """<p>The main runway was surfaced in 1984 and strengthened and repaved in 1989. Around 1988 the old north–south crosswind runway went out of use and has since disappeared. The current terminal building went up in <b>1993–94</b>.</p>
+<p>In <b>1996</b> a 1,200-foot extension stretched the 1944 runway to today's <b>7,200 × 100 feet</b>, the runway pilots land on now.</p>"""),
+      ("", "Modernization", "2002–2022", "Safety, lighting and guidance",
+       fig("charter", "Runway lights at KOLS at dusk.") +
+       """<p>From 2002 to 2011, nearly <b>$6 million</b> in FAA Airport Improvement Program grants funded perimeter fencing, guidance signs, runway and taxiway lighting, a runway rehabilitation, a new apron and taxiway work. Automated ASOS weather observations at the field are on record since at least 1999.</p>
+<p>In <b>2022</b>, nearly <b>$2 million</b> in state grants funded a new LED rotating beacon, runway end identifier lights, runway edge lights, guidance signs and a new visual approach guidance system (PAPI).</p>"""),
+      ("now", "Today", "2024–present", "Copper Mountain Air at KOLS",
+       fig("airfield", "Nogales International Airport today, with mountains behind.") +
+       f"""<p>On <b>June 14, 2024</b>, Santa Cruz County issued a request for proposals for a full-service FBO. Later that year, after Board of Supervisors approval, Copper Mountain Air succeeded Tiffin Aviation as the airport's full-service fixed-base operator, bringing:</p>
+<ul><li>Full-service Phillips 66 Jet A and 100LL, and Phillips 66 WingPoints rewards</li><li>FAA Part 61 single-engine flight training, with multi-engine arriving shortly and Part 141 certification in process</li><li>Expedited ground and air-to-ground cargo from the field</li></ul>
+<p>On <b>October 15, 2025</b>, the Board of Supervisors unanimously approved a <b>$1,571,000</b> contract with Kear Civil Corporation to replace the airport's fuel tanks with a new fuel farm. The work continues nearly a century of steady public investment at KOLS.</p>
+<p style="margin-top:1rem"><a class="btn btn-primary" href="{p}flight-training.html">Fly with us {ARROW}</a></p>"""),
+    ]
+    lis = "".join(f'<li class="{cls} reveal"><article class="tcard"><span class="era">{era}</span><span class="tyear">{yr}</span><h3>{h}</h3>{body}</article></li>' for cls, era, yr, h, body in items)
+    srcs = "".join(f'<li>{t}. <a href="{u}" target="_blank" rel="noopener">Source</a></li>' for t, u in HISTORY_SOURCES)
+    return f"""
+<section class="heritage" id="history" aria-label="History of Nogales International Airport"><div class="wrap">
+  <div class="lead-in">
+    <div class="section-head reveal" style="margin:0"><p class="eyebrow">History of KOLS</p><h2>Nearly a century of border aviation.</h2></div>
+    <p class="big reveal">Nogales International began in 1928 as a grass field the community bought for itself. It became a federal airport of entry, was paved in wartime, briefly saw airline DC-3s, and grew into the 7,200-foot border gateway pilots use today. And Nogales was flying even before that.</p>
+  </div>
+  <div class="hstats reveal">
+    <div><b>1928</b><span>Today's field opened, March 1928</span></div>
+    <div><b>1937</b><span>Listed as an international airport of entry</span></div>
+    <div><b>1944</b><span>First paved runways, March 31</span></div>
+    <div><b>7,200 ft</b><span>Runway 04/22 today, after the 1996 extension</span></div>
+  </div>
+  <ol class="tl">{lis}</ol>
+  <div class="sources"><h3>Sources</h3><ol>{srcs}</ol>
+    <p style="margin-top:.8rem">Dates follow the strongest primary record. Where sources conflict (for example, the first paved runway), we use the 2015 Master Plan's project table. Runway 04/22 was numbered 3/21 for most of its history.</p></div>
+</div></section>"""
+
 def about(p):
-    return page_hero("About", "Southern Arizona's home field team.", "Copper Mountain Air, LLC is based at Nogales International Airport (KOLS) in Nogales, Arizona.") + f"""
+    return page_hero("About", "Southern Arizona's home field team.", "Copper Mountain Air, LLC is the full-service FBO at Nogales International Airport (KOLS), a Santa Cruz County airport serving the border since 1928.") + f"""
 <section><div class="wrap split">
   <figure class="frame reveal">{img("airfield", p)}</figure>
   <div class="reveal"><p class="eyebrow">Our story</p><h2>Rooted at KOLS.</h2>
     <p>Since 2024, Copper Mountain Air has been the fixed-base operator at Nogales International Airport (KOLS) in Santa Cruz County, Arizona, just north of the U.S.–Mexico border.</p>
-    <p>We provide full-service Jet A and 100LL fueling, FBO ground support on the field, FAA Part 61 single-engine flight training, and on-demand expedited cargo by ground. Multi-engine training is arriving shortly, and FAA Part 141 flight school certification is in process. On-demand charter is in development and is not yet offered.</p></div>
+    <p>We provide full-service Jet A and 100LL fueling, FBO ground support on the field, FAA Part 61 single-engine flight training, and on-demand expedited cargo by ground. Multi-engine training is arriving shortly, and FAA Part 141 flight school certification is in process. On-demand charter is in development and is not yet offered.</p>
+    <p><a class="btn btn-dark" href="#history">Read the airport's history {ARROW}</a></p></div>
 </div></section>
-<section><div class="wrap split rev">
-  <figure class="frame reveal">{img("kols-guide", p)}</figure>
-  <div class="reveal"><p class="eyebrow">On the field</p><h2>Part of Nogales International.</h2>
-    <p>We work on the field every day alongside the pilots, tenants and neighbors who rely on KOLS, Santa Cruz County's public-use airport.</p></div>
-</div></section>
+{history(p)}
 <section class="sand"><div class="wrap">
   <div class="section-head reveal"><p class="eyebrow">Team</p><h2>Direct, hands-on service at KOLS.</h2><p>A locally led operation you can reach by phone or email when you need fuel, a ramp spot, a hangar, or a freight move.</p></div>
   <div class="grid cards">

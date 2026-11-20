@@ -239,3 +239,57 @@ html[data-wx-cat] .catbig .c{color:var(--cc,#fff)}
 .cargo-hero .hero-media img{object-position:70% 50%}
 .cargo-hero::after{background:linear-gradient(180deg,rgba(10,20,27,.6) 0%,rgba(10,20,27,.35) 40%,rgba(10,20,27,.75) 75%,rgba(10,20,27,.97) 100%),linear-gradient(90deg,rgba(10,20,27,.92) 0%,rgba(10,20,27,.7) 45%,rgba(10,20,27,.15) 100%)}
 @media (max-width:700px){.cat.on::after{display:none}.ro b{font-size:1.35rem}.comps b{font-size:.92rem}.dl{grid-template-columns:1fr;gap:.15rem}.dl dd{margin-bottom:.6rem}.livecard .mini b{font-size:.92rem}}
+
+/* ---------- About: airport history ---------- */
+.heritage{background:radial-gradient(900px 420px at 90% 0%,rgba(233,160,106,.16),transparent 60%),linear-gradient(180deg,#0a141b,#0f202b);color:#e6edf1;position:relative;overflow:hidden}
+.heritage::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(244,231,214,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(244,231,214,.035) 1px,transparent 1px);background-size:56px 56px;pointer-events:none}
+.heritage .wrap{position:relative}
+.heritage h2{color:#fff}.heritage .section-head p{color:#c4d0d7}
+.heritage .lead-in{display:grid;gap:2rem;align-items:end;margin-bottom:2.5rem}
+@media (min-width:980px){.heritage .lead-in{grid-template-columns:1.1fr 1fr}}
+.heritage .lead-in p.big{font-size:1.18rem;line-height:1.7;color:#e1d3c2;margin:0}
+.hstats{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:rgba(233,160,106,.25);border:1px solid rgba(233,160,106,.25);border-radius:20px;overflow:hidden}
+@media (min-width:760px){.hstats{grid-template-columns:repeat(4,1fr)}}
+.hstats div{background:rgba(7,16,23,.92);padding:1.3rem 1.2rem}
+.hstats b{display:block;font:900 clamp(1.9rem,3.4vw,2.6rem)/1 var(--display);font-stretch:118%;background:linear-gradient(100deg,#ffd2a6,var(--copper-2) 50%,var(--copper));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hstats span{display:block;font-size:.85rem;color:#c9b8a5;margin-top:.45rem;line-height:1.35}
+.tl{position:relative;list-style:none;margin:3rem 0 0;padding:0}
+.tl::before{content:"";position:absolute;top:0;bottom:0;left:18px;width:2px;background:linear-gradient(180deg,rgba(233,160,106,.15),var(--copper) 8%,var(--copper-2) 50%,var(--copper) 92%,rgba(233,160,106,.15))}
+.tl>li{position:relative;padding:0 0 2.2rem 3.4rem}
+.tl>li::before{content:"";position:absolute;left:9px;top:1.55rem;width:20px;height:20px;border-radius:50%;background:#0a141b;border:4px solid var(--copper-2);box-shadow:0 0 0 5px rgba(233,160,106,.15)}
+.tl>li.pro::before{border-color:#9fb0ba;box-shadow:0 0 0 5px rgba(159,176,186,.12)}
+.tl>li.now::before{background:var(--copper);border-color:#ffd2a6;box-shadow:0 0 0 6px rgba(196,112,61,.3)}
+@media (min-width:980px){
+  .tl::before{left:50%;margin-left:-1px}
+  .tl>li{width:50%;padding:0 3rem 2.6rem 0}
+  .tl>li::before{left:auto;right:-10px}
+  .tl>li:nth-child(even){margin-left:50%;padding:0 0 2.6rem 3rem}
+  .tl>li+li{margin-top:-5rem}
+  .tl>li:nth-child(even)::before{right:auto;left:-10px}
+  .tl>li:nth-child(odd) .tcard::after{content:"";position:absolute;top:1.9rem;right:-9px;width:16px;height:16px;background:inherit;border-top:1px solid rgba(255,255,255,.09);border-right:1px solid rgba(255,255,255,.09);transform:rotate(45deg)}
+  .tl>li:nth-child(even) .tcard::after{content:"";position:absolute;top:1.9rem;left:-9px;width:16px;height:16px;background:inherit;border-bottom:1px solid rgba(255,255,255,.09);border-left:1px solid rgba(255,255,255,.09);transform:rotate(45deg)}
+}
+.tcard{position:relative;background:#12252f;border:1px solid rgba(255,255,255,.09);border-radius:20px;padding:1.4rem 1.5rem 1.5rem;box-shadow:0 24px 60px -30px rgba(0,0,0,.8)}
+.pro .tcard{background:#18232a}
+.now .tcard{background:linear-gradient(160deg,#2a1a10,#12252f 70%);border-color:rgba(233,160,106,.5)}
+.era{display:inline-block;font:800 .66rem var(--display);font-stretch:125%;letter-spacing:.2em;text-transform:uppercase;padding:.3rem .65rem;border-radius:999px;background:rgba(233,160,106,.16);color:var(--copper-2);border:1px solid rgba(233,160,106,.4)}
+.pro .era{background:rgba(159,176,186,.12);color:#c9d4da;border-color:rgba(159,176,186,.4)}
+.now .era{background:var(--copper);color:#fff;border-color:var(--copper)}
+.tyear{display:block;font:900 clamp(1.9rem,3.2vw,2.5rem)/1 var(--display);font-stretch:120%;color:#fff;margin:.7rem 0 .35rem;letter-spacing:-.01em}
+.tcard h3{color:#f6e6d4;font-size:1.2rem;margin:0 0 .6rem}
+.tcard p{color:#c4d0d7;font-size:.98rem;margin:0 0 .7rem}
+.tcard p:last-child{margin-bottom:0}
+.tcard ul{margin:.2rem 0 .6rem;padding-left:1.1rem;color:#c4d0d7;font-size:.96rem}
+.tcard li{margin:.25rem 0}
+.tcard b{color:#fff}
+.tcard .note-pro{font-size:.85rem;color:#e7c9a6;background:rgba(233,160,106,.1);border-left:3px solid var(--copper-2);padding:.55rem .75rem;border-radius:0 10px 10px 0}
+.tfig{margin:.3rem 0 1rem;border-radius:14px;overflow:hidden;background:#071017;border:1px solid rgba(255,255,255,.08)}
+.tfig img{width:100%;height:auto;display:block}
+.tfig.crop img{aspect-ratio:16/9;object-fit:cover}
+.tfig figcaption{font-size:.78rem;line-height:1.45;color:#a9b6bf;padding:.6rem .8rem}
+.tfig.bw img{filter:contrast(1.05) sepia(.18)}
+.sources{margin-top:2.5rem;border-top:1px solid rgba(244,231,214,.14);padding-top:1.4rem;font-size:.82rem;color:#9fb0ba}
+.sources h3{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--copper-2);font-stretch:125%}
+.sources ol{margin:0;padding-left:1.2rem;columns:2 360px;column-gap:2.5rem}
+.sources li{margin:0 0 .45rem;break-inside:avoid}
+.sources a{color:#d9c4aa}
