@@ -183,12 +183,31 @@ def header(path, p):
 </div></header>
 <main id="main">"""
 
+SOCIAL = (
+    ("Facebook", "https://www.facebook.com/410339535507235",
+     '<path d="M22 12.07C22 6.48 17.52 2 11.93 2S1.86 6.48 1.86 12.07c0 5.02 3.66 9.18 8.44 9.93v-7.02H7.9v-2.91h2.4V9.84c0-2.38 1.41-3.69 3.57-3.69 1.03 0 2.12.18 2.12.18v2.33h-1.2c-1.18 0-1.55.73-1.55 1.48v1.78h2.64l-.42 2.91h-2.22V22c4.78-.75 8.44-4.91 8.44-9.93z"/>'),
+    ("Instagram", "https://www.instagram.com/copper_mountain_air/",
+     '<path d="M7.8 2h8.4A5.8 5.8 0 0 1 22 7.8v8.4A5.8 5.8 0 0 1 16.2 22H7.8A5.8 5.8 0 0 1 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2zm0 1.8A4 4 0 0 0 3.8 7.8v8.4A4 4 0 0 0 7.8 20.2h8.4a4 4 0 0 0 4-4V7.8a4 4 0 0 0-4-4H7.8zM12 7.05A4.95 4.95 0 1 1 7.05 12 4.95 4.95 0 0 1 12 7.05zm0 1.8A3.15 3.15 0 1 0 15.15 12 3.15 3.15 0 0 0 12 8.85zM17.65 6.1a1.2 1.2 0 1 1-1.2 1.2 1.2 1.2 0 0 1 1.2-1.2z"/>'),
+    ("TikTok", "https://www.tiktok.com/@copper.mountain.a0",
+     '<path d="M14.2 3c.5 2.5 2.1 4.3 4.8 4.6v2.5c-1.6-.05-3.1-.55-4.4-1.4v6.8A6.2 6.2 0 1 1 8.4 9.1v2.7a3.5 3.5 0 1 0 2.4 3.3V3h3.4z"/>'),
+)
+
+def social_links():
+    items = []
+    for name, href, path in SOCIAL:
+        items.append(
+            f'<a href="{href}" target="_blank" rel="noopener" aria-label="Copper Mountain Air on {name}">'
+            f'<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">{path}</svg></a>'
+        )
+    return f'<nav class="social-links" aria-label="Copper Mountain Air on social media">{"".join(items)}</nav>'
+
 def footer(p):
     return f"""</main>
 <footer class="site-footer"><div class="wrap">
   <div class="cols">
     <div><img src="{p}assets/img/logo-stacked-light.svg" alt="Copper Mountain Air" width="138" height="120" loading="lazy" style="height:120px;width:auto;margin-bottom:1rem">
-      <p>Fuel, FBO and cargo at Nogales International Airport (KOLS), serving Nogales and Santa Cruz County, Arizona.</p></div>
+      <p>Fuel, FBO and cargo at Nogales International Airport (KOLS), serving Nogales and Santa Cruz County, Arizona.</p>
+      {social_links()}</div>
     <div><h3>Visit</h3><p>Copper Mountain Air, LLC<br>Nogales International Airport (KOLS)<br>{STREET}<br>Nogales, AZ 85621</p></div>
     <div><h3>Contact</h3><ul><li>Phone: {PHONE_LINK}</li><li><a href="mailto:{CONTACT_TO}">{CONTACT_TO}</a></li><li>Hours: {HOURS_HTML}</li><li><a href="{p}contact.html">Send a message</a></li></ul></div>
     <div><h3>Explore</h3><ul><li><a href="{p}services.html">Services</a></li><li><a href="{p}fuel-fbo.html">Fuel &amp; FBO</a></li><li><a href="{p}flight-training.html">Flight training</a></li><li><a href="{p}cargo.html">Cargo</a></li><li><a href="{p}charter.html">Charter</a></li><li><a href="{p}about.html">About</a></li><li><a href="{p}blog/index.html">Blog</a></li></ul></div>
@@ -219,17 +238,20 @@ def page_hero(eyebrow, h1, lede, badge=""):
 def cta(p, h="Need fuel, a ramp spot or a freight quote?", t="Tell us what you need and we'll get back to you."):
     return f'<section><div class="wrap"><div class="cta-band reveal"><div><h2>{h}</h2><p>{t}</p></div><div><a class="btn btn-dark" href="{p}contact.html">Contact us {ARROW}</a></div></div></div></section>'
 
-AIRPORT_FACTS = """<div class="facts reveal">
+AIRNAV = 'https://www.airnav.com/airport/KOLS'
+# Official FAA Defense Internet NOTAM Service query, pre-filled for KOLS.
+NOTAMS = "https://www.notams.faa.gov/dinsQueryWeb/queryRetrievalMapAction.do?reportType=Report&retrieveLocId=KOLS&actionType=notamRetrievalByICAOs&submit=View+NOTAMs"
+# Nogales VOR/DME (OLS) 114.65, at field: AirNav navaid page and FAA Chart Supplement SW p. 68, both effective 29 Oct 2026. Type is VOR/DME (not VORTAC).
+AIRPORT_FACTS = f"""<div class="facts reveal">
  <div class="fact"><span class="k">Runway</span><span class="v">4/22</span><span class="s">7,200 × 100 ft asphalt</span></div>
  <div class="fact"><span class="k">Elevation</span><span class="v">3,955 ft</span><span class="s">MSL, surveyed</span></div>
  <div class="fact"><span class="k">CTAF / UNICOM</span><span class="v">122.8</span><span class="s">Non-towered field</span></div>
  <div class="fact"><span class="k">ASOS</span><span class="v">121.125</span><span class="s">Weather</span></div>
+ <div class="fact"><span class="k">Nogales VOR/DME</span><span class="v">114.65</span><span class="s">Ident OLS, at field</span></div>
  <div class="fact"><span class="k">Fuel on field</span><span class="v">Jet A · 100LL</span><span class="s">From Copper Mountain Air</span></div>
  <div class="fact"><span class="k">Status</span><span class="v">Airport of entry</span><span class="s">International, per FAA data</span></div>
 </div>
-<p class="source">Source: FAA airport data via <a href="https://www.airnav.com/airport/KOLS" rel="noopener">AirNav (KOLS)</a>, effective 29 Oct 2026. Not for navigation.</p>"""
-
-AIRNAV = 'https://www.airnav.com/airport/KOLS'
+<p class="source">Source: FAA airport data via <a href="{AIRNAV}" rel="noopener">AirNav (KOLS)</a>, effective 29 Oct 2026. Not for navigation. Check current <a href="{NOTAMS}" target="_blank" rel="noopener">KOLS NOTAMs on the FAA site</a>.</p>"""
 FUEL_PRICES = f'Current Jet A and 100LL prices are posted on <a href="{AIRNAV}" rel="noopener">AirNav</a>.'
 POSTS = []
 UNLISTED = []
@@ -528,6 +550,7 @@ def flight_training(p):
       <div><span>Runway 04/22</span><b>7,200 × 100</b><small>ft · asphalt · MIRL</small></div>
       <div><span>CTAF / UNICOM</span><b>122.8</b><small>Non-towered field</small></div>
       <div><span>ASOS</span><b>121.125</b><small>520-287-9332</small></div>
+      <div><span>Nogales VOR/DME</span><b>114.65</b><small>Ident OLS, at field</small></div>
       <div><span>Tucson Approach</span><b>118.75</b><small>App / Dep</small></div>
     </div>
   </div>
@@ -579,6 +602,7 @@ def flight_training(p):
       <div class="freqs">
         <div class="freq"><span>ASOS</span><b>121.125</b><small><a href="tel:+15202879332">520-287-9332</a></small></div>
         <div class="freq"><span>CTAF / UNICOM</span><b>122.8</b><small>Pilot-controlled lighting</small></div>
+        <div class="freq"><span>Nogales VOR/DME</span><b>114.65</b><small>Ident OLS, at field</small></div>
         <div class="freq"><span>Tucson App / Dep</span><b>118.75</b><small>Clearance: <a href="tel:+15208296121">520-829-6121</a></small></div>
         <div class="freq"><span>Prescott Radio</span><b>122.4</b><small>RCO · close flight plans</small></div>
       </div>
@@ -888,6 +912,7 @@ def contact(p):
     <div class="contact-card"><h3>Email</h3><p><a href="mailto:{CONTACT_TO}">{CONTACT_TO}</a></p></div>
     <div class="contact-card"><h3>Hours</h3><p>{HOURS_HTML}</p></div>
     <div class="contact-card"><h3>Location</h3><p>Nogales International Airport (KOLS)<br>{STREET}<br>Nogales, AZ 85621</p></div>
+    <div class="contact-card"><h3>Follow us</h3>{social_links()}</div>
   </div>
 </div></section>"""
 
