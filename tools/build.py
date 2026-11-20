@@ -854,7 +854,7 @@ def load_posts():
 def blog_index(posts):
     def f(p):
         cards = "".join(f"""<article class="card post-card reveal"><div class="media">{img(x["image"], p, sizes="card")}</div><div class="body">
-{'<span class="badge draft">Draft · not published</span>' if x["draft"] else ''}{f'<p class="meta">{html.escape(x["date"])}</p>' if x.get("date") and not x["date"].startswith("[") else ''}
+{'<span class="badge draft">Draft · not published</span>' if x["draft"] else ''}{f'<p class="meta">{html.escape(fmt_date(x["date"]))}</p>' if x.get("date") and not x["date"].startswith("[") else ''}
 <h3><a href="{p}blog/{x["slug"]}.html" style="color:inherit;text-decoration:none">{html.escape(x["title"])}</a></h3><p>{html.escape(x["description"])}</p>
 <a class="more" href="{p}blog/{x["slug"]}.html">{"Read the draft" if x["draft"] else "Read more"} {ARROW}</a></div></article>""" for x in posts)
         return page_hero("Blog", "From the ramp.", "Airport news, pilot info and freight tips from Nogales International Airport (KOLS) and Santa Cruz County.") + f"""
@@ -870,9 +870,15 @@ def expand(body, p):
     body = re.sub(r"\{\{GALLERY:([^}]*)\}\}", lambda m: '<div class="gallery">' + "".join(f'<figure>{img(s.strip(), p, sizes="third")}</figure>' for s in m.group(1).split(",")) + "</div>", body)
     return re.sub(r"\{\{FIGURE:([^|]*)\|([^}]*)\}\}", lambda m: f'<figure class="article-fig">{img(m.group(1), p, sizes="article")}<figcaption>{m.group(2)}</figcaption></figure>', body)
 
+def fmt_date(d):
+    """'2026-11-19' -> 'November 19, 2026' for display; anything else passes through."""
+    import datetime
+    try: return datetime.date.fromisoformat(d).strftime("%B %-d, %Y")
+    except (ValueError, TypeError): return d
+
 def blog_post(x):
     def f(p):
-        return f"""<div class="page-hero"><div class="wrap">{'<span class="badge draft">Draft · for review</span>' if x["draft"] else ''}<p class="eyebrow"><a href="{p}blog/index.html" style="color:inherit">Blog</a></p><h1 style="text-transform:none;font-size:clamp(2rem,5vw,3.4rem)">{html.escape(x["title"])}</h1><p class="post-meta">Copper Mountain Air{" · " + html.escape(x["date"]) if x.get("date") and not x["date"].startswith("[") else ""}</p></div></div>
+        return f"""<div class="page-hero"><div class="wrap">{'<span class="badge draft">Draft · for review</span>' if x["draft"] else ''}<p class="eyebrow"><a href="{p}blog/index.html" style="color:inherit">Blog</a></p><h1 style="text-transform:none;font-size:clamp(2rem,5vw,3.4rem)">{html.escape(x["title"])}</h1><p class="post-meta">Copper Mountain Air{" · " + html.escape(fmt_date(x["date"])) if x.get("date") and not x["date"].startswith("[") else ""}</p></div></div>
 <section style="padding-top:0"><div class="wrap"><article class="article">
 <div class="article-hero">{img(x["image"], p, eager=True, sizes="article")}</div>
 {'<div class="draft-banner">UNLISTED PREVIEW — not linked anywhere on the site and hidden from search engines. Share this link only with people reviewing the post.</div>' if x.get("unlisted") == "true" else ''}{f'<div class="draft-banner">DRAFT — not published. Seth to review and approve before this goes live. Source file: <code>{x["source"]}</code></div>' if x["draft"] else ''}
