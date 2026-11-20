@@ -700,8 +700,6 @@ HISTORY_SOURCES = [
   ('United States Code, 1946 supplement, airports of entry list; and 19 CFR § 122.13 (current)', 'https://www.ecfr.gov/current/title-19/chapter-I/part-122/subpart-B/section-122.13'),
   ('Historic airline records: Cavalcade of Wings (Arizona Airways; Frontier Airlines); The Airport Historian (Douglas, AZ); Departed Flights, OLS timetable of April 1, 1981', 'https://www.departedflights.com/OLS81intro.html'),
   ('<em>Nogales International</em>, “State grant to fund upgrades at Nogales International Airport,” January 28, 2022; and “Sky is the limit,” January 10, 2025', 'https://www.nogalesinternational.com/news/sky-is-the-limit-nogales-international-airport-lands-new-upgrades-management/article_e8215dc4-cd29-11ef-acd2-bf9c53f1ebae.html'),
-  ('Santa Cruz County, RFP #S-04-24-CO48, FBO Services at Nogales International Airport, June 14, 2024', 'https://az-santacruzcounty.civicplus.com/DocumentCenter/View/20143/Final-RFP-for-FBO-Services-S-04-24-CO48'),
-  ('Santa Cruz County Board of Supervisors agendas and minutes, July 2, 2025 and October 15, 2025', 'https://www.docketcity.com/az/santa-cruz-county/meeting/139964'),
 ]
 
 def history(p):
@@ -744,9 +742,8 @@ def history(p):
 <p>In <b>2022</b>, nearly <b>$2 million</b> in state grants funded a new LED rotating beacon, runway end identifier lights, runway edge lights, guidance signs and a new visual approach guidance system.</p>"""),
       ("now", "Today", "2024–present", "Copper Mountain Air at KOLS",
        fig("cargo", "The cargo sign on the field at KOLS today.") +
-       f"""<p>On <b>June 14, 2024</b>, Santa Cruz County issued a request for proposals for a full-service FBO. Later that year, after Board of Supervisors approval, Copper Mountain Air succeeded Tiffin Aviation as the airport's full-service fixed-base operator, bringing:</p>
-<ul><li>Full-service Phillips 66 Jet A and 100LL, and Phillips 66 WingPoints rewards</li><li>FAA Part 61 single-engine flight training, with multi-engine arriving shortly and Part 141 certification in process</li><li>Expedited ground and air-to-ground cargo from the field</li></ul>
-<p>On <b>October 15, 2025</b>, the Board of Supervisors unanimously approved a <b>$1,571,000</b> contract with Kear Civil Corporation to replace the airport's fuel tanks with a new fuel farm. The work continues nearly a century of steady public investment at KOLS.</p>
+       f"""<p>In <b>2024</b>, Copper Mountain Air became the full-service FBO at Nogales International Airport, bringing Phillips 66 fueling, flight training, and expedited cargo under one locally led roof on the field.</p>
+<p>With Santa Cruz County investing in a new airport fuel farm and ongoing airfield upgrades, KOLS is heading into its second century ready for the next generation of Southern Arizona aviation.</p>
 <p style="margin-top:1rem"><a class="btn btn-primary" href="{p}flight-training.html">Fly with us {ARROW}</a></p>"""),
     ]
     lis = "".join(f'<li class="{cls} reveal"><article class="tcard"><span class="era">{era}</span><span class="tyear">{yr}</span><h3>{h}</h3>{body}</article></li>' for cls, era, yr, h, body in items)
