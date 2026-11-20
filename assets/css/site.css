@@ -228,20 +228,49 @@ picture{display:contents}
 .flightplan-error{margin:.45rem 0 0;color:#8a2a2a;font-size:.9rem;font-weight:600}
 
 .kols-notams{margin-top:1.75rem}
-.kols-notams h3{font-family:var(--display);font-stretch:118%;font-weight:800;font-size:1.15rem;color:#fff;margin:0 0 .5rem}
+.kols-notams h3{font-family:var(--display);font-stretch:118%;font-weight:800;font-size:1.15rem;color:#fff;margin:0 0 .35rem}
+.kols-notams .notams-updated{margin:0 0 .35rem;font-size:.85rem;color:#c9b8a5}
 .kols-notams .notams-status{margin:0 0 .75rem;font-size:.95rem;color:#c9b8a5}
 .kols-notams .notam-list{list-style:none;margin:0;padding:0;display:grid;gap:.7rem}
 .kols-notams .notam{background:rgba(10,20,27,.72);border:1px solid rgba(233,160,106,.28);border-radius:12px;padding:.85rem 1rem}
+.kols-notams .notam-top{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem .6rem;margin-bottom:.35rem}
 .kols-notams .notam-id{font-family:var(--display);font-stretch:118%;font-weight:800;font-size:.82rem;letter-spacing:.1em;text-transform:uppercase;color:var(--copper-2)}
-.kols-notams .notam-times{font-size:.82rem;color:#c9b8a5;margin:.25rem 0 .4rem;line-height:1.35}
-.kols-notams .notam-text{font-size:.92rem;color:#efe1d0;white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word;margin:0;line-height:1.4}
+.kols-notams .notam-chips{display:flex;flex-wrap:wrap;gap:.3rem}
+.notam-chip{display:inline-block;font:700 .65rem/1.2 var(--display);font-stretch:120%;letter-spacing:.1em;text-transform:uppercase;padding:.22rem .5rem;border-radius:999px}
+.notam-chip-fuel{background:#8f4a24;color:#fff4e8}
+.notam-chip-closed{background:#7a1f12;color:#ffe8df}
+.notam-chip-construction{background:#c4703d;color:#1a0d05}
+.notam-chip-runway{background:#0d1b24;color:#f4e7d6}
+.notam-chip-taxiway{background:#16303f;color:#f4e7d6}
+.notam-chip-apron{background:#3d342c;color:#f4e7d6}
+.notam-chip-obstacle{background:#4a3a1f;color:#f4e7d6}
+.notam-chip-lighting{background:#3a4030;color:#f4e7d6}
+.notam-chip-airspace{background:#2f3c2c;color:#e7efd8}
+.notam-chip-notice{background:#16303f;color:#f4e7d6}
+.kols-notams .notam-summary{margin:0 0 .3rem;font-size:1.02rem;font-weight:700;color:#fff;line-height:1.35}
+.kols-notams .notam-times{font-size:.82rem;color:#c9b8a5;margin:0 0 .35rem;line-height:1.35}
+.kols-notams .notam-raw{margin:.15rem 0 0}
+.kols-notams .notam-raw summary{cursor:pointer;font-size:.8rem;color:var(--copper-2);width:fit-content}
+.kols-notams .notam-raw summary:hover{color:#fff}
+.kols-notams .notam-text{font-size:.82rem;color:#c9b8a5;white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word;margin:.4rem 0 0;line-height:1.4}
+.kols-notams .notams-more{margin:.85rem 0 0}
+.kols-notams .notams-toggle{appearance:none;background:transparent;border:1px solid rgba(233,160,106,.45);color:var(--copper-2);font:700 .9rem var(--body);padding:.55rem 1rem;border-radius:999px;cursor:pointer}
+.kols-notams .notams-toggle:hover,.kols-notams .notams-toggle:focus-visible{background:rgba(233,160,106,.12);color:#fff}
 .kols-notams .source{margin-top:.9rem}
+.fuel-notam-banner{background:#7a1f12;color:#fff4e8;border:1px solid #e98a6a;border-radius:14px;padding:1rem 1.15rem;margin:0 0 1.15rem;font-weight:700;line-height:1.4}
+.fuel-notam-banner[hidden]{display:none!important}
+#fuel .fuel-notam-banner{margin:0 0 1.25rem}
+.btn-notams-alert{background:linear-gradient(135deg,#ffd27a,var(--copper-2));color:#1a0d05;border-color:transparent}
+.btn-notams-alert:hover{color:#1a0d05;background:linear-gradient(135deg,#ffe0a0,var(--copper-2))}
 @media (max-width:520px){
   .kols-notams{margin-top:1.35rem}
   .kols-notams h3{font-size:1.05rem}
   .kols-notams .notam{padding:.7rem .8rem}
-  .kols-notams .notam-text{font-size:.85rem}
+  .kols-notams .notam-summary{font-size:.95rem}
+  .kols-notams .notam-text{font-size:.78rem}
   .kols-notams .notam-times{font-size:.78rem}
+  .hero .actions .btn{padding:.8rem 1.15rem;font-size:.92rem}
+  .fuel-notam-banner{padding:.85rem 1rem;font-size:.95rem}
 }
 .dark .flightplan-card p,.dark .flightplan-card .hint,.dark .flightplan-card .note{color:var(--muted)}
 .dark .flightplan-card a{color:var(--copper-3)}

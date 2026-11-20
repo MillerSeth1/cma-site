@@ -256,10 +256,13 @@ AIRPORT_FACTS = f"""<div class="facts reveal">
 
 def notams_panel():
     return f"""
-<div class="kols-notams reveal" id="kols-notams" data-endpoint="{NOTAMS_ENDPOINT}" data-official="{NOTAMS}">
+<div class="kols-notams reveal" id="notams" data-endpoint="{NOTAMS_ENDPOINT}" data-official="{NOTAMS}">
+  <div class="fuel-notam-banner" data-notams="fuel-banner" hidden></div>
   <h3>Active NOTAMs for KOLS</h3>
+  <p class="notams-updated" data-notams="updated" hidden></p>
   <p class="notams-status" data-notams="status">Loading current KOLS NOTAMs…</p>
   <ul class="notam-list" data-notams="list"></ul>
+  <p class="notams-more" data-notams="more-wrap" hidden><button type="button" class="notams-toggle" data-notams="toggle" aria-expanded="false">Show all NOTAMs</button></p>
   <p class="source">Not for flight planning — verify with official FAA sources. <a href="{NOTAMS}" target="_blank" rel="noopener">View KOLS NOTAMs on the FAA site</a>.</p>
 </div>
 """
@@ -309,7 +312,7 @@ def home(p):
     <p class="eyebrow">Nogales International Airport · KOLS</p>
     <h1>Fuel, freight &amp; flight <span class="cu">on the border.</span></h1>
     <p class="lede">Copper Mountain Air keeps Southern Arizona moving: Jet A and Avgas on the ramp, FBO service at KOLS, Part 61 flight training, and air and ground cargo out of Nogales.</p>
-    <div class="actions"><a class="btn btn-primary" href="{p}contact.html">Get in touch {ARROW}</a><a class="btn btn-ghost" href="{p}fuel-fbo.html">Fuel &amp; FBO</a><a class="btn btn-ghost" href="#plan-flight">Plan your flight</a></div>
+    <div class="actions"><a class="btn btn-primary" href="{p}contact.html">Get in touch {ARROW}</a><a class="btn btn-ghost" href="{p}fuel-fbo.html">Fuel &amp; FBO</a><a class="btn btn-ghost" href="#plan-flight">Plan your flight</a><a class="btn btn-ghost btn-notams" id="hero-notams" href="#notams" data-endpoint="{NOTAMS_ENDPOINT}">KOLS NOTAMs</a></div>
     <div class="hero-strip"><span>Jet A</span><span>100LL Avgas</span><span>FBO</span><span>Flight training</span><span>Air &amp; ground cargo</span><span>Santa Cruz County, AZ</span></div>
   </div>
 </section>
@@ -417,6 +420,7 @@ def fuel_fbo(p):
     return page_hero("Fuel &amp; FBO · KOLS", "Fuel up at Nogales International.", "Jet A and 100LL Avgas, plus ramp, hangar and handling services at Nogales International Airport (KOLS).") + f"""
 <section id="fuel"><div class="wrap">
   <div class="section-head reveal"><p class="eyebrow">Fuel</p><h2>Jet A &amp; 100LL.</h2><p>{FUEL_PRICES}</p></div>
+  <div class="fuel-notam-banner" data-notams="fuel-banner" hidden></div>
   <table class="price-table reveal"><thead><tr><th scope="col">Fuel</th><th scope="col">Service</th><th scope="col">Current price</th></tr></thead>
   <tbody><tr><td><strong>Jet A</strong> (including with additive)</td><td>Full service</td><td><a href="{AIRNAV}" rel="noopener">See current price on AirNav</a></td></tr>
   <tr><td><strong>100LL Avgas</strong></td><td>Full service</td><td><a href="{AIRNAV}" rel="noopener">See current price on AirNav</a></td></tr></tbody></table>
