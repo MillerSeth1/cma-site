@@ -293,11 +293,11 @@ picture{display:contents}
 .cookie-bar [data-cookie=accept]:hover{background:var(--copper-2)}
 .cookie-bar [data-cookie=decline]{background:transparent;color:var(--sand);border-color:rgba(244,231,214,.35)}
 .cookie-bar [data-cookie=decline]:hover{border-color:#fff;color:#fff}
-body.cookie-open{padding-bottom:6.5rem}
+body.cookie-open{padding-bottom:7.5rem}
 @media (max-width:420px){
   .cookie-bar .actions{width:100%}
   .cookie-bar button{flex:1}
-  body.cookie-open{padding-bottom:8rem}
+  body.cookie-open{padding-bottom:11rem}
 }
 .cookie-prefs{display:flex;flex-wrap:wrap;gap:.7rem;align-items:center;margin-top:1.4rem}
 .cookie-pref-status{font-size:.9rem;color:var(--ink-2)}

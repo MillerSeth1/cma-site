@@ -113,7 +113,7 @@
   }
   var TZ_FMT = (function(){try{return new Intl.DateTimeFormat("en-US",{timeZone:"America/Phoenix",hour:"numeric",minute:"2-digit",month:"short",day:"numeric"});}catch(e){return null;}})();
   function zulu(d){return ("0"+d.getUTCDate()).slice(-2)+("0"+d.getUTCHours()).slice(-2)+("0"+d.getUTCMinutes()).slice(-2)+"Z";}
-  function mst(d){return TZ_FMT?TZ_FMT.format(d)+" MST":d.toISOString();}
+  function mst(d){return TZ_FMT?TZ_FMT.format(d)+" AZ time":d.toISOString();}
   function ago(d){var m=Math.round((Date.now()-d.getTime())/60000);return m<1?"just now":(m<60?m+" min ago":Math.floor(m/60)+" h "+(m%60)+" min ago");}
 
 
@@ -321,13 +321,13 @@
         var frames=(j.radar&&j.radar.past)||[];
         var last=frames[frames.length-1];
         if(!last) throw new Error("no frames");
-        var map=window.L.map(box,{scrollWheelZoom:false,zoomControl:true,attributionControl:true}).setView([31.4177,-110.8479],8);
-        window.L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",{
-          attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>',
-          maxZoom:16, subdomains:"abcd"
+        var map=window.L.map(box,{scrollWheelZoom:false,zoomControl:true,attributionControl:true,minZoom:4,maxZoom:7}).setView([31.4177,-110.8479],6);
+        window.L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}",{
+          attribution:'Tiles &copy; <a href="https://www.esri.com/" target="_blank" rel="noopener">Esri</a>',
+          maxZoom:7, maxNativeZoom:16
         }).addTo(map);
         window.L.tileLayer(j.host+last.path+"/256/{z}/{x}/{y}/2/1_1.png",{
-          opacity:0.75,
+          opacity:0.8, maxZoom:7, maxNativeZoom:7,
           attribution:'<a href="https://www.rainviewer.com/" target="_blank" rel="noopener">RainViewer</a>'
         }).addTo(map);
         window.L.circleMarker([31.4177,-110.8479],{radius:6,color:"#e9a06a",fillColor:"#c4703d",fillOpacity:1,weight:2}).addTo(map).bindPopup("KOLS · Nogales International");
