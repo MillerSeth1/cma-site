@@ -36,8 +36,6 @@ For dock-to-dock moves and ground-level deliveries.
 - On-demand expedited ground moves across southern Arizona and beyond
 - Ramp-to-truck transfers at KOLS when freight arrives or departs by air
 
-On-demand passenger charter is **coming soon** and is not offered yet.
-
 ## What to send us for a quote
 
 - Pickup and delivery locations

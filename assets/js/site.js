@@ -189,3 +189,38 @@
     else if(act==="decline"){applyConsent("denied");hideBar();}
   });
 })();
+
+(function(){
+  function isExternalHref(href){
+    if(!href) return false;
+    href=String(href).trim();
+    if(/^(#|mailto:|tel:|sms:|javascript:|foreflightmobile:|garminpilot:)/i.test(href)) return false;
+    try{
+      var u=new URL(href, document.baseURI);
+      if(u.protocol!=="http:" && u.protocol!=="https:") return false;
+      return u.origin!==location.origin;
+    }catch(e){return false;}
+  }
+  function mark(a){
+    if(!a || !a.getAttribute) return;
+    if(!isExternalHref(a.getAttribute("href"))) return;
+    a.setAttribute("target","_blank");
+    var rel=(a.getAttribute("rel")||"").split(/\s+/).filter(Boolean);
+    ["noopener","noreferrer"].forEach(function(t){ if(rel.indexOf(t)===-1) rel.push(t); });
+    a.setAttribute("rel", rel.join(" "));
+  }
+  function scan(root){
+    if(!root) return;
+    if(root.nodeType===1 && root.tagName==="A") mark(root);
+    if(root.querySelectorAll) root.querySelectorAll("a[href]").forEach(mark);
+  }
+  scan(document);
+  if(window.MutationObserver){
+    new MutationObserver(function(muts){
+      muts.forEach(function(m){
+        if(m.type==="attributes" && m.target && m.target.tagName==="A") mark(m.target);
+        m.addedNodes && m.addedNodes.forEach(function(n){ if(n.nodeType===1) scan(n); });
+      });
+    }).observe(document.documentElement,{childList:true,subtree:true,attributes:true,attributeFilter:["href"]});
+  }
+})();

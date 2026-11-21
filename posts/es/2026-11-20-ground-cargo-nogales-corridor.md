@@ -36,8 +36,6 @@ Para movimientos de andén a andén y entregas a nivel de piso.
 - Movimientos terrestres expeditos bajo demanda por el sur de Arizona y más allá
 - Transferencias de rampa a camión en KOLS cuando el flete llega o sale por aire
 
-El chárter de pasajeros bajo demanda **estará disponible pronto** y aún no se ofrece.
-
 ## Qué enviarnos para una cotización
 
 - Lugares de recolección y entrega

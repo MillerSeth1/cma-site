@@ -445,6 +445,48 @@ def footer(p):
 </html>
 """
 
+
+def is_external_href(href):
+    """True for http(s) links that leave coppermountainair.com."""
+    if not href:
+        return False
+    href = html.unescape(href).strip()
+    if href.startswith(("#", "/", "mailto:", "tel:", "sms:", "javascript:", "foreflightmobile:", "garminpilot:")):
+        return False
+    if not re.match(r"^(https?:)?//", href, re.I):
+        return False
+    if re.search(r"https?://(www\.)?coppermountainair\.com(?!\w)", href, re.I):
+        return False
+    return True
+
+def decorate_external_links(s):
+    """Ensure external <a> tags open in a new tab with noopener noreferrer."""
+    def repl(m):
+        attrs = m.group(1)
+        href_m = re.search(r"\bhref\s*=\s*(\"([^\"]*)\"|'([^']*)')", attrs, re.I)
+        if not href_m:
+            return m.group(0)
+        href = href_m.group(2) if href_m.group(2) is not None else href_m.group(3)
+        if not is_external_href(href):
+            return m.group(0)
+        if re.search(r"\btarget\s*=", attrs, re.I):
+            attrs = re.sub(r"\btarget\s*=\s*(\"([^\"]*)\"|'([^']*)')", 'target="_blank"', attrs, count=1, flags=re.I)
+        else:
+            attrs += ' target="_blank"'
+        rel_m = re.search(r"\brel\s*=\s*(\"([^\"]*)\"|'([^']*)')", attrs, re.I)
+        if rel_m:
+            existing = (rel_m.group(2) or rel_m.group(3) or "").split()
+            lower = {x.lower() for x in existing}
+            for token in ("noopener", "noreferrer"):
+                if token not in lower:
+                    existing.append(token)
+            rel = " ".join(existing)
+            attrs = re.sub(r"\brel\s*=\s*(\"([^\"]*)\"|'([^']*)')", f'rel="{rel}"', attrs, count=1, flags=re.I)
+        else:
+            attrs += ' rel="noopener noreferrer"'
+        return f"<a{attrs}>"
+    return re.sub(r"<a\b([^>]*?)>", repl, s, flags=re.I)
+
 def page(path, title, desc, body, extra_ld=None, og_type="website", og_img=None, og_w=1200, og_h=630, lang="en"):
     global LANG, LP
     if lang == "es" and not path.startswith("es/"):
@@ -456,6 +498,7 @@ def page(path, title, desc, body, extra_ld=None, og_type="website", og_img=None,
     out = head(title, desc, path, p, extra_ld, og_type, og_img, og_w, og_h) + "\n" + header(path, p) + "\n" + body(p) + "\n" + footer(p)
     js = "".join(f'<script src="{p}{s}" defer></script>\n' for s in PAGE_JS.get(en_path(path), []))
     if js: out = out.replace(f'<script src="{p}assets/js/site.js" defer></script>\n', f'<script src="{p}assets/js/site.js" defer></script>\n{js}', 1)
+    out = decorate_external_links(out)
     full = os.path.join(OUT, path)
     os.makedirs(os.path.dirname(full), exist_ok=True)
     open(full, "w").write(out)
@@ -544,7 +587,7 @@ def climate_panel():
     cat_labels = (("VFR", "Días VFR al año"), ("MVFR", "Días MVFR al año"), ("IFR", "Días IFR al año"), ("LIFR", "Días LIFR al año")) if is_es() else (("VFR", "VFR days / year"), ("MVFR", "MVFR days / year"), ("IFR", "IFR days / year"), ("LIFR", "LIFR days / year"))
     cats = []
     for key, label in cat_labels:
-        cats.append(f'<div class="climate-cat" data-cat="{key}"><b>{_days(a[key])}</b><span>{label}</span></div>')
+        cats.append(f'<div class="climate-cat" data-cat="{key}"><div class="climate-num">{_days(a[key])}</div><div class="climate-lbl">{label}</div></div>')
     cols = []
     for m in data["monthly"]:
         name = months_es.get(m["name"], m["name"]) if is_es() else m["name"]
@@ -554,7 +597,8 @@ def climate_panel():
             if h <= 0:
                 continue
             unit = "días" if is_es() else "days"
-            segs.append(f'<span class="bar {cls}" style="height:{h:.2f}%" title="{name} {key} {_days(m[key])} {unit}"></span>')
+            colors = {"lifr": "#d946ef", "ifr": "#ef4444", "mvfr": "#3b82f6", "vfr": "#22c55e"}
+            segs.append(f'<span class="bar {cls}" style="height:{h:.2f}%;flex-grow:{h:.2f};background:{colors[cls]}" title="{name} {key} {_days(m[key])} {unit}"></span>')
         cols.append(f'<div class="climate-col"><div class="bars">{"".join(segs)}</div><span class="mo">{name}</span></div>')
     rows = []
     for m in data["monthly"]:
@@ -591,8 +635,8 @@ def climate_panel():
             f'</div>'
             f'<div class="climate-cats">{"".join(cats)}</div>'
             f'<div class="climate-sky">'
-            f'<div><b>{_days(a["clear"])}</b><span>días despejados / soleados al año</span></div>'
-            f'<div><b>{_days(a["cloudy"])}</b><span>días nublados al año</span></div>'
+            f'<div><span class="climate-num">{_days(a["clear"])}</span> <span class="climate-lbl">días despejados / soleados al año</span></div>'
+            f'<div><span class="climate-num">{_days(a["cloudy"])}</span> <span class="climate-lbl">días nublados al año</span></div>'
             f'</div>'
             f'<p class="wx-now-kicker" style="margin:0 0 .55rem">Promedio de días al mes</p>'
             f'<div class="climate-chart" aria-hidden="true">{"".join(cols)}</div>'
@@ -619,8 +663,8 @@ def climate_panel():
         f'</div>'
         f'<div class="climate-cats">{"".join(cats)}</div>'
         f'<div class="climate-sky">'
-        f'<div><b>{_days(a["clear"])}</b><span>clear / sunny days per year</span></div>'
-        f'<div><b>{_days(a["cloudy"])}</b><span>cloudy days per year</span></div>'
+        f'<div><span class="climate-num">{_days(a["clear"])}</span> <span class="climate-lbl">clear / sunny days per year</span></div>'
+        f'<div><span class="climate-num">{_days(a["cloudy"])}</span> <span class="climate-lbl">cloudy days per year</span></div>'
         f'</div>'
         f'<p class="wx-now-kicker" style="margin:0 0 .55rem">Average days per month</p>'
         f'<div class="climate-chart" aria-hidden="true">{"".join(cols)}</div>'

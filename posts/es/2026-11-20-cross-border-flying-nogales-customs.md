@@ -38,8 +38,6 @@ Siga siempre las instrucciones vigentes de CBP, los [NOTAM de KOLS](https://www.
 
 Cuando CBP haya liberado la aeronave, Copper Mountain Air puede ayudarle con [combustible, rampa, amarre y hangar](fuel-and-fbo-at-kols.html) en KOLS. Llame al [520-287-9120](tel:+15202879120) o escriba a [operations@coppermountainair.com](mailto:operations@coppermountainair.com) con su ETA si desea combustible o estacionamiento después de la inspección.
 
-El chárter de pasajeros bajo demanda no se ofrece en este momento.
-
 ## Fuentes oficiales que debe consultar antes de volar
 
 - [Ficha de aeropuerto de aviación general de KOLS de CBP](https://www.cbp.gov/sites/default/files/2026-02/KOLS%20GA%20Airport%20Fact%20Sheet%2020260224.pdf) (24 de febrero de 2026)

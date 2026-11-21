@@ -363,3 +363,16 @@ body.lightbox-open{overflow:hidden}
   .lightbox-next{right:0}
   .lightbox{padding:3.5rem .75rem 4.5rem}
 }
+
+/* Climate stats: essential layout so numbers, labels and monthly bars stay readable even if pages.css does not apply */
+.climate-cat .climate-num,.climate-cat .climate-lbl{display:block}
+.climate-cat .climate-lbl{margin-top:.3rem}
+.climate-sky .climate-num{margin-right:.35em}
+.climate-chart{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:.35rem;align-items:end;min-height:160px}
+.climate-col{display:flex;flex-direction:column;align-items:center;gap:.35rem;min-width:0}
+.climate-col .bars{width:100%;height:140px;display:flex;flex-direction:column-reverse;justify-content:flex-start;overflow:hidden;background:rgba(255,255,255,.04)}
+.climate-col .bar{width:100%;display:block;min-height:0}
+.climate-col .mo{max-width:100%;overflow:hidden}
+@media (max-width:520px){.climate-col .mo{font-size:.55rem;letter-spacing:0}}
+@media (max-width:420px){.climate-col .bars{height:110px}.climate-chart{min-height:130px;gap:.22rem}}
+
