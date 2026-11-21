@@ -82,6 +82,23 @@
     if(checked) bits.push(T.checked.replace("{t}", checked));
     return bits.join(" · ");
   }
+  function formatBadgeTime(iso){
+    if(!iso) return "";
+    var d=new Date(iso);
+    if(isNaN(d.getTime())) return "";
+    try{
+      var fmt=new Intl.DateTimeFormat(locale,{timeZone:"America/Phoenix",month:"short",day:"numeric",hour:"numeric",minute:"2-digit",hour12:true});
+      return fmt.format(d)+" "+T.az;
+    }catch(e){return "";}
+  }
+  function badgeUpdated(data){
+    if(data.reportedAtLabel||data.reportedAt){
+      return (ES ? "Actualizado " : "Updated ")+(data.reportedAtLabel||data.reportedAt);
+    }
+    var checked=formatBadgeTime(data.fetchedAt);
+    if(checked) return T.checked.replace("{t}", checked);
+    return "";
+  }
   function fill(data){
     var avgas=find("100ll", data.prices);
     var jeta=find("jet", data.prices);
@@ -93,13 +110,24 @@
       el.textContent=updatedLine(data);
       el.hidden=false;
     });
+    var missing=(!avgas||!avgas.usd)&&(!jeta||!jeta.usd);
+    document.querySelectorAll("[data-fuel='badge-100ll']").forEach(function(el){el.textContent=money(avgas);});
+    document.querySelectorAll("[data-fuel='badge-jeta']").forEach(function(el){el.textContent=money(jeta);});
     document.querySelectorAll("[data-fuel='badge-text']").forEach(function(el){
       var a=money(avgas), j=money(jeta);
-      if((!avgas||!avgas.usd)&&(!jeta||!jeta.usd)){
+      if(missing){
         el.textContent=T.callBadge;
+        el.hidden=false;
       }else{
         el.textContent=T.badgeOk.replace("{a}",a).replace("{j}",j);
+        el.hidden=!!el.closest(".hero-status-card");
       }
+    });
+    document.querySelectorAll(".hero-status-prices").forEach(function(el){el.hidden=missing;});
+    document.querySelectorAll("[data-fuel='badge-updated']").forEach(function(el){
+      var line=missing?"":badgeUpdated(data);
+      el.textContent=line;
+      el.hidden=!line;
     });
     document.querySelectorAll("[data-fuel='card']").forEach(function(el){
       var a=money(avgas), j=money(jeta);

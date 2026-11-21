@@ -767,6 +767,39 @@ def flight_plan_widget():
   </div>
 </div>"""
 
+
+def hero_status():
+    """Compact fuel + NOTAM status cards for the homepage hero."""
+    if is_es():
+        group = "Precios de combustible y NOTAM de KOLS"
+        fuel_k = "Combustible"
+        fuel_fallback = "Precios actuales de Jet A y 100LL"
+        notam_k = "NOTAM de KOLS"
+        notam_meta = "Consultando avisos vigentes"
+    else:
+        group = "Fuel prices and KOLS NOTAMs"
+        fuel_k = "Fuel"
+        fuel_fallback = "Current Jet A and 100LL prices"
+        notam_k = "KOLS NOTAMs"
+        notam_meta = "Checking current notices"
+    return f"""
+    <div class="hero-status" role="group" aria-label="{group}">
+      <a class="hero-status-card" href="{LP}fuel-fbo.html" data-fuel="badge" data-endpoint="{FUEL_ENDPOINT}">
+        <span class="hero-status-k">{fuel_k}</span>
+        <span class="hero-status-prices">
+          <span class="hero-status-grade"><span class="g">100LL</span><strong data-fuel="badge-100ll">—</strong><span class="unit">/ gal</span></span>
+          <span class="hero-status-grade"><span class="g">Jet A</span><strong data-fuel="badge-jeta">—</strong><span class="unit">/ gal</span></span>
+        </span>
+        <span class="hero-status-fallback" data-fuel="badge-text" hidden>{fuel_fallback}</span>
+        <span class="hero-status-meta" data-fuel="badge-updated" hidden></span>
+      </a>
+      <a class="hero-status-card" id="hero-notams" href="#notams" data-endpoint="{NOTAMS_ENDPOINT}">
+        <span class="hero-status-k">{notam_k}</span>
+        <span class="hero-status-value" data-notams-hero="count">—</span>
+        <span class="hero-status-meta" data-notams-hero="label">{notam_meta}</span>
+      </a>
+    </div>"""
+
 # ---------- HOME ----------
 def home(p):
     return f"""
@@ -776,8 +809,8 @@ def home(p):
     <p class="eyebrow">Nogales International Airport · KOLS</p>
     <h1>Fuel, freight &amp; flight <span class="cu">on the border.</span></h1>
     <p class="lede">Copper Mountain Air keeps Southern Arizona moving: Jet A and Avgas on the ramp, FBO service at KOLS, Part 61 flight training, and air and ground cargo out of Nogales.</p>
-    <div class="actions"><a class="btn btn-primary" href="{p}contact.html">Get in touch {ARROW}</a><a class="btn btn-ghost" href="{p}trip-request.html">Request a trip / quote</a><a class="btn btn-ghost" href="{p}fuel-fbo.html">Fuel &amp; FBO</a><a class="btn btn-ghost" href="#plan-flight">Plan your flight</a><a class="btn btn-ghost btn-notams" id="hero-notams" href="#notams" data-endpoint="{NOTAMS_ENDPOINT}">KOLS NOTAMs</a></div>
-    <a class="fuel-badge" href="{p}fuel-fbo.html" data-fuel="badge" data-endpoint="{FUEL_ENDPOINT}"><span class="k">Fuel prices</span><span data-fuel="badge-text">Current Jet A and 100LL prices</span></a>
+    <div class="actions"><a class="btn btn-primary" href="{p}contact.html">Get in touch {ARROW}</a><a class="btn btn-ghost" href="{p}trip-request.html">Request a trip / quote</a><a class="btn btn-ghost" href="{p}fuel-fbo.html">Fuel &amp; FBO</a><a class="btn btn-ghost" href="#plan-flight">Plan your flight</a></div>
+    {hero_status()}
     <div class="hero-strip"><span>Jet A</span><span>100LL Avgas</span><span>FBO</span><span>Flight training</span><span>Air &amp; ground cargo</span><span>Santa Cruz County, AZ</span></div>
   </div>
 </section>

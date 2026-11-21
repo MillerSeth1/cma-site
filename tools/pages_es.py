@@ -14,8 +14,8 @@ def home(p):
     <p class="eyebrow">Aeropuerto Internacional de Nogales · KOLS</p>
     <h1>Combustible, carga y vuelo <span class="cu">en la frontera.</span></h1>
     <p class="lede">Copper Mountain Air mantiene en movimiento al sur de Arizona: Jet A y Avgas en la rampa, servicio de FBO en KOLS, instrucción de vuelo Part 61, y carga aérea y terrestre desde Nogales.</p>
-    <div class="actions"><a class="btn btn-primary" href="{b.LP}contact.html">Contáctenos {b.ARROW}</a><a class="btn btn-ghost" href="{b.LP}trip-request.html">Solicite un viaje / cotización</a><a class="btn btn-ghost" href="{b.LP}fuel-fbo.html">Combustible y FBO</a><a class="btn btn-ghost" href="#plan-flight">Planifique su vuelo</a><a class="btn btn-ghost btn-notams" id="hero-notams" href="#notams" data-endpoint="{b.NOTAMS_ENDPOINT}">NOTAM de KOLS</a></div>
-    <a class="fuel-badge" href="{b.LP}fuel-fbo.html" data-fuel="badge" data-endpoint="{b.FUEL_ENDPOINT}"><span class="k">Precios de combustible</span><span data-fuel="badge-text">Precios actuales de Jet A y 100LL</span></a>
+    <div class="actions"><a class="btn btn-primary" href="{b.LP}contact.html">Contáctenos {b.ARROW}</a><a class="btn btn-ghost" href="{b.LP}trip-request.html">Solicite un viaje / cotización</a><a class="btn btn-ghost" href="{b.LP}fuel-fbo.html">Combustible y FBO</a><a class="btn btn-ghost" href="#plan-flight">Planifique su vuelo</a></div>
+    {b.hero_status()}
     <div class="hero-strip"><span>Jet A</span><span>100LL Avgas</span><span>FBO</span><span>Instrucción de vuelo</span><span>Carga aérea y terrestre</span><span>Condado de Santa Cruz, AZ</span></div>
   </div>
 </section>

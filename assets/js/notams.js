@@ -52,19 +52,45 @@
   var moreWrap = root && root.querySelector("[data-notams=more-wrap]");
   var toggleBtn = root && root.querySelector("[data-notams=toggle]");
 
+  function heroCopy(count, kind) {
+    if (kind === "fail") {
+      return { count: "—", label: ES ? "Vea los avisos oficiales de la FAA" : "See official FAA notices" };
+    }
+    if (kind === "loading") {
+      return { count: "—", label: ES ? "Consultando avisos vigentes" : "Checking current notices" };
+    }
+    if (count === 0) {
+      return { count: "0", label: ES ? "Ningún aviso activo" : "No active notices" };
+    }
+    if (count === 1) {
+      return { count: "1", label: ES ? "1 aviso activo" : "1 active notice" };
+    }
+    return { count: String(count), label: ES ? (count + " avisos activos") : (count + " active notices") };
+  }
+
   function fallback(message) {
     if (statusEl) statusEl.textContent = message;
     if (listEl) listEl.replaceChildren();
     if (moreWrap) moreWrap.hidden = true;
-    setHero(ES ? "NOTAM de KOLS" : "KOLS NOTAMs", false);
+    setHero(heroCopy(null, "fail"), false);
     setFuelBanners([]);
   }
 
-  function setHero(label, alert) {
+  function setHero(copy, alert) {
     if (!hero) return;
-    hero.textContent = label;
-    hero.classList.toggle("btn-notams-alert", !!alert);
-    hero.classList.toggle("btn-ghost", !alert);
+    var countEl = hero.querySelector("[data-notams-hero=count]");
+    var labelEl = hero.querySelector("[data-notams-hero=label]");
+    var label = copy && copy.label ? copy.label : (ES ? "NOTAM de KOLS" : "KOLS NOTAMs");
+    var count = copy && copy.count != null ? copy.count : "—";
+    if (countEl) countEl.textContent = count;
+    if (labelEl) labelEl.textContent = label;
+    if (!countEl && !labelEl) {
+      hero.textContent = count !== "—" ? (label + " (" + count + ")") : label;
+    }
+    var isBtn = hero.classList.contains("btn");
+    hero.classList.toggle("hero-status-alert", !!alert && !isBtn);
+    hero.classList.toggle("btn-notams-alert", !!alert && isBtn);
+    hero.classList.toggle("btn-ghost", isBtn && !alert);
   }
 
   function setFuelBanners(notams) {
@@ -324,7 +350,7 @@
       items = sortNotams(items);
 
       var highImpact = items.some(function (n) { return n._meta.high; });
-      setHero(items.length ? (ES ? ("NOTAM de KOLS (" + items.length + ")") : ("KOLS NOTAMs (" + items.length + ")")) : (ES ? "NOTAM de KOLS" : "KOLS NOTAMs"), highImpact);
+      setHero(heroCopy(items.length), highImpact);
       setFuelBanners(items);
 
       if (updatedEl) {
@@ -339,7 +365,7 @@
 
       if (!items.length) {
         fallback(ES ? "No se encontraron NOTAM activos." : "No active NOTAMs found.");
-        setHero(ES ? "NOTAM de KOLS (0)" : "KOLS NOTAMs (0)", false);
+        setHero(heroCopy(0), false);
         return;
       }
 
