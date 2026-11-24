@@ -264,12 +264,43 @@ def gallery_copy(item, field):
     return item[field]
 
 # Home is reached from the logo; Cargo has its own page (Seth, Nov 19, 2026).
-NAV = [("services.html","Services"),("fuel-fbo.html","Fuel &amp; FBO"),("weather.html","Weather"),("notams.html","NOTAMs"),
-       ("flight-training.html","Flight Training"),("cargo.html","Cargo"),("charter.html","Charter"),("about.html","About"),
-       ("gallery.html","Gallery"),("blog/index.html","Blog")]
-NAV_ES = [("services.html","Servicios"),("fuel-fbo.html","Combustible y FBO"),("weather.html","Clima"),("notams.html","NOTAMs"),
-       ("flight-training.html","Instrucción de vuelo"),("cargo.html","Carga"),("charter.html","Chárter"),("about.html","Nosotros"),
-       ("gallery.html","Galería"),("blog/index.html","Blog")]
+# Header uses grouped dropdowns so labels stay on one line at common desktop widths.
+NAV_GROUPS = [
+    ("services", "Services", [
+        ("services.html", "Services"),
+        ("fuel-fbo.html", "Fuel &amp; FBO"),
+        ("cargo.html", "Cargo"),
+        ("charter.html", "Charter"),
+        ("flight-training.html", "Flight Training"),
+    ]),
+    ("pilot", "Pilot Info", [
+        ("weather.html", "Weather"),
+        ("notams.html", "NOTAMs"),
+    ]),
+    ("about", "About", [
+        ("about.html", "About"),
+        ("gallery.html", "Gallery"),
+        ("blog/index.html", "Blog"),
+    ]),
+]
+NAV_GROUPS_ES = [
+    ("services", "Servicios", [
+        ("services.html", "Servicios"),
+        ("fuel-fbo.html", "Combustible y FBO"),
+        ("cargo.html", "Carga"),
+        ("charter.html", "Chárter"),
+        ("flight-training.html", "Instrucción de vuelo"),
+    ]),
+    ("pilot", "Info para pilotos", [
+        ("weather.html", "Clima"),
+        ("notams.html", "NOTAMs"),
+    ]),
+    ("about", "Nosotros", [
+        ("about.html", "Nosotros"),
+        ("gallery.html", "Galería"),
+        ("blog/index.html", "Blog"),
+    ]),
+]
 # Page-specific assets. Leaflet 1.9.4 is vendored in assets/vendor/leaflet (BSD-2-Clause) so the map never depends on a CDN.
 PAGE_CSS = {
   "about.html": ["assets/css/pages.css"],
@@ -348,7 +379,7 @@ def head(title, desc, path, p, extra_ld=None, og_type="website", og_img=None, og
 {GA_HEAD}</head>"""
 
 def header(path, p):
-    nav = NAV_ES if is_es() else NAV
+    groups = NAV_GROUPS_ES if is_es() else NAV_GROUPS
     contact_label = "Contacto" if is_es() else "Contact"
     menu_label = "Menú" if is_es() else "Menu"
     skip = "Ir al contenido" if is_es() else "Skip to content"
@@ -356,9 +387,23 @@ def header(path, p):
     nav_label = "Principal" if is_es() else "Primary"
     items = []
     cur_path = en_path(path)
-    for href, label in nav:
-        cur = ' aria-current="page"' if (href == cur_path or (href == "blog/index.html" and cur_path.startswith("blog/"))) else ""
-        items.append(f'<li><a href="{LP}{href}"{cur}>{label}</a></li>')
+    for key, label, links in groups:
+        child_html = []
+        group_current = False
+        for href, clabel in links:
+            is_cur = href == cur_path or (href == "blog/index.html" and cur_path.startswith("blog/"))
+            if is_cur:
+                group_current = True
+            cur = ' aria-current="page"' if is_cur else ""
+            child_html.append(f'<li><a href="{LP}{href}"{cur}>{clabel}</a></li>')
+        current_cls = " is-current" if group_current else ""
+        sub_id = f"nav-{key}"
+        items.append(
+            f'<li class="nav-item has-sub{current_cls}">'
+            f'<button type="button" class="nav-parent" aria-expanded="false" aria-haspopup="true" aria-controls="{sub_id}">{label} <span class="nav-caret" aria-hidden="true"></span></button>'
+            f'<ul id="{sub_id}" class="nav-sub">{"".join(child_html)}</ul>'
+            f'</li>'
+        )
     contact_cur = ' aria-current="page"' if cur_path == "contact.html" else ""
     items.append(f'<li><a class="nav-cta" href="{LP}contact.html"{contact_cur}>{contact_label}</a></li>')
     bar = ('<div class="preview-bar"><strong>Preview draft.</strong> Not yet published.</div>') if PREVIEW else ""
