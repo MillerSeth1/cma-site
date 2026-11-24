@@ -264,18 +264,24 @@ def gallery_copy(item, field):
     return item[field]
 
 # Home is reached from the logo; Cargo has its own page (Seth, Nov 19, 2026).
-NAV = [("services.html","Services"),("fuel-fbo.html","Fuel &amp; FBO"),
+NAV = [("services.html","Services"),("fuel-fbo.html","Fuel &amp; FBO"),("weather.html","Weather"),
        ("flight-training.html","Flight Training"),("cargo.html","Cargo"),("charter.html","Charter"),("about.html","About"),
        ("gallery.html","Gallery"),("blog/index.html","Blog")]
-NAV_ES = [("services.html","Servicios"),("fuel-fbo.html","Combustible y FBO"),
+NAV_ES = [("services.html","Servicios"),("fuel-fbo.html","Combustible y FBO"),("weather.html","Clima"),
        ("flight-training.html","Instrucción de vuelo"),("cargo.html","Carga"),("charter.html","Chárter"),("about.html","Nosotros"),
        ("gallery.html","Galería"),("blog/index.html","Blog")]
 # Page-specific assets. Leaflet 1.9.4 is vendored in assets/vendor/leaflet (BSD-2-Clause) so the map never depends on a CDN.
-PAGE_CSS = {"about.html": ["assets/css/pages.css"], "flight-training.html": ["assets/vendor/leaflet/leaflet.css", "assets/css/pages.css"], "cargo.html": ["assets/css/pages.css"]}
+PAGE_CSS = {
+  "about.html": ["assets/css/pages.css"],
+  "flight-training.html": ["assets/vendor/leaflet/leaflet.css", "assets/css/pages.css"],
+  "weather.html": ["assets/vendor/leaflet/leaflet.css", "assets/css/pages.css"],
+  "cargo.html": ["assets/css/pages.css"],
+}
 PAGE_JS = {
   "index.html": ["assets/js/flightplan.js", "assets/js/notams.js", "assets/js/fuel.js"],
   "fuel-fbo.html": ["assets/js/flightplan.js", "assets/js/notams.js", "assets/js/fuel.js"],
   "flight-training.html": ["assets/vendor/leaflet/leaflet.js", "assets/js/kols.js"],
+  "weather.html": ["assets/vendor/leaflet/leaflet.js", "assets/js/kols.js"],
   "gallery.html": ["assets/js/gallery.js"],
 }
 
@@ -401,6 +407,7 @@ def footer(p):
         links = (
             f'<li><a href="{LP}services.html">Servicios</a></li>'
             f'<li><a href="{LP}fuel-fbo.html">Combustible y FBO</a></li>'
+            f'<li><a href="{LP}weather.html">Clima</a></li>'
             f'<li><a href="{LP}flight-training.html">Instrucción de vuelo</a></li>'
             f'<li><a href="{LP}cargo.html">Carga</a></li>'
             f'<li><a href="{LP}charter.html">Chárter</a></li>'
@@ -419,6 +426,7 @@ def footer(p):
         links = (
             f'<li><a href="{p}services.html">Services</a></li>'
             f'<li><a href="{p}fuel-fbo.html">Fuel &amp; FBO</a></li>'
+            f'<li><a href="{p}weather.html">Weather</a></li>'
             f'<li><a href="{p}flight-training.html">Flight training</a></li>'
             f'<li><a href="{p}cargo.html">Cargo</a></li>'
             f'<li><a href="{p}charter.html">Charter</a></li>'
@@ -737,6 +745,142 @@ def wx_now_and_radar():
         '<p class="wx-foot">Radar imagery from <a href="https://www.rainviewer.com/" target="_blank" rel="noopener">RainViewer</a>, loaded when you scroll to this map. For situational awareness only — not for flight planning.</p>'
         '</div></div>'
     )
+
+def conditions_section():
+    """Live ASOS panel, radar, wind components, climatology and field frequencies."""
+    wp = wingpoints()
+    if is_es():
+        return f"""
+<section class="cockpit" id="conditions" aria-label="Condiciones en vivo de KOLS"><div class="wrap" id="wx" data-metar-endpoint="{METAR_ENDPOINT}">
+  <div class="section-head reveal"><p class="eyebrow">Condiciones en vivo · ASOS de KOLS</p><h2>Lo que está haciendo el campo ahora mismo.</h2><p>Observaciones en vivo del ASOS del Aeropuerto Internacional de Nogales, actualizadas cada cinco minutos, con categoría de vuelo, componentes de viento en pista y altitud de densidad ya calculados para usted.</p></div>
+  {wx_now_and_radar()}
+  <div class="catbar" role="list" aria-label="Categorías de vuelo de la FAA">
+    <div class="cat" role="listitem" data-cat="VFR"><b>VFR</b><span>Techo por encima de 3,000 ft y visibilidad por encima de 5 SM</span></div>
+    <div class="cat" role="listitem" data-cat="MVFR"><b>MVFR</b><span>Techo de 1,000–3,000 ft o visibilidad de 3–5 SM</span></div>
+    <div class="cat" role="listitem" data-cat="IFR"><b>IFR</b><span>Techo de 500 a menos de 1,000 ft o visibilidad de 1 a menos de 3 SM</span></div>
+    <div class="cat" role="listitem" data-cat="LIFR"><b>LIFR</b><span>Techo por debajo de 500 ft o visibilidad por debajo de 1 SM</span></div>
+  </div>
+  <div class="panel-grid">
+    <div class="glass"><h3>Viento en la pista 04/22 <small>Dibujado al norte magnético</small></h3>
+      {wind_rose()}
+      <div class="comps"><div><span>Preferida</span><b data-wx="rwy">—</b></div><div><span>Frontal / de cola</span><b data-wx="head">—</b></div><div><span>Viento de través</span><b data-wx="cross">—</b></div></div>
+      <p class="comps-sub" data-wx="rwy-sub"></p>
+    </div>
+    <div class="glass"><h3>Lecturas del ASOS <small data-wx="ago"></small></h3>
+      <div class="readouts">
+        <div class="ro"><span>Viento</span><b data-wx="wind">—</b><small data-wx="wind-sub">&nbsp;</small></div>
+        <div class="ro"><span>Visibilidad</span><b><span data-wx="vis">—</span> SM</b><small>Millas estatutarias</small></div>
+        <div class="ro"><span>Cielo / techo</span><b data-wx="sky">—</b><small data-wx="sky-sub">&nbsp;</small></div>
+        <div class="ro"><span>Temperatura</span><b data-wx="temp">—</b><small data-wx="dew">&nbsp;</small></div>
+        <div class="ro"><span>Altímetro</span><b data-wx="alt">—</b><small data-wx="alt-sub">inHg</small></div>
+        <div class="ro hl"><span>Altitud de densidad</span><b data-wx="da">—</b><small data-wx="da-sub">A partir de la elevación del campo, el altímetro y la temperatura</small></div>
+      </div>
+      <div class="metar">
+        <div><code data-wx="metar">Cargando el METAR más reciente de KOLS…</code><div class="meta">Observado <b data-wx="time">—</b> · <span data-wx="status"></span> <span data-wx="src"></span></div><div class="meta" data-wx="sample"></div></div>
+        <div class="btns"><button class="mbtn" type="button" id="wx-refresh">↻ Actualizar</button><button class="mbtn" type="button" id="wx-copy">Copiar METAR</button><a class="mbtn" href="https://aviationweather.gov/data/metar/?ids=KOLS&amp;hours=0&amp;include_taf=yes" target="_blank" rel="noopener">AviationWeather.gov</a></div>
+      </div>
+    </div>
+  </div>
+  {climate_panel()}
+  <div class="infocard">
+    <div class="glass"><h3>Campo de KOLS <small>FAA Chart Supplement, ciclo del 29 de oct. de 2026</small></h3>
+      <dl class="dl">
+        <dt>Pista</dt><dd><b>04/22</b> · 7,200 × 100 ft de asfalto · 1.6% de subida hacia el noreste · rumbos magnéticos 037° / 217°</dd>
+        <dt>Iluminación</dt><dd>Luces de pista de intensidad media (MIRL), activadas por el piloto en CTAF 122.8 · REIL en ambos extremos · faro rotatorio</dd>
+        <dt>Pendiente de planeo</dt><dd>PAPI de 4 luces a la izquierda: 3.0° pista 04, 4.0° pista 22</dd>
+        <dt>Circuito</dt><dd>Tráfico a la izquierda en ambas pistas · la pista 22 es la de viento en calma · umbral de la pista 22 desplazado 899 ft · toma y despegue no autorizada en la pista 04</dd>
+        <dt>Elevación</dt><dd>3,955 ft MSL (levantada) · variación 9° E</dd>
+        <dt>Aproximaciones</dt><dd>RNAV (GPS)-A · VOR-B · Nogales VOR/DME (OLS) 114.65 en el campo</dd>
+        <dt>En el campo</dt><dd>Phillips 66 Jet A y 100LL, servicio completo de Copper Mountain Air · {wp} · atención de 7 a.m. a 7 p.m.</dd>
+        <dt>Entrada</dt><dd>Aeropuerto internacional de entrada (U.S. Customs and Border Protection)</dd>
+      </dl>
+    </div>
+    <div class="glass"><h3>Frecuencias y teléfonos</h3>
+      <div class="freqs">
+        <div class="freq"><span>ASOS</span><b>121.125</b><small><a href="tel:+15202879332">520-287-9332</a></small></div>
+        <div class="freq"><span>CTAF / UNICOM</span><b>122.8</b><small>Iluminación controlada por el piloto</small></div>
+        <div class="freq"><span>Nogales VOR/DME</span><b>114.65</b><small>Ident OLS, en el campo</small></div>
+        <div class="freq"><span>Tucson App / Dep</span><b>118.75</b><small>Autorización: <a href="tel:+15208296121">520-829-6121</a></small></div>
+        <div class="freq"><span>Prescott Radio</span><b>122.4</b><small>RCO · cerrar planes de vuelo</small></div>
+      </div>
+      <p class="wx-foot">Meteorología: ASOS de la FAA a través de <a href="https://aviationweather.gov/data/metar/?ids=KOLS&amp;hours=0&amp;include_taf=yes" target="_blank" rel="noopener">AviationWeather.gov</a>, la <a href="https://www.weather.gov/documentation/services-web-api" target="_blank" rel="noopener">API del National Weather Service</a> y el <a href="https://mesonet.agron.iastate.edu/" target="_blank" rel="noopener">Iowa Environmental Mesonet</a>. Datos del aeropuerto: FAA Chart Supplement y <a href="{AIRNAV}" target="_blank" rel="noopener">AirNav KOLS</a>. Solo para conciencia situacional, no para planificación de vuelo. No usar para navegación; obtenga un briefing oficial antes de cada vuelo.</p>
+    </div>
+  </div>
+</div></section>
+"""
+    return f"""
+<section class="cockpit" id="conditions" aria-label="Live KOLS conditions"><div class="wrap" id="wx" data-metar-endpoint="{METAR_ENDPOINT}">
+  <div class="section-head reveal"><p class="eyebrow">Live conditions · KOLS ASOS</p><h2>What the field is doing right now.</h2><p>Live observations from the Nogales International ASOS, refreshed every five minutes, with flight category, runway wind components and density altitude worked out for you.</p></div>
+  {wx_now_and_radar()}
+  <div class="catbar" role="list" aria-label="FAA flight categories">
+    <div class="cat" role="listitem" data-cat="VFR"><b>VFR</b><span>Ceiling above 3,000 ft and visibility above 5 SM</span></div>
+    <div class="cat" role="listitem" data-cat="MVFR"><b>MVFR</b><span>Ceiling 1,000–3,000 ft or visibility 3–5 SM</span></div>
+    <div class="cat" role="listitem" data-cat="IFR"><b>IFR</b><span>Ceiling 500 to below 1,000 ft or visibility 1 to below 3 SM</span></div>
+    <div class="cat" role="listitem" data-cat="LIFR"><b>LIFR</b><span>Ceiling below 500 ft or visibility below 1 SM</span></div>
+  </div>
+  <div class="panel-grid">
+    <div class="glass"><h3>Runway 04/22 wind <small>Drawn to magnetic north</small></h3>
+      {wind_rose()}
+      <div class="comps"><div><span>Favored</span><b data-wx="rwy">—</b></div><div><span>Head / tail</span><b data-wx="head">—</b></div><div><span>Crosswind</span><b data-wx="cross">—</b></div></div>
+      <p class="comps-sub" data-wx="rwy-sub"></p>
+    </div>
+    <div class="glass"><h3>ASOS readouts <small data-wx="ago"></small></h3>
+      <div class="readouts">
+        <div class="ro"><span>Wind</span><b data-wx="wind">—</b><small data-wx="wind-sub">&nbsp;</small></div>
+        <div class="ro"><span>Visibility</span><b><span data-wx="vis">—</span> SM</b><small>Statute miles</small></div>
+        <div class="ro"><span>Sky / ceiling</span><b data-wx="sky">—</b><small data-wx="sky-sub">&nbsp;</small></div>
+        <div class="ro"><span>Temperature</span><b data-wx="temp">—</b><small data-wx="dew">&nbsp;</small></div>
+        <div class="ro"><span>Altimeter</span><b data-wx="alt">—</b><small data-wx="alt-sub">inHg</small></div>
+        <div class="ro hl"><span>Density altitude</span><b data-wx="da">—</b><small data-wx="da-sub">From field elevation, altimeter and temperature</small></div>
+      </div>
+      <div class="metar">
+        <div><code data-wx="metar">Loading the latest KOLS METAR…</code><div class="meta">Observed <b data-wx="time">—</b> · <span data-wx="status"></span> <span data-wx="src"></span></div><div class="meta" data-wx="sample"></div></div>
+        <div class="btns"><button class="mbtn" type="button" id="wx-refresh">↻ Refresh</button><button class="mbtn" type="button" id="wx-copy">Copy METAR</button><a class="mbtn" href="https://aviationweather.gov/data/metar/?ids=KOLS&amp;hours=0&amp;include_taf=yes" target="_blank" rel="noopener">AviationWeather.gov</a></div>
+      </div>
+    </div>
+  </div>
+  {climate_panel()}
+  <div class="infocard">
+    <div class="glass"><h3>KOLS airfield <small>FAA Chart Supplement, 29 Oct 2026 cycle</small></h3>
+      <dl class="dl">
+        <dt>Runway</dt><dd><b>04/22</b> · 7,200 × 100 ft asphalt · 1.6% up to the northeast · magnetic headings 037° / 217°</dd>
+        <dt>Lighting</dt><dd>Medium-intensity runway lights (MIRL), pilot-activated on CTAF 122.8 · REIL both ends · rotating beacon</dd>
+        <dt>Glidepath</dt><dd>4-light PAPI on the left: 3.0° Runway 04, 4.0° Runway 22</dd>
+        <dt>Pattern</dt><dd>Left traffic both runways · Runway 22 is the calm-wind runway · Runway 22 threshold displaced 899 ft · Runway 04 touch-and-go not authorized</dd>
+        <dt>Elevation</dt><dd>3,955 ft MSL (surveyed) · variation 9° E</dd>
+        <dt>Approaches</dt><dd>RNAV (GPS)-A · VOR-B · Nogales VOR/DME (OLS) 114.65 on the field</dd>
+        <dt>On field</dt><dd>Phillips 66 Jet A and 100LL, full service from Copper Mountain Air · {wp} · attended 7 a.m.–7 p.m.</dd>
+        <dt>Entry</dt><dd>International airport of entry (U.S. Customs and Border Protection)</dd>
+      </dl>
+    </div>
+    <div class="glass"><h3>Frequencies &amp; phones</h3>
+      <div class="freqs">
+        <div class="freq"><span>ASOS</span><b>121.125</b><small><a href="tel:+15202879332">520-287-9332</a></small></div>
+        <div class="freq"><span>CTAF / UNICOM</span><b>122.8</b><small>Pilot-controlled lighting</small></div>
+        <div class="freq"><span>Nogales VOR/DME</span><b>114.65</b><small>Ident OLS, at field</small></div>
+        <div class="freq"><span>Tucson App / Dep</span><b>118.75</b><small>Clearance: <a href="tel:+15208296121">520-829-6121</a></small></div>
+        <div class="freq"><span>Prescott Radio</span><b>122.4</b><small>RCO · close flight plans</small></div>
+      </div>
+      <p class="wx-foot">Weather: FAA ASOS via <a href="https://aviationweather.gov/data/metar/?ids=KOLS&amp;hours=0&amp;include_taf=yes" target="_blank" rel="noopener">AviationWeather.gov</a>, the <a href="https://www.weather.gov/documentation/services-web-api" target="_blank" rel="noopener">National Weather Service API</a> and the <a href="https://mesonet.agron.iastate.edu/" target="_blank" rel="noopener">Iowa Environmental Mesonet</a>. Airport data: FAA Chart Supplement and <a href="{AIRNAV}" target="_blank" rel="noopener">AirNav KOLS</a>. For situational awareness only. Not for navigation; get an official briefing before every flight.</p>
+    </div>
+  </div>
+</div></section>
+"""
+
+def weather(p):
+    if is_es():
+        hero = page_hero(
+            "Clima · Aeropuerto Internacional de Nogales · KOLS",
+            "El clima en vivo en KOLS.",
+            "Observaciones en vivo del ASOS del Aeropuerto Internacional de Nogales, con categoría de vuelo, radar, componentes de viento en pista, altitud de densidad y climatología VFR.",
+        )
+    else:
+        hero = page_hero(
+            "Weather · Nogales International · KOLS",
+            "Live weather at KOLS.",
+            "Live observations from the Nogales International ASOS, with flight category, radar, runway wind components, density altitude and VFR climatology.",
+        )
+    return hero + conditions_section()
 
 def privacy(p):
     return page_hero("Privacy", "How we use this site.", "A short note on cookies, analytics and how to reach us.") + f"""
@@ -1097,12 +1241,12 @@ def flight_training(p):
         <p class="lede">FAA Part 61 single-engine flight training on a 7,200-foot runway at the foot of the Santa Cruz Valley. Non-towered, high-elevation and minutes from Tucson's Class C airspace, so you build real-world airmanship from your very first lesson.</p>
         <div class="actions"><a class="btn btn-primary" href="{p}contact.html?topic=Flight%20training" id="start-training">Start flight training {ARROW}</a>{fc}</div>
       </div>
-      <aside class="livecard" aria-label="Live KOLS field status">
+      <aside class="livecard" aria-label="Live KOLS field status" data-metar-endpoint="{METAR_ENDPOINT}">
         <div class="top"><span class="tag">Live field status</span><span class="status" data-wx="status">Loading live KOLS data…</span></div>
         <div class="catbig"><span class="c" data-wx="cat">—</span><span class="w">Flight category</span></div>
         <div class="pill"><span class="led"></span><span data-wx="pill">KOLS · ASOS 121.125</span></div>
         <div class="mini"><div><span>Wind</span><b data-wx="wind">—</b></div><div><span>Visibility</span><b><span data-wx="vis">—</span> SM</b></div><div><span>Density alt</span><b data-wx="da">—</b></div></div>
-        <a class="more" href="#conditions">Full ASOS panel ↓</a>
+        <a class="more" href="{p}weather.html">Full ASOS panel {ARROW}</a>
       </aside>
     </div>
     <div class="qstrip">
@@ -1116,61 +1260,8 @@ def flight_training(p):
   </div>
 </section>
 
-<section class="cockpit" id="conditions" aria-label="Live KOLS conditions"><div class="wrap" id="wx" data-metar-endpoint="{METAR_ENDPOINT}">
-  <div class="section-head reveal"><p class="eyebrow">Live conditions · KOLS ASOS</p><h2>What the field is doing right now.</h2><p>Live observations from the Nogales International ASOS, refreshed every five minutes, with flight category, runway wind components and density altitude worked out for you.</p></div>
-  {wx_now_and_radar()}
-  <div class="catbar" role="list" aria-label="FAA flight categories">
-    <div class="cat" role="listitem" data-cat="VFR"><b>VFR</b><span>Ceiling above 3,000 ft and visibility above 5 SM</span></div>
-    <div class="cat" role="listitem" data-cat="MVFR"><b>MVFR</b><span>Ceiling 1,000–3,000 ft or visibility 3–5 SM</span></div>
-    <div class="cat" role="listitem" data-cat="IFR"><b>IFR</b><span>Ceiling 500 to below 1,000 ft or visibility 1 to below 3 SM</span></div>
-    <div class="cat" role="listitem" data-cat="LIFR"><b>LIFR</b><span>Ceiling below 500 ft or visibility below 1 SM</span></div>
-  </div>
-  <div class="panel-grid">
-    <div class="glass"><h3>Runway 04/22 wind <small>Drawn to magnetic north</small></h3>
-      {wind_rose()}
-      <div class="comps"><div><span>Favored</span><b data-wx="rwy">—</b></div><div><span>Head / tail</span><b data-wx="head">—</b></div><div><span>Crosswind</span><b data-wx="cross">—</b></div></div>
-      <p class="comps-sub" data-wx="rwy-sub"></p>
-    </div>
-    <div class="glass"><h3>ASOS readouts <small data-wx="ago"></small></h3>
-      <div class="readouts">
-        <div class="ro"><span>Wind</span><b data-wx="wind">—</b><small data-wx="wind-sub">&nbsp;</small></div>
-        <div class="ro"><span>Visibility</span><b><span data-wx="vis">—</span> SM</b><small>Statute miles</small></div>
-        <div class="ro"><span>Sky / ceiling</span><b data-wx="sky">—</b><small data-wx="sky-sub">&nbsp;</small></div>
-        <div class="ro"><span>Temperature</span><b data-wx="temp">—</b><small data-wx="dew">&nbsp;</small></div>
-        <div class="ro"><span>Altimeter</span><b data-wx="alt">—</b><small data-wx="alt-sub">inHg</small></div>
-        <div class="ro hl"><span>Density altitude</span><b data-wx="da">—</b><small data-wx="da-sub">From field elevation, altimeter and temperature</small></div>
-      </div>
-      <div class="metar">
-        <div><code data-wx="metar">Loading the latest KOLS METAR…</code><div class="meta">Observed <b data-wx="time">—</b> · <span data-wx="status"></span> <span data-wx="src"></span></div><div class="meta" data-wx="sample"></div></div>
-        <div class="btns"><button class="mbtn" type="button" id="wx-refresh">↻ Refresh</button><button class="mbtn" type="button" id="wx-copy">Copy METAR</button><a class="mbtn" href="https://aviationweather.gov/data/metar/?ids=KOLS&amp;hours=0&amp;include_taf=yes" target="_blank" rel="noopener">AviationWeather.gov</a></div>
-      </div>
-    </div>
-  </div>
-  {climate_panel()}
-  <div class="infocard">
-    <div class="glass"><h3>KOLS airfield <small>FAA Chart Supplement, 29 Oct 2026 cycle</small></h3>
-      <dl class="dl">
-        <dt>Runway</dt><dd><b>04/22</b> · 7,200 × 100 ft asphalt · 1.6% up to the northeast · magnetic headings 037° / 217°</dd>
-        <dt>Lighting</dt><dd>Medium-intensity runway lights (MIRL), pilot-activated on CTAF 122.8 · REIL both ends · rotating beacon</dd>
-        <dt>Glidepath</dt><dd>4-light PAPI on the left: 3.0° Runway 04, 4.0° Runway 22</dd>
-        <dt>Pattern</dt><dd>Left traffic both runways · Runway 22 is the calm-wind runway · Runway 22 threshold displaced 899 ft · Runway 04 touch-and-go not authorized</dd>
-        <dt>Elevation</dt><dd>3,955 ft MSL (surveyed) · variation 9° E</dd>
-        <dt>Approaches</dt><dd>RNAV (GPS)-A · VOR-B · Nogales VOR/DME (OLS) 114.65 on the field</dd>
-        <dt>On field</dt><dd>Phillips 66 Jet A and 100LL, full service from Copper Mountain Air · {WINGPOINTS} · attended 7 a.m.–7 p.m.</dd>
-        <dt>Entry</dt><dd>International airport of entry (U.S. Customs and Border Protection)</dd>
-      </dl>
-    </div>
-    <div class="glass"><h3>Frequencies &amp; phones</h3>
-      <div class="freqs">
-        <div class="freq"><span>ASOS</span><b>121.125</b><small><a href="tel:+15202879332">520-287-9332</a></small></div>
-        <div class="freq"><span>CTAF / UNICOM</span><b>122.8</b><small>Pilot-controlled lighting</small></div>
-        <div class="freq"><span>Nogales VOR/DME</span><b>114.65</b><small>Ident OLS, at field</small></div>
-        <div class="freq"><span>Tucson App / Dep</span><b>118.75</b><small>Clearance: <a href="tel:+15208296121">520-829-6121</a></small></div>
-        <div class="freq"><span>Prescott Radio</span><b>122.4</b><small>RCO · close flight plans</small></div>
-      </div>
-      <p class="wx-foot">Weather: FAA ASOS via <a href="https://aviationweather.gov/data/metar/?ids=KOLS&amp;hours=0&amp;include_taf=yes" target="_blank" rel="noopener">AviationWeather.gov</a>, the <a href="https://www.weather.gov/documentation/services-web-api" target="_blank" rel="noopener">National Weather Service API</a> and the <a href="https://mesonet.agron.iastate.edu/" target="_blank" rel="noopener">Iowa Environmental Mesonet</a>. Airport data: FAA Chart Supplement and <a href="{AIRNAV}" target="_blank" rel="noopener">AirNav KOLS</a>. For situational awareness and training preview only. Not for navigation; get an official briefing before every flight.</p>
-    </div>
-  </div>
+<section aria-label="KOLS weather"><div class="wrap">
+  <p>Live KOLS weather, radar and VFR climatology are on the <a href="{p}weather.html">Weather</a> page.</p>
 </div></section>
 
 <section class="mapsec" id="map" aria-label="Training area map"><div class="wrap">
@@ -1209,7 +1300,7 @@ def flight_training(p):
     <div><span class="ic">{ico("mountain")}</span><h3>High-elevation airmanship</h3><p>At <b>3,955 ft</b> field elevation with mountains all around, you learn density altitude and mountain flying for real, not just from a textbook.</p></div>
     <div><span class="ic">{ico("tower")}</span><h3>Towered airspace next door</h3><p>Sierra Vista (Class D) is <b>{xc[0]["dist"]} NM</b> away and Tucson International (Class C) is <b>{next(d for d in xc if d["id"]=="KTUS")["dist"]} NM</b>, an easy hop for radio and towered-airport practice.</p></div>
     <div><span class="ic">{ico("compass")}</span><h3>Instrument-ready field</h3><p>A <b>VOR/DME on the field</b>, published RNAV (GPS)-A and VOR-B approaches, and Tucson Approach overhead.</p></div>
-    <div><span class="ic">{ico("sun")}</span><h3>Desert flying weather</h3><p>Southern Arizona's dry climate means flyable weather much of the year, and the live panel above shows you exactly what it's doing today.</p></div>
+    <div><span class="ic">{ico("sun")}</span><h3>Desert flying weather</h3><p>Southern Arizona's dry climate means flyable weather much of the year. See <a href="{p}weather.html">live conditions and VFR climatology</a> for today and the year.</p></div>
     <div><span class="ic">{ico("fuel")}</span><h3>Full-service FBO on the field</h3><p>Phillips 66 Jet A and 100LL, a pilot lounge and flight-planning desk, all from Copper Mountain Air at KOLS.</p></div>
   </div>
 </div></section>
@@ -1817,7 +1908,9 @@ def main():
     page("fuel-fbo.html", "Jet A & 100LL Fuel and FBO at KOLS | Copper Mountain Air",
          "Jet A and 100LL Avgas, ramp and tie-down parking, hangars and ground handling at Nogales International Airport (KOLS), Nogales, AZ.", fuel_fbo)
     page("flight-training.html", "Flight Training in Nogales, AZ | Copper Mountain Air",
-         "FAA Part 61 single-engine flight training at Nogales International Airport (KOLS), with live KOLS ASOS weather, an FAA sectional training map and FlightCircle scheduling. Multi-engine arriving shortly; Part 141 in process.", flight_training)
+         "FAA Part 61 single-engine flight training at Nogales International Airport (KOLS), with an FAA sectional training map and FlightCircle scheduling. Multi-engine arriving shortly; Part 141 in process.", flight_training)
+    page("weather.html", "KOLS Weather at Nogales International Airport | Copper Mountain Air",
+         "Live KOLS ASOS weather, radar, runway wind components, density altitude and VFR climatology at Nogales International Airport (KOLS) in Nogales, Arizona.", weather)
     page("cargo.html", "Cargo & Expedited Freight from Nogales, AZ (KOLS) | Copper Mountain Air",
          "Expedited ground and air-to-ground cargo from Nogales International Airport (KOLS): a 26-ft dock-height Hino 268 box truck with liftgate, a Ford E-150 cargo van, and ramp-to-truck transfers.", cargo)
     page("charter.html", "Charter from Nogales, AZ (Coming Soon) | Copper Mountain Air",
@@ -1871,7 +1964,9 @@ def main():
     page("fuel-fbo.html", "Combustible Jet A y 100LL y FBO en KOLS | Copper Mountain Air",
          "Jet A y 100LL Avgas, rampa y amarre, hangares y atención en tierra en el Aeropuerto Internacional de Nogales (KOLS), Nogales, AZ.", pages_es.fuel_fbo, lang="es")
     page("flight-training.html", "Instrucción de vuelo en Nogales, AZ | Copper Mountain Air",
-         "Instrucción de vuelo monomotor FAA Part 61 en el Aeropuerto Internacional de Nogales (KOLS), con clima en vivo del ASOS de KOLS, un mapa de instrucción en la seccional de la FAA y programación en FlightCircle. Multimotor en breve; Part 141 en proceso.", pages_es.flight_training, lang="es")
+         "Instrucción de vuelo monomotor FAA Part 61 en el Aeropuerto Internacional de Nogales (KOLS), con un mapa de instrucción en la seccional de la FAA y programación en FlightCircle. Multimotor en breve; Part 141 en proceso.", pages_es.flight_training, lang="es")
+    page("weather.html", "Clima en KOLS en el Aeropuerto Internacional de Nogales | Copper Mountain Air",
+         "Clima en vivo del ASOS de KOLS, radar, componentes de viento en pista, altitud de densidad y climatología VFR en el Aeropuerto Internacional de Nogales (KOLS) en Nogales, Arizona.", pages_es.weather, lang="es")
     page("cargo.html", "Carga y flete expedito desde Nogales, AZ (KOLS) | Copper Mountain Air",
          "Carga expedita terrestre y de aire a tierra desde el Aeropuerto Internacional de Nogales (KOLS): un camión de caja Hino 268 de 26 ft a altura de andén con elevador, una van Ford E-150 y transferencias de rampa a camión.", pages_es.cargo, lang="es")
     page("charter.html", "Chárter desde Nogales, AZ (próximamente) | Copper Mountain Air",

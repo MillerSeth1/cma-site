@@ -16,7 +16,7 @@ KOLS es un aeropuerto del condado, sin torre, con una pista de asfalto de **7,20
 
 El campo también queda cerca de espacio aéreo útil para práctica. Sierra Vista Municipal–Libby AAF (KFHU) ofrece práctica de Clase D cercana, y la Clase C de Tucson International (KTUS) queda a un salto corto al norte. Un VOR/DME de Nogales en el campo (OLS, 114.65) y las aproximaciones publicadas RNAV (GPS)-A y VOR-B respaldan el trabajo de instrumentos a medida que avanza. Los datos del aeropuerto provienen del FAA Chart Supplement y de [AirNav para KOLS](https://www.airnav.com/airport/KOLS) (ciclo vigente del 29 de octubre de 2026).
 
-El clima también ayuda. Con observaciones oficiales del ASOS de 2020 a 2025, KOLS promedió unos **327 días VFR** al año en horario diurno (de 7:00 a.m. a 7:00 p.m., hora de Arizona), junto con unos 314 días despejados o soleados. El método y el desglose mensual están en nuestra página de [instrucción de vuelo](../flight-training.html#climatology).
+El clima también ayuda. Con observaciones oficiales del ASOS de 2020 a 2025, KOLS promedió unos **327 días VFR** al año en horario diurno (de 7:00 a.m. a 7:00 p.m., hora de Arizona), junto con unos 314 días despejados o soleados. El método y el desglose mensual están en nuestra página de [clima](../weather.html#climatology).
 
 ## Lo que ofrecemos ahora, y lo que sigue
 
@@ -37,7 +37,7 @@ Copper Mountain Air usa [FlightCircle](https://www.flightcircle.com/v1/) para la
 2. Le ayudaremos con el siguiente paso, incluido el acceso a FlightCircle cuando esté listo para programar.
 3. Entrene a su ritmo en KOLS, con vuelos de travesía por el sur de Arizona a medida que avanza.
 
-Para una mirada más de cerca al campo, las rutas después del certificado privado y el clima en vivo de KOLS, visite la página de [instrucción de vuelo](../flight-training.html). Hay fotografías del aeropuerto en nuestra [galería](../gallery.html).
+Para una mirada más de cerca al campo y las rutas después del certificado privado, visite la página de [instrucción de vuelo](../flight-training.html). El clima en vivo de KOLS está en la página de [clima](../weather.html). Hay fotografías del aeropuerto en nuestra [galería](../gallery.html).
 
 **Teléfono:** [520-287-9120](tel:+15202879120)
 **Correo:** [operations@coppermountainair.com](mailto:operations@coppermountainair.com)

@@ -16,7 +16,7 @@ KOLS is a non-towered county airport with a **7,200 × 100 ft** asphalt runway a
 
 The field also sits close to useful practice airspace. Sierra Vista Municipal–Libby AAF (KFHU) offers nearby Class D practice, and Tucson International (KTUS) Class C is a short hop to the north. An on-field Nogales VOR/DME (OLS, 114.65) and published RNAV (GPS)-A and VOR-B approaches support instrument work as you move on. Airport data is from the FAA Chart Supplement and [AirNav for KOLS](https://www.airnav.com/airport/KOLS) (effective 29 October 2026 cycle).
 
-The weather helps too. Using official ASOS observations from 2020 through 2025, KOLS averaged about **327 VFR days** a year during daytime hours (7:00 a.m. to 7:00 p.m. Arizona time), along with about 314 clear or sunny days. The method and monthly breakdown are on our [flight training](../flight-training.html#climatology) page.
+The weather helps too. Using official ASOS observations from 2020 through 2025, KOLS averaged about **327 VFR days** a year during daytime hours (7:00 a.m. to 7:00 p.m. Arizona time), along with about 314 clear or sunny days. The method and monthly breakdown are on our [weather](../weather.html#climatology) page.
 
 ## What we offer now — and what is still ahead
 
@@ -37,7 +37,7 @@ Copper Mountain Air uses [FlightCircle](https://www.flightcircle.com/v1/) for fl
 2. We will help you take the next step, including FlightCircle access once you are ready to schedule.
 3. Train at your own pace at KOLS, with cross-country flying across southern Arizona as you progress.
 
-For a closer look at the field, pathways after the private certificate, and live KOLS weather, visit the [flight training](../flight-training.html) page. Photos from the airport are in our [gallery](../gallery.html).
+For a closer look at the field and pathways after the private certificate, visit the [flight training](../flight-training.html) page. Live KOLS weather is on the [weather](../weather.html) page. Photos from the airport are in our [gallery](../gallery.html).
 
 **Phone:** [520-287-9120](tel:+15202879120)
 **Email:** [operations@coppermountainair.com](mailto:operations@coppermountainair.com)

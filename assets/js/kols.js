@@ -267,7 +267,8 @@
     $$(".rwy-end").forEach(function(e){e.classList.toggle("fav", wc && !wc.vrb && e.getAttribute("data-rwy")===wc.best);});
   }
   var last=null;
-  var METAR_API=(($("#wx")||{}).getAttribute&&$("#wx").getAttribute("data-metar-endpoint"))||"";
+  var metarRoot=$("#wx")||document.querySelector("[data-metar-endpoint]");
+  var METAR_API=(metarRoot&&metarRoot.getAttribute&&metarRoot.getAttribute("data-metar-endpoint"))||"";
   var IEM = "https://mesonet.agron.iastate.edu/api/1/currents.json?station=OLS&network=AZ_ASOS";
   function getJSON(u){return fetch(u,{cache:"no-store"}).then(function(r){if(!r.ok)throw new Error("HTTP "+r.status);return r.json();});}
   function settle(pr){return pr.then(function(v){return {ok:true,v:v};},function(e){return {ok:false,e:e};});}
@@ -420,6 +421,13 @@
     });
   }
   window.__kolsParse={metar:parseMetar,category:category,wind:windComponents,da:densityAlt};
-  function boot(){initWx();initMap();initRadar();initTabs();}
+  function redirectLegacyWxHash(){
+    var h=location.hash;
+    if(h!=="#conditions" && h!=="#climatology" && h!=="#wx") return;
+    if($("#wx-radar-map") || $("#climatology")) return;
+    if(!/flight-training\.html$/.test(location.pathname)) return;
+    location.replace(location.pathname.replace(/flight-training\.html$/, "weather.html")+h);
+  }
+  function boot(){redirectLegacyWxHash();initWx();initMap();initRadar();initTabs();}
   if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",boot); else boot();
 })();
