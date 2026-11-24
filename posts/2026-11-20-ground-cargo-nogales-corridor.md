@@ -4,7 +4,7 @@ slug: ground-cargo-nogales-corridor
 published: true
 date: "2026-11-20"
 description: "On-demand expedited freight from Nogales and Santa Cruz County: a Ford E-150 cargo van and a 26-ft Hino box truck with liftgate, dispatched from KOLS."
-image: cargo
+image: fbo
 ---
 Nogales sits on the U.S.–Mexico border, and a lot of freight moving through Santa Cruz County is on a clock. When a shipment can't wait for the next scheduled truck, Copper Mountain Air handles time-critical freight out of Nogales International Airport (KOLS) by ground, and coordinates air cargo on the ramp.
 

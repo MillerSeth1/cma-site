@@ -4,7 +4,7 @@ slug: fuel-and-fbo-at-kols
 published: true
 date: "2026-11-20"
 description: "Full-service Phillips 66 Jet A and 100LL, WingPoints, and FBO support from Copper Mountain Air at Nogales International Airport (KOLS)."
-image: fbo-night
+image: fbo
 ---
 Copper Mountain Air is the full-service fixed-base operator at Nogales International Airport (KOLS). We took on that role in **2024**, succeeding Tiffin Aviation, and we fuel and support aircraft on the field today.
 

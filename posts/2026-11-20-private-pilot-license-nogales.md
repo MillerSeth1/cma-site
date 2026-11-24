@@ -4,7 +4,7 @@ slug: private-pilot-license-nogales
 published: true
 date: "2026-11-20"
 description: "Earn your FAA private pilot certificate with Part 61 single-engine training at Nogales International Airport (KOLS) in Santa Cruz County, Arizona."
-image: training
+image: hero
 ---
 If you want to learn to fly in Santa Cruz County, you can do it at Nogales International Airport (KOLS). Copper Mountain Air offers FAA Part 61 single-engine flight training on the field, with scheduling through [FlightCircle](https://www.flightcircle.com/v1/).
 

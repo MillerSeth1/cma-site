@@ -4,7 +4,7 @@ slug: ground-cargo-nogales-corridor
 published: true
 date: "2026-11-20"
 description: "Flete expedito bajo demanda desde Nogales y el condado de Santa Cruz: una van Ford E-150 y un camión de caja Hino de 26 ft con elevador, despachados desde KOLS."
-image: cargo
+image: fbo
 ---
 Nogales está en la frontera entre Estados Unidos y México, y mucho del flete que se mueve por el condado de Santa Cruz va contra reloj. Cuando un envío no puede esperar al siguiente camión programado, Copper Mountain Air maneja flete urgente desde el Aeropuerto Internacional de Nogales (KOLS) por tierra y coordina la carga aérea en la rampa.
 

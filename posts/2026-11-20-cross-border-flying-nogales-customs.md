@@ -4,7 +4,7 @@ slug: cross-border-flying-nogales-customs
 published: true
 date: "2026-11-20"
 description: "CBP basics for private aircraft arriving at Nogales International Airport (KOLS), an airport of entry, with links to official Customs and FAA sources."
-image: airfield
+image: charter
 ---
 Nogales International Airport (KOLS) is a U.S. Customs and Border Protection **international airport of entry**, just north of the U.S.–Mexico border in Santa Cruz County, Arizona. If you are arriving from Mexico or another foreign point, plan the customs stop before you take off — and treat official CBP and FAA guidance as controlling.
 
