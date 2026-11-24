@@ -235,8 +235,8 @@
     ? contact.getAttribute("href").replace(/contact\.html$/, "blog/thanksgiving-hours-2026.html")
     : "blog/thanksgiving-hours-2026.html";
   var html = es
-    ? '<div class="wrap"><strong>Horario de Acción de Gracias (jueves 26 de noviembre):</strong> abiertos de 7:00 a.m. a 12:00 p.m. Después del mediodía, llame al <a href="tel:+15202879120">520-287-9120</a>. <a href="'+href+'">Detalles</a></div>'
-    : '<div class="wrap"><strong>Thanksgiving hours (Thursday, November 26):</strong> open 7:00 a.m. to 12:00 p.m. After noon, call <a href="tel:+15202879120">520-287-9120</a>. <a href="'+href+'">Details</a></div>';
+    ? '<div class="wrap"><strong>Horario de Acción de Gracias (jueves 26 de noviembre):</strong> abiertos de 7:00 a.m. a 12:00 p.m. Después del mediodía, llame al <a href="tel:+15206044020">520-604-4020</a>. <a href="'+href+'">Detalles</a></div>'
+    : '<div class="wrap"><strong>Thanksgiving hours (Thursday, November 26):</strong> open 7:00 a.m. to 12:00 p.m. After noon, call <a href="tel:+15206044020">520-604-4020</a>. <a href="'+href+'">Details</a></div>';
   var bar = document.createElement("div");
   bar.className = "holiday-hours-banner";
   bar.setAttribute("role", "region");
