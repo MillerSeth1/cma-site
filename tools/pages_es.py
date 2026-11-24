@@ -34,7 +34,7 @@ def home(p):
 <section class="dark"><div class="wrap">
   <div class="section-head reveal"><p class="eyebrow">¿Viene volando?</p><h2>El Aeropuerto Internacional de Nogales de un vistazo.</h2><p>Una pista de 7,200 pies al pie del valle de Santa Cruz, a unas 7 millas al noreste del centro de Nogales.</p></div>
   {b.airport_facts()}
-  {b.notams_panel()}
+  <p>Los <a href="{b.LP}notams.html">NOTAM de KOLS</a> en vivo están en su propia página. Verifique siempre con las fuentes oficiales de la FAA antes de volar.</p>
   {b.flight_plan_widget()}
   {b.kols_link(p, "Lea la guía del piloto de KOLS")}
 </div></section>
@@ -125,7 +125,7 @@ def fuel_fbo(p):
     return b.page_hero("Combustible y FBO · KOLS", "Cargue combustible en el Aeropuerto Internacional de Nogales.", "Jet A y 100LL Avgas, más rampa, hangar y servicios de atención en tierra en el Aeropuerto Internacional de Nogales (KOLS).") + f"""
 <section id="fuel"><div class="wrap">
   <div class="section-head reveal"><p class="eyebrow">Combustible</p><h2>Jet A y 100LL.</h2><p>Precios en vivo de nuestro <a href="{b.AIRNAV}" rel="noopener">listado AirNav de KOLS</a>.</p></div>
-  <div class="fuel-notam-banner" data-notams="fuel-banner" hidden></div>
+  <div class="fuel-notam-banner" data-notams="fuel-banner" data-endpoint="{b.NOTAMS_ENDPOINT}" hidden></div>
   <table class="price-table reveal" data-fuel="table" data-endpoint="{b.FUEL_ENDPOINT}"><thead><tr><th scope="col">Combustible</th><th scope="col">Servicio</th><th scope="col">Precio actual</th></tr></thead>
   <tbody><tr><td><strong>Jet A</strong> (también con aditivo)</td><td data-fuel="jeta-service">Servicio completo</td><td data-fuel="jeta-price">Cargando el precio actual…</td></tr>
   <tr><td><strong>100LL Avgas</strong></td><td data-fuel="100ll-service">Servicio completo</td><td data-fuel="100ll-price">Cargando el precio actual…</td></tr></tbody></table>
@@ -141,7 +141,7 @@ def fuel_fbo(p):
 <section class="dark"><div class="wrap">
   <div class="section-head reveal"><p class="eyebrow">Información del aeropuerto</p><h2>KOLS para pilotos.</h2></div>
   {b.airport_facts()}
-  {b.notams_panel()}
+  <p>Los <a href="{b.LP}notams.html">NOTAM de KOLS</a> en vivo están en su propia página. Verifique siempre con las fuentes oficiales de la FAA antes de volar.</p>
   {b.flight_plan_widget()}
   {b.kols_link(p, "Guía completa del piloto de KOLS")}
 </div></section>
@@ -149,6 +149,9 @@ def fuel_fbo(p):
 
 def weather(p):
     return B().weather(p)
+
+def notams(p):
+    return B().notams(p)
 
 def flight_training(p):
     b = B()

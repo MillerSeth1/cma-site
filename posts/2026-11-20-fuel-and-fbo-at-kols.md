@@ -16,7 +16,7 @@ We dispense Phillips 66 Aviation **Jet A** (including with additive) and **100LL
 
 Copper Mountain Air is a Phillips 66 [WingPoints](https://www.wingpoints.com/) rewards program participant. Current Jet A and 100LL prices are posted on [AirNav for KOLS](https://www.airnav.com/airport/KOLS); we do not list prices here.
 
-If a fuel grade is temporarily unavailable, we post that on the [Fuel & FBO](../fuel-fbo.html) page and in the live [KOLS NOTAMs](../fuel-fbo.html#notams) list. Always confirm current NOTAMs with official FAA sources before you fly.
+If a fuel grade is temporarily unavailable, we post that on the [Fuel & FBO](../fuel-fbo.html) page and in the live [KOLS NOTAMs](../notams.html) list. Always confirm current NOTAMs with official FAA sources before you fly.
 
 ## Hours and how to pay
 
@@ -40,7 +40,7 @@ Let us know your ETA and fuel needs so the line team can be ready. You can [rese
 **Email:** [operations@coppermountainair.com](mailto:operations@coppermountainair.com)
 **Address:** 11 Access Way, Nogales, AZ 85621
 
-See the [Fuel & FBO](../fuel-fbo.html) page for airport facts, the live NOTAM list, and a flight-planning widget for KOLS. Photos from the field, including a night view of the FBO taxiway sign, are in the [gallery](../gallery.html).
+See the [Fuel & FBO](../fuel-fbo.html) page for airport facts and a flight-planning widget for KOLS, and the [KOLS NOTAMs](../notams.html) page for the live NOTAM list. Photos from the field, including a night view of the FBO taxiway sign, are in the [gallery](../gallery.html).
 
 ## Related reading
 

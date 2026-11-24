@@ -16,7 +16,7 @@ Suministramos **Jet A** de Phillips 66 Aviation (también con aditivo) y **100LL
 
 Copper Mountain Air participa en el programa de recompensas [WingPoints](https://www.wingpoints.com/) de Phillips 66. Los precios actuales de Jet A y 100LL se publican en [AirNav para KOLS](https://www.airnav.com/airport/KOLS); no los listamos aquí.
 
-Si un tipo de combustible no está disponible temporalmente, lo publicamos en la página de [Combustible y FBO](../fuel-fbo.html) y en la lista en vivo de [NOTAM de KOLS](../fuel-fbo.html#notams). Confirme siempre los NOTAM vigentes con fuentes oficiales de la FAA antes de volar.
+Si un tipo de combustible no está disponible temporalmente, lo publicamos en la página de [Combustible y FBO](../fuel-fbo.html) y en la lista en vivo de [NOTAM de KOLS](../notams.html). Confirme siempre los NOTAM vigentes con fuentes oficiales de la FAA antes de volar.
 
 ## Horario y formas de pago
 
@@ -40,7 +40,7 @@ Avísenos su ETA y lo que necesita de combustible para que el equipo de rampa es
 **Correo:** [operations@coppermountainair.com](mailto:operations@coppermountainair.com)
 **Dirección:** 11 Access Way, Nogales, AZ 85621
 
-Vea la página de [Combustible y FBO](../fuel-fbo.html) para datos del aeropuerto, la lista en vivo de NOTAM y un widget de planificación de vuelo para KOLS. Hay fotografías del campo, incluida una vista nocturna del letrero de FBO en la calle de rodaje, en la [galería](../gallery.html).
+Vea la página de [Combustible y FBO](../fuel-fbo.html) para datos del aeropuerto y un widget de planificación de vuelo para KOLS, y la página de [NOTAM de KOLS](../notams.html) para la lista en vivo de NOTAM. Hay fotografías del campo, incluida una vista nocturna del letrero de FBO en la calle de rodaje, en la [galería](../gallery.html).
 
 ## Lecturas relacionadas
 

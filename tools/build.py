@@ -264,10 +264,10 @@ def gallery_copy(item, field):
     return item[field]
 
 # Home is reached from the logo; Cargo has its own page (Seth, Nov 19, 2026).
-NAV = [("services.html","Services"),("fuel-fbo.html","Fuel &amp; FBO"),("weather.html","Weather"),
+NAV = [("services.html","Services"),("fuel-fbo.html","Fuel &amp; FBO"),("weather.html","Weather"),("notams.html","NOTAMs"),
        ("flight-training.html","Flight Training"),("cargo.html","Cargo"),("charter.html","Charter"),("about.html","About"),
        ("gallery.html","Gallery"),("blog/index.html","Blog")]
-NAV_ES = [("services.html","Servicios"),("fuel-fbo.html","Combustible y FBO"),("weather.html","Clima"),
+NAV_ES = [("services.html","Servicios"),("fuel-fbo.html","Combustible y FBO"),("weather.html","Clima"),("notams.html","NOTAMs"),
        ("flight-training.html","Instrucción de vuelo"),("cargo.html","Carga"),("charter.html","Chárter"),("about.html","Nosotros"),
        ("gallery.html","Galería"),("blog/index.html","Blog")]
 # Page-specific assets. Leaflet 1.9.4 is vendored in assets/vendor/leaflet (BSD-2-Clause) so the map never depends on a CDN.
@@ -280,6 +280,7 @@ PAGE_CSS = {
 PAGE_JS = {
   "index.html": ["assets/js/flightplan.js", "assets/js/notams.js", "assets/js/fuel.js"],
   "fuel-fbo.html": ["assets/js/flightplan.js", "assets/js/notams.js", "assets/js/fuel.js"],
+  "notams.html": ["assets/js/notams.js"],
   "flight-training.html": ["assets/vendor/leaflet/leaflet.js", "assets/js/kols.js"],
   "weather.html": ["assets/vendor/leaflet/leaflet.js", "assets/js/kols.js"],
   "gallery.html": ["assets/js/gallery.js"],
@@ -408,6 +409,7 @@ def footer(p):
             f'<li><a href="{LP}services.html">Servicios</a></li>'
             f'<li><a href="{LP}fuel-fbo.html">Combustible y FBO</a></li>'
             f'<li><a href="{LP}weather.html">Clima</a></li>'
+            f'<li><a href="{LP}notams.html">NOTAMs</a></li>'
             f'<li><a href="{LP}flight-training.html">Instrucción de vuelo</a></li>'
             f'<li><a href="{LP}cargo.html">Carga</a></li>'
             f'<li><a href="{LP}charter.html">Chárter</a></li>'
@@ -427,6 +429,7 @@ def footer(p):
             f'<li><a href="{p}services.html">Services</a></li>'
             f'<li><a href="{p}fuel-fbo.html">Fuel &amp; FBO</a></li>'
             f'<li><a href="{p}weather.html">Weather</a></li>'
+            f'<li><a href="{p}notams.html">NOTAMs</a></li>'
             f'<li><a href="{p}flight-training.html">Flight training</a></li>'
             f'<li><a href="{p}cargo.html">Cargo</a></li>'
             f'<li><a href="{p}charter.html">Charter</a></li>'
@@ -882,6 +885,27 @@ def weather(p):
         )
     return hero + conditions_section()
 
+def notams(p):
+    if is_es():
+        hero = page_hero(
+            "NOTAM · Aeropuerto Internacional de Nogales · KOLS",
+            "NOTAM vigentes en KOLS.",
+            "Avisos a los aviadores (NOTAM) en vivo para el Aeropuerto Internacional de Nogales, con un enlace a la consulta oficial de la FAA.",
+        )
+        aria = "NOTAM de KOLS"
+    else:
+        hero = page_hero(
+            "NOTAMs · Nogales International · KOLS",
+            "Current NOTAMs at KOLS.",
+            "Live Notices to Airmen (NOTAMs) for Nogales International Airport, plus a link to the official FAA query.",
+        )
+        aria = "KOLS NOTAMs"
+    return hero + f"""
+<section class="dark" aria-label="{aria}"><div class="wrap">
+  {notams_panel()}
+</div></section>
+"""
+
 def privacy(p):
     return page_hero("Privacy", "How we use this site.", "A short note on cookies, analytics and how to reach us.") + f"""
 <section><div class="wrap" style="max-width:42rem">
@@ -981,7 +1005,7 @@ def hero_status():
         <span class="hero-status-fallback" data-fuel="badge-text" hidden>{fuel_fallback}</span>
         <span class="hero-status-meta" data-fuel="badge-updated" hidden></span>
       </a>
-      <a class="hero-status-card" id="hero-notams" href="#notams" data-endpoint="{NOTAMS_ENDPOINT}">
+      <a class="hero-status-card" id="hero-notams" href="{LP}notams.html" data-endpoint="{NOTAMS_ENDPOINT}">
         <span class="hero-status-k">{notam_k}</span>
         <span class="hero-status-value" data-notams-hero="count">—</span>
         <span class="hero-status-meta" data-notams-hero="label">{notam_meta}</span>
@@ -1017,7 +1041,7 @@ def home(p):
 <section class="dark"><div class="wrap">
   <div class="section-head reveal"><p class="eyebrow">Flying in?</p><h2>Nogales International at a glance.</h2><p>A 7,200-foot runway at the foot of the Santa Cruz Valley, about 7 miles northeast of downtown Nogales.</p></div>
   {AIRPORT_FACTS}
-  {notams_panel()}
+  <p>Live <a href="{p}notams.html">KOLS NOTAMs</a> are on their own page. Always verify with official FAA sources before you fly.</p>
   {flight_plan_widget()}
   {kols_link(p, "Read the KOLS pilot guide")}
 </div></section>
@@ -1106,7 +1130,7 @@ def fuel_fbo(p):
     return page_hero("Fuel &amp; FBO · KOLS", "Fuel up at Nogales International.", "Jet A and 100LL Avgas, plus ramp, hangar and handling services at Nogales International Airport (KOLS).") + f"""
 <section id="fuel"><div class="wrap">
   <div class="section-head reveal"><p class="eyebrow">Fuel</p><h2>Jet A &amp; 100LL.</h2><p>Live prices from our <a href="{AIRNAV}" rel="noopener">AirNav KOLS listing</a>.</p></div>
-  <div class="fuel-notam-banner" data-notams="fuel-banner" hidden></div>
+  <div class="fuel-notam-banner" data-notams="fuel-banner" data-endpoint="{NOTAMS_ENDPOINT}" hidden></div>
   <table class="price-table reveal" data-fuel="table" data-endpoint="{FUEL_ENDPOINT}"><thead><tr><th scope="col">Fuel</th><th scope="col">Service</th><th scope="col">Current price</th></tr></thead>
   <tbody><tr><td><strong>Jet A</strong> (including with additive)</td><td data-fuel="jeta-service">Full service</td><td data-fuel="jeta-price">Loading current price…</td></tr>
   <tr><td><strong>100LL Avgas</strong></td><td data-fuel="100ll-service">Full service</td><td data-fuel="100ll-price">Loading current price…</td></tr></tbody></table>
@@ -1122,7 +1146,7 @@ def fuel_fbo(p):
 <section class="dark"><div class="wrap">
   <div class="section-head reveal"><p class="eyebrow">Airport info</p><h2>KOLS for pilots.</h2></div>
   {AIRPORT_FACTS}
-  {notams_panel()}
+  <p>Live <a href="{p}notams.html">KOLS NOTAMs</a> are on their own page. Always verify with official FAA sources before you fly.</p>
   {flight_plan_widget()}
   {kols_link(p, "Full KOLS pilot guide")}
 </div></section>
@@ -1911,6 +1935,8 @@ def main():
          "FAA Part 61 single-engine flight training at Nogales International Airport (KOLS), with an FAA sectional training map and FlightCircle scheduling. Multi-engine arriving shortly; Part 141 in process.", flight_training)
     page("weather.html", "KOLS Weather at Nogales International Airport | Copper Mountain Air",
          "Live KOLS ASOS weather, radar, runway wind components, density altitude and VFR climatology at Nogales International Airport (KOLS) in Nogales, Arizona.", weather)
+    page("notams.html", "KOLS NOTAMs at Nogales International Airport | Copper Mountain Air",
+         "Live KOLS Notices to Airmen (NOTAMs) at Nogales International Airport (KOLS) in Nogales, Arizona.", notams)
     page("cargo.html", "Cargo & Expedited Freight from Nogales, AZ (KOLS) | Copper Mountain Air",
          "Expedited ground and air-to-ground cargo from Nogales International Airport (KOLS): a 26-ft dock-height Hino 268 box truck with liftgate, a Ford E-150 cargo van, and ramp-to-truck transfers.", cargo)
     page("charter.html", "Charter from Nogales, AZ (Coming Soon) | Copper Mountain Air",
@@ -1967,6 +1993,8 @@ def main():
          "Instrucción de vuelo monomotor FAA Part 61 en el Aeropuerto Internacional de Nogales (KOLS), con un mapa de instrucción en la seccional de la FAA y programación en FlightCircle. Multimotor en breve; Part 141 en proceso.", pages_es.flight_training, lang="es")
     page("weather.html", "Clima en KOLS en el Aeropuerto Internacional de Nogales | Copper Mountain Air",
          "Clima en vivo del ASOS de KOLS, radar, componentes de viento en pista, altitud de densidad y climatología VFR en el Aeropuerto Internacional de Nogales (KOLS) en Nogales, Arizona.", pages_es.weather, lang="es")
+    page("notams.html", "NOTAM de KOLS en el Aeropuerto Internacional de Nogales | Copper Mountain Air",
+         "NOTAM en vivo del Aeropuerto Internacional de Nogales (KOLS) en Nogales, Arizona.", pages_es.notams, lang="es")
     page("cargo.html", "Carga y flete expedito desde Nogales, AZ (KOLS) | Copper Mountain Air",
          "Carga expedita terrestre y de aire a tierra desde el Aeropuerto Internacional de Nogales (KOLS): un camión de caja Hino 268 de 26 ft a altura de andén con elevador, una van Ford E-150 y transferencias de rampa a camión.", pages_es.cargo, lang="es")
     page("charter.html", "Chárter desde Nogales, AZ (próximamente) | Copper Mountain Air",

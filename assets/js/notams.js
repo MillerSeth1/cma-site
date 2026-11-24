@@ -1,5 +1,18 @@
 (function () {
   var ES = document.documentElement.lang === "es";
+  function redirectLegacyNotamsHash() {
+    var h = location.hash;
+    if (h !== "#notams") return;
+    if (document.getElementById("notams") || document.getElementById("kols-notams")) return;
+    var path = location.pathname;
+    var dest = null;
+    if (/fuel-fbo\.html$/.test(path)) dest = path.replace(/fuel-fbo\.html$/, "notams.html");
+    else if (/index\.html$/.test(path)) dest = path.replace(/index\.html$/, "notams.html");
+    else if (/\/es\/?$/.test(path)) dest = path.replace(/\/es\/?$/, "/es/notams.html");
+    else if (/\/$/.test(path)) dest = path.replace(/\/$/, "/notams.html");
+    if (dest) location.replace(dest + h);
+  }
+  redirectLegacyNotamsHash();
   function tr(en) {
     if (!ES) return en;
     if (SUM[en]) return SUM[en];
@@ -42,7 +55,8 @@
   var SUM = {};
   var root = document.getElementById("notams") || document.getElementById("kols-notams");
   var hero = document.getElementById("hero-notams");
-  var endpoint = (root && root.getAttribute("data-endpoint")) || (hero && hero.getAttribute("data-endpoint"));
+  var banner = document.querySelector("[data-notams=fuel-banner]");
+  var endpoint = (root && root.getAttribute("data-endpoint")) || (hero && hero.getAttribute("data-endpoint")) || (banner && banner.getAttribute("data-endpoint"));
   if (!endpoint) return;
 
   var official = (root && root.getAttribute("data-official")) || "";
