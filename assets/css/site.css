@@ -33,6 +33,13 @@ p{margin:0 0 1em}
 .preview-bar{background:#2b1a10;color:#f7d7b8;font-size:.82rem;text-align:center;padding:.45rem 1rem;letter-spacing:.02em}
 .preview-bar strong{color:#fff}
 
+/* Thanksgiving 2026 hours notice (hidden automatically after 26 Nov 2026, America/Phoenix) */
+.holiday-hours-banner{background:var(--copper-3);color:var(--sand);font-size:.92rem;line-height:1.45;text-align:center;padding:.7rem 1.1rem}
+.holiday-hours-banner .wrap{width:min(100% - 2rem,var(--max));margin-inline:auto}
+.holiday-hours-banner strong{color:#fff;font-weight:700}
+.holiday-hours-banner a{color:#fff;text-underline-offset:2px}
+.holiday-hours-banner a:hover{color:var(--sand)}
+
 /* Header */
 .site-header{position:sticky;top:0;z-index:50;background:rgba(10,20,27,.86);backdrop-filter:saturate(1.4) blur(12px);-webkit-backdrop-filter:saturate(1.4) blur(12px);border-bottom:1px solid rgba(233,160,106,.18)}
 .site-header .wrap{display:flex;align-items:center;gap:1rem;min-height:68px}
