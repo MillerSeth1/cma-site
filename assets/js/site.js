@@ -34,19 +34,33 @@
   };
   var t=document.querySelector(".nav-toggle"),n=document.getElementById("site-nav");
   function isMobileNav(){return window.matchMedia("(max-width:860px)").matches;}
+  function fineHover(){return window.matchMedia("(hover: hover) and (pointer: fine)").matches;}
   function navItems(){return n?Array.prototype.slice.call(n.querySelectorAll(".nav-item.has-sub")):[];}
+  var closeTimer=null;
+  function clearCloseTimer(){if(closeTimer){clearTimeout(closeTimer);closeTimer=null;}}
   function closeItem(item){
     item.classList.remove("open");
+    item.classList.remove("pinned");
     var btn=item.querySelector(".nav-parent");
     if(btn) btn.setAttribute("aria-expanded","false");
   }
-  function openItem(item){
+  function openItem(item,pin){
+    clearCloseTimer();
     navItems().forEach(function(other){if(other!==item) closeItem(other);});
     item.classList.add("open");
+    if(pin) item.classList.add("pinned");
     var btn=item.querySelector(".nav-parent");
     if(btn) btn.setAttribute("aria-expanded","true");
   }
-  function closeAllNav(){navItems().forEach(closeItem);}
+  function scheduleClose(item){
+    if(item.classList.contains("pinned")) return;
+    clearCloseTimer();
+    closeTimer=setTimeout(function(){
+      closeTimer=null;
+      if(!item.classList.contains("pinned")) closeItem(item);
+    },250);
+  }
+  function closeAllNav(){clearCloseTimer();navItems().forEach(closeItem);}
   function subLinks(item){return Array.prototype.slice.call(item.querySelectorAll(".nav-sub a"));}
   if(t&&n){
     t.addEventListener("click",function(){
@@ -61,14 +75,15 @@
         if(isMobileNav()) return;
         e.preventDefault();
         e.stopPropagation();
-        if(item.classList.contains("open")) closeItem(item); else openItem(item);
+        if(item.classList.contains("pinned")) closeItem(item);
+        else openItem(item,true);
       });
       btn.addEventListener("keydown",function(e){
         if(isMobileNav()) return;
         if(e.key==="ArrowDown"||e.key==="ArrowUp"){
           e.preventDefault();
           e.stopPropagation();
-          openItem(item);
+          openItem(item,true);
           var links=subLinks(item);
           if(!links.length) return;
           (e.key==="ArrowUp"?links[links.length-1]:links[0]).focus();
@@ -86,13 +101,15 @@
       });
       item.addEventListener("focusout",function(e){
         if(isMobileNav()) return;
-        if(!item.contains(e.relatedTarget)) closeItem(item);
+        if(item.contains(e.relatedTarget)) return;
+        if(item.classList.contains("pinned")) return;
+        scheduleClose(item);
       });
       item.addEventListener("mouseenter",function(){
-        if(!isMobileNav() && window.matchMedia("(hover: hover) and (pointer: fine)").matches) openItem(item);
+        if(!isMobileNav() && fineHover()) openItem(item);
       });
       item.addEventListener("mouseleave",function(){
-        if(!isMobileNav() && window.matchMedia("(hover: hover) and (pointer: fine)").matches) closeItem(item);
+        if(!isMobileNav() && fineHover()) scheduleClose(item);
       });
     });
     document.addEventListener("click",function(e){
@@ -105,11 +122,19 @@
       }
     });
     document.addEventListener("keydown",function(e){
-      if(e.key==="Escape"&&n.classList.contains("open")&&isMobileNav()){
+      if(e.key!=="Escape") return;
+      if(n.classList.contains("open")&&isMobileNav()){
         n.classList.remove("open");
         t.setAttribute("aria-expanded","false");
         closeAllNav();
         t.focus();
+        return;
+      }
+      var opened=navItems().filter(function(item){return item.classList.contains("open");});
+      if(opened.length){
+        var focusBtn=opened[0].querySelector(".nav-parent");
+        closeAllNav();
+        if(focusBtn) focusBtn.focus();
       }
     });
     window.addEventListener("resize",function(){

@@ -1,11 +1,37 @@
 """Build the Copper Mountain Air static site.  Run: python3 tools/build.py
 Pages are written to _site/ (GitHub Actions deploys that folder). Relative links only,
 so the site works at the domain root on coppermountainair.com."""
-import os, re, json, html, shutil, sys
+import os, re, json, html, shutil, sys, hashlib
 import markdown
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 OUT = os.path.join(ROOT, "_site")                       # build output (deployed by GitHub Actions)
+
+_ASSET_VER = {}
+def asset_ver(rel):
+    """Short content hash so browsers fetch updated CSS/JS instead of a stale cache."""
+    if rel not in _ASSET_VER:
+        path = os.path.join(ROOT, rel)
+        _ASSET_VER[rel] = hashlib.sha256(open(path, "rb").read()).hexdigest()[:10]
+    return _ASSET_VER[rel]
+
+def asset_href(p, rel):
+    return f"{p}{rel}?v={asset_ver(rel)}"
+
+# Inline critical nav styles: hide dropdowns and make group triggers look like nav
+# links even if a cached copy of site.css (without dropdown rules) is still applied.
+NAV_CRITICAL_CSS = (
+    ".site-nav .nav-item.has-sub{position:relative}"
+    ".site-nav .nav-sub{display:none!important;list-style:none;margin:0}"
+    ".site-nav .nav-item.has-sub.open>.nav-sub{display:block!important;position:absolute!important;left:0;z-index:60}"
+    ".js .site-nav.open .nav-sub{display:block!important;position:static!important;box-shadow:none!important;border:0!important;background:transparent!important;min-width:0;padding:0 0 .35rem .15rem}"
+    ".no-js .site-nav .nav-item.has-sub:hover>.nav-sub,"
+    ".no-js .site-nav .nav-item.has-sub:focus-within>.nav-sub{display:block!important;position:absolute!important;left:0;top:100%;z-index:60}"
+    ".site-nav .nav-parent{-webkit-appearance:none;appearance:none;background:transparent;border:0;color:#f4e7d6;"
+    "font:600 .92rem/1.2 inherit;padding:.5rem .7rem;border-radius:999px;cursor:pointer;white-space:nowrap;"
+    "display:inline-flex;align-items:center;gap:.35rem;margin:0}"
+    ".site-nav a,.site-nav .nav-parent{white-space:nowrap}"
+)
 # --drafts renders unpublished posts too, for LOCAL review only. The deploy workflow never passes it.
 SHOW_DRAFTS = "--drafts" in sys.argv
 SITE_URL = "https://coppermountainair.com/"
@@ -373,7 +399,8 @@ def head(title, desc, path, p, extra_ld=None, og_type="website", og_img=None, og
 <meta name="geo.placename" content="Nogales, Arizona">
 <link rel="preload" href="{p}assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="{p}assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
-{pre}<link rel="stylesheet" href="{p}assets/css/site.css">{''.join(f'\n<link rel="stylesheet" href="{p}{c}">' for c in PAGE_CSS.get(en_path(path), []))}
+{pre}<link rel="stylesheet" href="{asset_href(p, 'assets/css/site.css')}">{''.join(f'\n<link rel="stylesheet" href="{asset_href(p, c)}">' for c in PAGE_CSS.get(en_path(path), []))}
+<style>{NAV_CRITICAL_CSS}</style>
 <script>document.documentElement.className="js";</script>
 <script type="application/ld+json">{json.dumps(ld if len(ld)>1 else ld[0], ensure_ascii=False)}</script>
 {GA_HEAD}</head>"""
@@ -496,7 +523,7 @@ def footer(p):
   </div>
   <div class="legal"><span>© 2026 Copper Mountain Air, LLC</span><span>{legal_note}</span><a href="{LP}privacy.html">{privacy}</a></div>
 </div></footer>
-<script src="{p}assets/js/site.js" defer></script>
+<script src="{asset_href(p, 'assets/js/site.js')}" defer></script>
 </body>
 </html>
 """
@@ -552,8 +579,9 @@ def page(path, title, desc, body, extra_ld=None, og_type="website", og_img=None,
     depth = path.count("/") - (1 if path.startswith("es/") else 0)
     LP = "../" * depth
     out = head(title, desc, path, p, extra_ld, og_type, og_img, og_w, og_h) + "\n" + header(path, p) + "\n" + body(p) + "\n" + footer(p)
-    js = "".join(f'<script src="{p}{s}" defer></script>\n' for s in PAGE_JS.get(en_path(path), []))
-    if js: out = out.replace(f'<script src="{p}assets/js/site.js" defer></script>\n', f'<script src="{p}assets/js/site.js" defer></script>\n{js}', 1)
+    site_js_tag = f'<script src="{asset_href(p, "assets/js/site.js")}" defer></script>\n'
+    js = "".join(f'<script src="{asset_href(p, s)}" defer></script>\n' for s in PAGE_JS.get(en_path(path), []))
+    if js: out = out.replace(site_js_tag, site_js_tag + js, 1)
     out = decorate_external_links(out)
     full = os.path.join(OUT, path)
     os.makedirs(os.path.dirname(full), exist_ok=True)
