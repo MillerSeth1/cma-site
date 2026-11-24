@@ -4,8 +4,10 @@ slug: ground-cargo-nogales-corridor
 published: true
 date: "2026-11-20"
 description: "On-demand expedited freight from Nogales and Santa Cruz County: a Ford E-150 cargo van and a 26-ft Hino box truck with liftgate, dispatched from KOLS."
-image: fbo
+image: blog-cargo-loading
 ---
+*A cargo container being loaded onto an aircraft at Hong Kong International Airport — not a Copper Mountain Air operation. Photo: Jamesshliu, via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Aircraft_cargo_(ULD)_loader_in_operaton.jpg). [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/).*
+
 Nogales sits on the U.S.–Mexico border, and a lot of freight moving through Santa Cruz County is on a clock. When a shipment can't wait for the next scheduled truck, Copper Mountain Air handles time-critical freight out of Nogales International Airport (KOLS) by ground, and coordinates air cargo on the ramp.
 
 We dispatch from the field at 11 Access Way, Nogales, AZ 85621. This is an overview of the ground operation; the [cargo](../cargo.html) page has the same fleet details and a quote form.

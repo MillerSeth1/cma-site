@@ -114,6 +114,10 @@ IMG = {
   "ww-car":      "Best Car award winner with a classic car on the ramp at Nogales International Airport, mountains behind",
   "ww-motorcycle": "Best Motorcycle award winner with a motorcycle on the ramp at Nogales International Airport, mountains behind",
   "aero-1920":  "Row of 12th Aero Squadron biplanes on the grass at Camp Stephen D. Little near Nogales, 1920 (U.S. Air Service, public domain)",
+  "blog-turkey-flight": "A wild turkey in flight with wings spread",
+  "blog-fuel-truck": "A 100LL aviation fuel truck servicing a light aircraft at Lošinj Airport",
+  "blog-cargo-loading": "A cargo container being loaded onto an aircraft at Hong Kong International Airport",
+  "blog-training-172": "A Cessna 172 on a mountain airstrip",
   "fuel":       {"file": "fuel.svg", "alt": "Placeholder: fuel photo coming soon"},
   # Drop the real photo in as assets/img/josh-berg.jpg and change "file" below to "josh-berg.jpg".
   "josh-berg":  {"file": "josh-berg.svg", "alt": "Photo placeholder: Josh Berg, photo coming"},
@@ -256,6 +260,10 @@ IMG_ALT_ES = {
   "rnav-gps-a": "Procedimiento de aproximación por instrumentos RNAV (GPS)-A de la FAA para el Aeropuerto Internacional de Nogales (KOLS)",
   "vor-b": "Procedimiento de aproximación por instrumentos VOR-B de la FAA para el Aeropuerto Internacional de Nogales (KOLS)",
   "airport-aerial": "Fotografía aérea del Aeropuerto Internacional de Nogales (KOLS) que muestra la pista 04/22, la calle de rodaje A y la rampa",
+  "blog-turkey-flight": "Un pavo silvestre en vuelo con las alas extendidas",
+  "blog-fuel-truck": "Un camión de combustible de aviación 100LL abasteciendo una aeronave ligera en el aeropuerto de Lošinj",
+  "blog-cargo-loading": "Un contenedor de carga siendo embarcado en una aeronave en el Aeropuerto Internacional de Hong Kong",
+  "blog-training-172": "Un Cessna 172 en una pista de montaña",
 }
 
 GALLERY_I18N = {

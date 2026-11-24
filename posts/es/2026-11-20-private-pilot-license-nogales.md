@@ -4,8 +4,10 @@ slug: private-pilot-license-nogales
 published: true
 date: "2026-11-20"
 description: "Obtenga su certificado de piloto privado de la FAA con instrucción monomotor Part 61 en el Aeropuerto Internacional de Nogales (KOLS), en el condado de Santa Cruz, Arizona."
-image: hero
+image: blog-training-172
 ---
+*Un Cessna 172 en una pista de montaña (C-GWKC); no es una aeronave de Copper Mountain Air. Foto: Rachel Claire, vía [Pexels](https://www.pexels.com/photo/a-cessna-172-7276734/). [Licencia de Pexels](https://www.pexels.com/license/).*
+
 Si quiere aprender a volar en el condado de Santa Cruz, puede hacerlo en el Aeropuerto Internacional de Nogales (KOLS). Copper Mountain Air ofrece instrucción de vuelo monomotor FAA Part 61 en el campo, con programación a través de [FlightCircle](https://www.flightcircle.com/v1/).
 
 Esta página es una introducción a la instrucción aquí. Para detalles de pista, frecuencias y llegadas, vea nuestra [guía del piloto de KOLS](kols-pilot-guide.html).

@@ -4,8 +4,10 @@ slug: fuel-and-fbo-at-kols
 published: true
 date: "2026-11-20"
 description: "Full-service Phillips 66 Jet A and 100LL, WingPoints, and FBO support from Copper Mountain Air at Nogales International Airport (KOLS)."
-image: fbo
+image: blog-fuel-truck
 ---
+*A 100LL fuel truck servicing a light aircraft at Lošinj Airport — not Nogales International (KOLS) and not a Copper Mountain Air truck. Photo: flightlog, via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Lošinj_Airport_fuel_truck.jpg). [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/).*
+
 Copper Mountain Air is the full-service fixed-base operator at Nogales International Airport (KOLS). We took on that role in **2024**, succeeding Tiffin Aviation, and we fuel and support aircraft on the field today.
 
 For runway, frequencies, and customs arrivals, use the [pilot's guide to KOLS](kols-pilot-guide.html). This post covers fuel and ramp services.
