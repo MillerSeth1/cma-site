@@ -2019,14 +2019,17 @@ STORE_PRICES = storecat.STORE_PRICE_LABELS
 STORE_SUPPLIES = storecat.STORE_SUPPLIES
 
 def store_image_sources(slug, p):
+    """Store image URLs include a content hash so updated mockups are not served from cache."""
     widths = STORE_IMG_WIDTHS
     sizes = "(max-width: 640px) 100vw, (max-width: 980px) 45vw, 30vw"
     mid = widths[-1]
+    def href(w, ext):
+        return asset_href(p, f"assets/img/store/{slug}-{w}.{ext}")
     def ss(ext):
-        return ", ".join(f"{p}assets/img/store/{slug}-{w}.{ext} {w}w" for w in widths)
+        return ", ".join(f"{href(w, ext)} {w}w" for w in widths)
     return {
         "slug": slug,
-        "full": f"{p}assets/img/store/{slug}-{mid}.jpg",
+        "full": href(mid, "jpg"),
         "sizes": sizes,
         "avif": ss("avif"),
         "webp": ss("webp"),
