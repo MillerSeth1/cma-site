@@ -2186,7 +2186,7 @@ def store(p):
     tagline = storecat.collection_tagline(featured, es=es)
     if es:
         hero_eyebrow, hero_h1 = "Mercancía oficial · KOLS", "Lleva KOLS. Representa Nogales."
-        hero_lede = "Equipo de Copper Mountain Air, el FBO y operador de carga en el Aeropuerto Internacional de Nogales. Camisetas suaves, una sudadera pesada, una gorra trucker y esenciales de hangar, impresos bajo pedido. La compra en línea aún no está abierta."
+        hero_lede = "Equipo de Copper Mountain Air, el FBO y operador de carga en el Aeropuerto Internacional de Nogales. Camisetas suaves, una sudadera pesada y esenciales de hangar, impresos bajo pedido. La compra en línea aún no está abierta."
         hero_note = "El pago en línea estará disponible pronto. Hasta entonces, cada botón dice Próximamente."
         buy_label, buy_note = "Próximamente", "La compra en línea aún no está abierta."
         supplies_eyebrow, supplies_h2 = "Artículos para pilotos", "Cartas, plotters y bitácoras en el mostrador."
@@ -2207,7 +2207,7 @@ def store(p):
         )
     else:
         hero_eyebrow, hero_h1 = "Official merch · KOLS", "Wear KOLS. Rep Nogales."
-        hero_lede = "Field-ready gear from Copper Mountain Air — the FBO and cargo operator at Nogales International. Soft tees, a heavyweight hoodie, a trucker cap and a few hangar essentials, printed to order. Online checkout is not open yet."
+        hero_lede = "Field-ready gear from Copper Mountain Air — the FBO and cargo operator at Nogales International. Soft tees, a heavyweight hoodie, and a few hangar essentials, printed to order. Online checkout is not open yet."
         hero_note = "Online checkout is coming soon. Until then, items can’t be ordered from this page."
         buy_label, buy_note = "Coming soon", "Online checkout is not open yet."
         supplies_eyebrow, supplies_h2 = "Pilot Supplies", "Charts, plotters and logbooks at the counter."
@@ -2368,7 +2368,7 @@ def main():
     page("privacy.html", "Privacy | Copper Mountain Air",
          "How Copper Mountain Air uses cookies and Google Analytics on coppermountainair.com, and how to contact us about this notice.", privacy)
     page("store.html", "Store | Copper Mountain Air — Wear KOLS. Rep Nogales.",
-         "Official Copper Mountain Air merch and pilot supplies at Nogales International Airport (KOLS). Tees, hoodies, a trucker cap, stickers and FBO-counter charts, plotters and logbooks.",
+         "Official Copper Mountain Air merch and pilot supplies at Nogales International Airport (KOLS). Tees, hoodies, stickers and FBO-counter charts, plotters and logbooks.",
          store)
     page("gallery.html", "Photo Gallery | Copper Mountain Air at Nogales International Airport (KOLS)",
          "Photos from Nogales International Airport (KOLS) and Copper Mountain Air's first Wings & Wheels on November 8, 2026.",
