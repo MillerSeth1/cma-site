@@ -143,8 +143,8 @@ PRODUCTS_2026 = [
     {"id": "left-chest", "picker": "apparel", "default_style": "tee", "default_color": "navy",
      "sizes": APPAREL_SIZES, "note": "Left chest", "note_es": "Pecho izquierdo",
      "name": "Left-Chest Crest", "name_es": "Emblema al pecho",
-     "desc": "A small CMA mark and stacked wordmark on the left chest — the quiet everyday shirt. On the quarter-zip, jacket, and polos (Port Authority for men, Gildan for women) the crest is embroidered. Pairs with the runway back print.",
-     "desc_es": "Una marca pequeña de CMA y el nombre apilado en el pecho izquierdo: la camiseta discreta para todos los días. En el quarter-zip, la chaqueta y los polos (Port Authority para hombre, Gildan para mujer) el emblema va bordado. Combina con el estampado de pista en la espalda.",
+     "desc": "A small CMA mark and stacked wordmark on the left chest — the quiet everyday shirt. On the quarter-zip and jacket the crest is embroidered; the polos have their own cards. Pairs with the runway back print.",
+     "desc_es": "Una marca pequeña de CMA y el nombre apilado en el pecho izquierdo: la camiseta discreta para todos los días. En el quarter-zip y la chaqueta el emblema va bordado; los polos tienen sus propias tarjetas. Combina con el estampado de pista en la espalda.",
      "styles": styles(
          tee=[c("navy", "v2-left-chest-navy-tee",
                 "Navy tee with a small left-chest Copper Mountain Air crest and KOLS wordmark",
@@ -333,8 +333,8 @@ PRODUCTS_2026 = [
     {"id": "line-crew", "picker": "apparel", "default_style": "quarter-zip", "default_color": "navy",
      "sizes": APPAREL_SIZES, "note": "Line crew", "note_es": "Line crew",
      "name": "Line Crew", "name_es": "Line Crew",
-     "desc": "A small left-chest crest — Copper Mountain Air, KOLS, Line Crew. Embroidered on the navy quarter-zip, the SOL’S 32000 windbreaker, and the Port Authority polo; printed on the tee and long sleeve.",
-     "desc_es": "Un pequeño emblema al pecho izquierdo — Copper Mountain Air, KOLS, Line Crew. Bordado en el quarter-zip navy, el cortavientos SOL’S 32000 y el polo Port Authority; impreso en la camiseta y la manga larga.",
+     "desc": "A small left-chest crest — Copper Mountain Air, KOLS, Line Crew. Embroidered on the navy quarter-zip and the SOL’S 32000 windbreaker (the Line Crew polo has its own card); printed on the tee and long sleeve.",
+     "desc_es": "Un pequeño emblema al pecho izquierdo — Copper Mountain Air, KOLS, Line Crew. Bordado en el quarter-zip navy y el cortavientos SOL’S 32000 (el polo Line Crew tiene su propia tarjeta); impreso en la camiseta y la manga larga.",
      "styles": styles(
          tee=[c("navy", "line-crew-navy-tee",
                 "Navy tee with a small left-chest Copper Mountain Air Line Crew crest",
@@ -648,25 +648,45 @@ def _add_womens_youth(products):
 WOMENS_POLO_SIZES = ["S", "M", "L", "XL", "2XL"]
 
 
-def _add_womens_polo(products):
-    """Left-chest crest on the Gildan 64800L women's pique polo (embroidered)."""
-    for item in products:
-        if item["id"] != "left-chest":
-            continue
-        cols = []
-        for cid, slug, en, es in [("black", "black", "Black", "negro"), ("navy", "navy", "Navy", "navy"),
-                                  ("white", "white", "White", "blanco"), ("sport-grey", "sport-grey", "Sport grey", "gris deportivo")]:
-            cols.append(c(cid, f"wy-left-chest-womens-polo-{slug}",
-                          f"{en} Gildan women's pique polo with an embroidered Copper Mountain Air crest on the left chest",
-                          f"Polo de mujer Gildan de piqué {es} con un emblema bordado de Copper Mountain Air en el pecho izquierdo"))
-        item["styles"]["womens-polo"] = {
-            "colors": cols, "sizes": WOMENS_POLO_SIZES,
-            "size_labels_en": {s_: f"Women's {s_}" for s_ in WOMENS_POLO_SIZES},
-            "size_labels_es": {s_: f"Mujer {s_}" for s_ in WOMENS_POLO_SIZES},
-        }
+def _split_polos(products):
+    """Polos are their own store cards (not a Style option on the left-chest / Line Crew cards)."""
+    by = {p_["id"]: p_ for p_ in products}
+    lc, lcrew = by["left-chest"], by["line-crew"]
+    men_cols = lc["styles"].pop("polo")["colors"]
+    crew_cols = lcrew["styles"].pop("polo")["colors"]
+    wcols = []
+    for cid, slug, en, es in [("black", "black", "Black", "negro"), ("navy", "navy", "Navy", "navy"),
+                              ("white", "white", "White", "blanco"), ("sport-grey", "sport-grey", "Sport grey", "gris deportivo")]:
+        wcols.append(c(cid, f"wy-left-chest-womens-polo-{slug}",
+                       f"{en} Gildan women's pique polo with an embroidered Copper Mountain Air crest on the left chest",
+                       f"Polo de mujer Gildan de piqué {es} con un emblema bordado de Copper Mountain Air en el pecho izquierdo"))
+    cards = [
+        {"id": "cma-polo", "picker": "apparel", "default_style": "polo", "default_color": "navy",
+         "sizes": APPAREL_SIZES, "note": "Embroidered left chest", "note_es": "Bordado en el pecho izquierdo",
+         "name": "CMA Polo", "name_es": "Polo CMA",
+         "desc": "A Port Authority men's premium polo with the Copper Mountain Air mark and stacked wordmark embroidered on the left chest. Six colors, sizes S to 2XL.",
+         "desc_es": "Un polo premium Port Authority para hombre con la marca de Copper Mountain Air y el nombre apilado bordados en el pecho izquierdo. Seis colores, tallas S a 2XL.",
+         "styles": {"polo": {"colors": men_cols}}},
+        {"id": "cma-womens-polo", "picker": "apparel", "default_style": "womens-polo", "default_color": "navy",
+         "sizes": WOMENS_POLO_SIZES, "note": "Embroidered left chest", "note_es": "Bordado en el pecho izquierdo",
+         "name": "CMA Women’s Polo", "name_es": "Polo CMA de mujer",
+         "desc": "A Gildan women's piqué polo with the Copper Mountain Air mark and stacked wordmark embroidered on the left chest. Four colors, women's sizes S to 2XL.",
+         "desc_es": "Un polo de piqué Gildan para mujer con la marca de Copper Mountain Air y el nombre apilado bordados en el pecho izquierdo. Cuatro colores, tallas de mujer S a 2XL.",
+         "styles": {"womens-polo": {"colors": wcols, "sizes": WOMENS_POLO_SIZES,
+                                    "size_labels_en": {s_: f"Women's {s_}" for s_ in WOMENS_POLO_SIZES},
+                                    "size_labels_es": {s_: f"Mujer {s_}" for s_ in WOMENS_POLO_SIZES}}}},
+        {"id": "line-crew-polo", "picker": "apparel", "default_style": "polo", "default_color": "navy",
+         "sizes": APPAREL_SIZES, "note": "Line crew · Embroidered", "note_es": "Line crew · Bordado",
+         "name": "Line Crew Polo", "name_es": "Polo Line Crew",
+         "desc": "The Line Crew crest — Copper Mountain Air, KOLS, Line Crew — embroidered on the left chest of a Port Authority men's premium polo. Navy or black, sizes S to 2XL.",
+         "desc_es": "El emblema Line Crew — Copper Mountain Air, KOLS, Line Crew — bordado en el pecho izquierdo de un polo premium Port Authority para hombre. Navy o negro, tallas S a 2XL.",
+         "styles": {"polo": {"colors": crew_cols}}},
+    ]
+    at = [p_["id"] for p_ in products].index("left-chest") + 1
+    products[at:at] = cards
 
 
-_add_womens_polo(PRODUCTS_2026)
+_split_polos(PRODUCTS_2026)
 
 _add_womens_youth(PRODUCTS_2026)
 
