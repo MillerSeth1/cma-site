@@ -2094,6 +2094,7 @@ def store_variant_payload(item, p, es):
             "id": sid,
             "label": label,
             "price": STORE_PRICES[sid],
+            "sizes": data.get("sizes") or item.get("sizes") or [],
             "colors": colors,
         }
     style, color = storecat.product_default(item)
@@ -2101,7 +2102,7 @@ def store_variant_payload(item, p, es):
         "id": item["id"],
         "defaultStyle": style,
         "defaultColor": color["id"],
-        "sizes": item.get("sizes") or [],
+        "sizes": styles[style]["sizes"],
         "note": item.get("note_es") if es else item.get("note"),
         "styles": styles,
         "labels": {
@@ -2110,6 +2111,13 @@ def store_variant_payload(item, p, es):
             "size": "Talla" if es else "Size",
         },
     }
+
+
+def default_size(sizes):
+    """M when offered, else the second size, else the only size."""
+    if "M" in sizes:
+        return "M"
+    return sizes[1] if len(sizes) > 1 else (sizes[0] if sizes else "")
 
 
 def store_picker_html(payload, es):
@@ -2127,7 +2135,7 @@ def store_picker_html(payload, es):
         return "".join(out)
     style_opts = opts([(sid, styles[sid]["label"]) for sid in styles], style0)
     color_opts = opts([(c["id"], c["label"]) for c in styles[style0]["colors"]], color0)
-    size_opts = opts([(sz, sz) for sz in payload["sizes"]], payload["sizes"][1] if len(payload["sizes"]) > 1 else (payload["sizes"][0] if payload["sizes"] else ""))
+    size_opts = opts([(sz, sz) for sz in payload["sizes"]], default_size(payload["sizes"]))
     style_row = ""
     if len(styles) > 1:
         style_row = (

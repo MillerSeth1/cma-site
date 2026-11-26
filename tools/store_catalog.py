@@ -44,6 +44,12 @@ STORE_PRICES = {
     "sticker": 4,
     "koozie": 10,
     "luggage-tag": 14,
+    # Women's + youth (Printful base, size M: Bella+Canvas 6110 $17.83, AS Colour 4161 $35.19,
+    # Gildan 64000B $13.63, Comfort Colors 1467Y $25.45)
+    "womens-tee": 30,
+    "womens-hoodie": 58,
+    "youth-tee": 22,
+    "youth-hoodie": 40,
 }
 
 STORE_PRICE_LABELS = {k: f"${v}" for k, v in STORE_PRICES.items()}
@@ -66,6 +72,10 @@ STYLE_LABELS = {
     "corduroy": ("Corduroy", "Pana"),
     "washed-cap": ("Washed cap", "Gorra lavada"),
     "suede-bill": ("Suede-bill cap", "Gorra de visera de ante"),
+    "womens-tee": ("Women's tee", "Camiseta de mujer"),
+    "womens-hoodie": ("Women's hoodie", "Sudadera de mujer"),
+    "youth-tee": ("Youth tee", "Camiseta juvenil"),
+    "youth-hoodie": ("Youth hoodie", "Sudadera juvenil"),
 }
 
 COLOR_LABELS = {
@@ -91,6 +101,7 @@ COLOR_LABELS = {
     "brown-khaki": ("Brown / khaki", "Marrón / khaki"),
     "olive-green": ("Olive", "Olivo"),
     "charcoal": ("Charcoal", "Carbón"),
+    "athletic-heather": ("Athletic heather", "Gris jaspeado"),
 }
 
 
@@ -501,6 +512,85 @@ PRODUCTS_2026 = [
      "alt": "Navy can koozie on a pickup tailgate at golden hour, printed with the circular saguaro and KOLS patch",
      "alt_es": "Enfriador de lata navy sobre la puerta de una pickup al atardecer, con el parche circular de saguaro y KOLS"},
 ]
+
+
+# Women's and youth styles for each apparel design. Mockups are the design's print art
+# placed on Printful's own flat product photos (no AI imagery); see
+# cma-merch/source/build_womens_youth.py. Images: assets/img/store/wy-<design>-<style>-<color>.
+WY_GARMENTS = {
+    # style: (light blank, dark blank, sizes, EN garment, ES garment)
+    "womens-tee": ("natural", "black", ["XS", "S", "M", "L", "XL", "2XL", "3XL"],
+                   "Bella+Canvas 6110 women's heavyweight tee", "camiseta de mujer Bella+Canvas 6110"),
+    "womens-hoodie": ("athletic-heather", "black", ["XS", "S", "M", "L", "XL", "2XL"],
+                      "AS Colour 4161 women's relax hoodie", "sudadera de mujer AS Colour 4161"),
+    "youth-tee": ("white", "navy", ["XS", "S", "M", "L", "XL"],
+                  "Gildan 64000B youth softstyle tee", "camiseta juvenil Gildan 64000B"),
+    "youth-hoodie": ("ivory", "black", ["XS", "S", "M", "L", "XL"],
+                     "Comfort Colors 1467Y youth hoodie", "sudadera juvenil Comfort Colors 1467Y"),
+}
+
+# product id: (image slug, garment sides, EN print phrase, ES print phrase)
+WY_DESIGNS = {
+    "ridgeline": ("ridgeline", ("light", "dark"),
+                  "printed with a wide mountain ridgeline and the Copper Mountain Air wordmark",
+                  "con una línea de montañas y el logotipo de Copper Mountain Air"),
+    "left-chest": ("left-chest", ("dark", "light"),
+                   "with a left-chest Copper Mountain Air crest",
+                   "con el emblema de Copper Mountain Air en el pecho izquierdo"),
+    "collegiate": ("collegiate", ("dark", "light"),
+                   "printed with arched NOGALES, ARIZONA and a big KOLS",
+                   "con NOGALES en arco, ARIZONA y un KOLS grande"),
+    "greetings": ("greetings", ("light",),
+                  "printed with the Greetings from Nogales postcard",
+                  "con la postal Greetings from Nogales"),
+    "lousy": ("lousy", ("light", "dark"),
+              "printed with the Nogales lousy t-shirt souvenir stack",
+              "con el clásico recuerdo de Nogales y la camiseta"),
+    "crosswind": ("crosswind", ("dark", "light"),
+                  "printed with I survived the Nogales crosswind and a windsock",
+                  "con I survived the Nogales crosswind y una manga de viento"),
+    "runway-0422": ("runway-0422", ("dark",),
+                    "printed with big 04/22 runway numerals and threshold stripes",
+                    "con los números de pista 04/22 y franjas de umbral"),
+    "sectional": ("sectional", ("light",),
+                  "printed with a stylized KOLS sectional chart",
+                  "con una carta seccional estilizada de KOLS"),
+    "topo": ("topo", ("dark",),
+             "printed with topographic contours around the CMA peak",
+             "con curvas topográficas alrededor de la cumbre de CMA"),
+    "luggage-tag-tee": ("luggage-tag", ("light",),
+                        "printed with a vintage Nogales airline luggage tag",
+                        "con una etiqueta de equipaje antigua de Nogales"),
+    "line-crew": ("line-crew", ("dark",),
+                  "with a left-chest Copper Mountain Air Line Crew crest",
+                  "con el emblema Line Crew de Copper Mountain Air en el pecho izquierdo"),
+}
+
+_COLOR_WORDS = {
+    "natural": ("Natural", "natural"), "black": ("Black", "negra"),
+    "athletic-heather": ("Athletic heather", "gris jaspeado"), "white": ("White", "blanca"),
+    "navy": ("Navy", "navy"), "ivory": ("Ivory", "marfil"),
+}
+
+
+def _add_womens_youth(products):
+    for item in products:
+        spec = WY_DESIGNS.get(item["id"])
+        if not spec:
+            continue
+        slug, sides, en, es = spec
+        for sid, (light, dark, sizes, g_en, g_es) in WY_GARMENTS.items():
+            colors = []
+            for side in sides:
+                col = light if side == "light" else dark
+                cen, ces = _COLOR_WORDS[col]
+                colors.append(c(col, f"wy-{slug}-{sid}-{col}",
+                                f"{cen} {g_en} {en}",
+                                f"{g_es[0].upper()}{g_es[1:]} {ces} {es}"))
+            item["styles"][sid] = {"colors": colors, "sizes": sizes}
+
+
+_add_womens_youth(PRODUCTS_2026)
 
 
 def product_default(item):

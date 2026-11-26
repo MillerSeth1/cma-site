@@ -68,6 +68,7 @@
     if (!data) return;
     var styleSel = card.querySelector("[data-opt=style]");
     var colorSel = card.querySelector("[data-opt=color]");
+    var sizeSel = card.querySelector("[data-opt=size]");
     var styleId = data.defaultStyle;
     var colorId = data.defaultColor;
 
@@ -77,6 +78,12 @@
       var keep = style.colors.some(function (c) { return c.id === colorId; });
       colorId = keep ? colorId : style.colors[0].id;
       fillSelect(colorSel, style.colors, colorId);
+      if (sizeSel && style.sizes && style.sizes.length) {
+        var cur = sizeSel.value;
+        var want = style.sizes.indexOf(cur) >= 0 ? cur
+          : (style.sizes.indexOf("M") >= 0 ? "M" : style.sizes[Math.min(1, style.sizes.length - 1)]);
+        fillSelect(sizeSel, style.sizes.map(function (s) { return { id: s, label: s }; }), want);
+      }
       apply(card, data, styleId, colorId);
     }
     function onColor() {

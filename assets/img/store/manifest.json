@@ -4406,6 +4406,2502 @@
      }
     }
    }
+  },
+  {
+   "id": "wy-collegiate-womens-hoodie-athletic-heather",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 27065
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 11122
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 10560
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 66477
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 28178
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 26879
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-collegiate-womens-hoodie-black",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 18186
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 7288
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 6328
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 35420
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 12896
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 11278
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-collegiate-womens-tee-black",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 21586
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 8098
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 7180
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 44083
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 14952
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 13386
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-collegiate-womens-tee-natural",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 20346
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 7396
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 6583
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 42271
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 13946
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 12570
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-collegiate-youth-hoodie-black",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 21862
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 8188
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 7271
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 43382
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 15022
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 13358
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-collegiate-youth-hoodie-ivory",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 18206
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 7062
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 6226
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 36013
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 13172
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 10726
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-collegiate-youth-tee-navy",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 17948
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 7166
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 6126
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 36404
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 13392
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 10489
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-collegiate-youth-tee-white",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 17940
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 6614
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 6274
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 37768
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 12612
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 11565
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-crosswind-womens-hoodie-athletic-heather",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 28220
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 12412
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 10974
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 67867
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 30524
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 27025
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-crosswind-womens-hoodie-black",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 19938
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 8360
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 7071
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 38114
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 14578
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 11648
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-crosswind-womens-tee-black",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 24154
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 9452
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 7811
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 48516
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 16418
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 13926
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-crosswind-womens-tee-natural",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 22827
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 8838
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 7297
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 46227
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 16412
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 13186
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-crosswind-youth-hoodie-black",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 24056
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 9532
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 8014
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 47687
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 16580
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 14315
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-crosswind-youth-hoodie-ivory",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 20217
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 8228
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 6892
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 40400
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 14718
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 11450
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-crosswind-youth-tee-navy",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 20411
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 8462
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 6609
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 40827
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 14962
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 11456
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-crosswind-youth-tee-white",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 20401
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 7994
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 6933
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 42057
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 15046
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 12342
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-greetings-womens-hoodie-athletic-heather",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 27978
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 12232
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 10640
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 68070
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 30942
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 26740
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-greetings-womens-tee-natural",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 20983
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 7532
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 6373
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 44033
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 14840
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 12220
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-greetings-youth-hoodie-ivory",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 18576
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 7208
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 6216
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 38168
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 13718
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 11275
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-greetings-youth-tee-white",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 18883
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 6780
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 6214
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 39354
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 13500
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 11572
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-left-chest-womens-hoodie-athletic-heather",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 25999
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 10588
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 10159
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 64203
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 27468
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 25982
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-left-chest-womens-hoodie-black",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 15647
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 5634
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 5171
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 30001
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 9898
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 8788
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-left-chest-womens-tee-black",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 17482
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 5278
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 5005
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 35472
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 9430
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 9645
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-left-chest-womens-tee-natural",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 16367
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 4846
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 4632
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 34390
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 9360
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 9237
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-left-chest-youth-hoodie-black",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 17860
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 5832
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 5637
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 36017
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 10600
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 10405
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-left-chest-youth-hoodie-ivory",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 14364
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 4952
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 4667
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 28962
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 9216
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 8017
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-left-chest-youth-tee-navy",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 13273
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 4262
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 3904
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 27114
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 7976
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 7035
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-left-chest-youth-tee-white",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 13893
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 4126
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 4418
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 29543
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 8254
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 8662
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-line-crew-womens-hoodie-black",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 15465
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 5552
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 5132
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 29816
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 9862
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 8806
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-line-crew-womens-tee-black",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 17292
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 5192
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 4841
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 35031
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 9378
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 9538
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-line-crew-youth-hoodie-black",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 17584
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 5864
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 5756
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 35682
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 10864
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 10299
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-line-crew-youth-tee-navy",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 13170
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 4200
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 3933
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 27017
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 8242
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 7119
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-lousy-womens-hoodie-athletic-heather",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 27918
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 12086
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 11098
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 67406
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 30338
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 27119
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-lousy-womens-hoodie-black",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 19183
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 7942
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 6766
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 36781
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 13796
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 11586
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-lousy-womens-tee-black",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 22667
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 8542
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 7386
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 46040
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 15470
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 13403
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-lousy-womens-tee-natural",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 21701
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 8382
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 7081
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 43955
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 14824
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 12636
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-lousy-youth-hoodie-black",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 22937
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 8846
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 7837
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 45594
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 15934
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 13783
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-lousy-youth-hoodie-ivory",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 19517
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 8030
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 6644
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 38468
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 14376
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 10909
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-lousy-youth-tee-navy",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 19374
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 7966
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 6409
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 38930
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 14172
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 10860
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-lousy-youth-tee-white",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 19447
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 7508
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 6617
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 40017
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 13976
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 11846
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-luggage-tag-womens-hoodie-athletic-heather",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 28776
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 12628
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 10862
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 70075
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 31538
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 27717
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-luggage-tag-womens-tee-natural",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 23402
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 8552
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 7126
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 48306
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 16422
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 12912
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-luggage-tag-youth-hoodie-ivory",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 19826
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 7614
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 6211
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 41425
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 14206
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 11278
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-luggage-tag-youth-tee-white",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 20438
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 7472
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 6453
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 43144
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 14590
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 12089
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-ridgeline-womens-hoodie-athletic-heather",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 26706
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 11292
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 10680
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 65820
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 28884
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 26500
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-ridgeline-womens-hoodie-black",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 17053
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 6752
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 6056
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 33445
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 11940
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 10112
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-ridgeline-womens-tee-black",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 20244
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 7352
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 6528
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 41439
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 13310
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 11958
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-ridgeline-womens-tee-natural",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 19103
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 6874
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 6028
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 39823
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 12836
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 11331
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-ridgeline-youth-hoodie-black",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 20419
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 7672
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 6926
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 40579
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 13690
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 12376
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-ridgeline-youth-hoodie-ivory",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 16835
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 6614
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 5861
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 33602
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 12054
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 9607
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-ridgeline-youth-tee-navy",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 16573
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 6160
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 5295
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 32893
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 11638
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 9044
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-ridgeline-youth-tee-white",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 16937
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 6006
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 5668
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 35457
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 11746
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 10395
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-runway-0422-womens-hoodie-black",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 19766
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 7612
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 6319
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 38447
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 13898
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 11233
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-runway-0422-womens-tee-black",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 24200
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 8738
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 7297
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 48709
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 16010
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 13315
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-runway-0422-youth-hoodie-black",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 24083
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 8540
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 7467
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 47295
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 15822
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 13617
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-runway-0422-youth-tee-navy",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 21339
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 7814
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 6507
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 40837
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 14254
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 10931
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-sectional-womens-hoodie-athletic-heather",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 27741
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 11162
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 10455
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 68229
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 30744
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 27338
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-sectional-womens-tee-natural",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 21524
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 7464
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 6630
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 45020
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 15484
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 13972
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-sectional-youth-hoodie-ivory",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 18901
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 6796
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 6317
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 39989
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 14058
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 11879
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-sectional-youth-tee-white",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 19254
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 6662
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 6310
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 40891
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 14372
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 13460
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-topo-womens-hoodie-black",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 17928
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 7352
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 6339
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 36769
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 15464
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 12111
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-topo-womens-tee-black",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 22567
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 9802
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 7511
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 48731
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 20738
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 15561
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-topo-youth-hoodie-black",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 22160
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 9682
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 7955
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 47015
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 20196
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 15183
+     }
+    }
+   }
+  },
+  {
+   "id": "wy-topo-youth-tee-navy",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 18510
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 8548
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 6550
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 40844
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 18918
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 12519
+     }
+    }
+   }
   }
  ]
 }
