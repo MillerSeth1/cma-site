@@ -354,6 +354,7 @@ PAGE_JS = {
   "notams.html": ["assets/js/notams.js"],
   "flight-training.html": ["assets/vendor/leaflet/leaflet.js", "assets/js/kols.js"],
   "weather.html": ["assets/vendor/leaflet/leaflet.js", "assets/js/kols.js"],
+  "store.html": ["assets/js/store.js"],
   # gallery lightbox is the shared assets/js/lightbox.js included on every page
 }
 
@@ -2017,48 +2018,145 @@ STORE_IMG_WIDTHS = storecat.STORE_IMG_WIDTHS
 STORE_PRICES = storecat.STORE_PRICE_LABELS
 STORE_SUPPLIES = storecat.STORE_SUPPLIES
 
-def store_product_picture(item, p, eager=False):
-    slug = item["id"]
+def store_image_sources(slug, p):
     widths = STORE_IMG_WIDTHS
     sizes = "(max-width: 640px) 100vw, (max-width: 980px) 45vw, 30vw"
+    mid = widths[-1]
     def ss(ext):
         return ", ".join(f"{p}assets/img/store/{slug}-{w}.{ext} {w}w" for w in widths)
-    mid = widths[-1]
-    alt = html.escape(item["alt_es"] if is_es() else item["alt"])
+    return {
+        "slug": slug,
+        "full": f"{p}assets/img/store/{slug}-{mid}.jpg",
+        "sizes": sizes,
+        "avif": ss("avif"),
+        "webp": ss("webp"),
+        "jpg": ss("jpg"),
+        "width": mid,
+        "height": mid,
+    }
+
+
+def store_product_picture(slug, alt, p, eager=False):
+    src = store_image_sources(slug, p)
+    alt = html.escape(alt)
     load = 'loading="eager" fetchpriority="high"' if eager else 'loading="lazy"'
-    full = f"{p}assets/img/store/{slug}-{mid}.jpg"
     zoom = "Ampliar imagen" if is_es() else "Click to enlarge"
     picture = (
         f'<picture>'
-        f'<source type="image/avif" srcset="{ss("avif")}" sizes="{sizes}">'
-        f'<source type="image/webp" srcset="{ss("webp")}" sizes="{sizes}">'
-        f'<img src="{full}" srcset="{ss("jpg")}" sizes="{sizes}" '
-        f'alt="{alt}" {load} decoding="async" width="{mid}" height="{mid}">'
+        f'<source type="image/avif" srcset="{src["avif"]}" sizes="{src["sizes"]}">'
+        f'<source type="image/webp" srcset="{src["webp"]}" sizes="{src["sizes"]}">'
+        f'<img src="{src["full"]}" srcset="{src["jpg"]}" sizes="{src["sizes"]}" '
+        f'alt="{alt}" {load} decoding="async" width="{src["width"]}" height="{src["height"]}">'
         f'</picture>'
     )
     return (
-        f'<button type="button" class="zoom-media" data-lightbox data-full="{html.escape(full, quote=True)}" '
+        f'<button type="button" class="zoom-media" data-lightbox data-full="{html.escape(src["full"], quote=True)}" '
         f'data-alt="{alt}" aria-label="{zoom}">'
         f'{picture}'
         f'</button>'
     )
 
+
+def store_variant_payload(item, p, es):
+    """JSON for the garment picker: every style/color carries its mockup URLs."""
+    if item.get("picker") != "apparel":
+        return None
+    styles = {}
+    for sid, data in item["styles"].items():
+        label = storecat.STYLE_LABELS[sid][1 if es else 0]
+        colors = []
+        for col in data["colors"]:
+            src = store_image_sources(col["image"], p)
+            colors.append({
+                "id": col["id"],
+                "label": storecat.COLOR_LABELS.get(col["id"], (col["id"], col["id"]))[1 if es else 0],
+                "alt": col["alt_es"] if es else col["alt"],
+                **src,
+            })
+        styles[sid] = {
+            "id": sid,
+            "label": label,
+            "price": STORE_PRICES[sid],
+            "colors": colors,
+        }
+    style, color = storecat.product_default(item)
+    return {
+        "id": item["id"],
+        "defaultStyle": style,
+        "defaultColor": color["id"],
+        "sizes": item.get("sizes") or [],
+        "note": item.get("note_es") if es else item.get("note"),
+        "styles": styles,
+        "labels": {
+            "style": "Estilo" if es else "Style",
+            "color": "Color" if es else "Color",
+            "size": "Talla" if es else "Size",
+        },
+    }
+
+
+def store_picker_html(payload, es):
+    if not payload:
+        return ""
+    style0 = payload["defaultStyle"]
+    color0 = payload["defaultColor"]
+    styles = payload["styles"]
+    labels = payload["labels"]
+    def opts(pairs, selected):
+        out = []
+        for value, label in pairs:
+            sel = " selected" if value == selected else ""
+            out.append(f'<option value="{html.escape(value, quote=True)}"{sel}>{html.escape(label)}</option>')
+        return "".join(out)
+    style_opts = opts([(sid, styles[sid]["label"]) for sid in styles], style0)
+    color_opts = opts([(c["id"], c["label"]) for c in styles[style0]["colors"]], color0)
+    size_opts = opts([(sz, sz) for sz in payload["sizes"]], payload["sizes"][1] if len(payload["sizes"]) > 1 else (payload["sizes"][0] if payload["sizes"] else ""))
+    color_row = ""
+    if len(styles[style0]["colors"]) or any(len(st["colors"]) > 0 for st in styles.values()):
+        color_row = (
+            f'            <label class="opt">{html.escape(labels["color"])}'
+            f'<select class="opt-color" data-opt="color" aria-label="{html.escape(labels["color"], quote=True)}">{color_opts}</select></label>\n'
+        )
+    size_row = ""
+    if payload["sizes"]:
+        size_row = (
+            f'            <label class="opt">{html.escape(labels["size"])}'
+            f'<select class="opt-size" data-opt="size" aria-label="{html.escape(labels["size"], quote=True)}">{size_opts}</select></label>\n'
+        )
+    data = json.dumps(payload, ensure_ascii=False).replace("<", "\\u003c")
+    return (
+        f'            <script type="application/json" class="product-data">{data}</script>\n'
+        f'            <div class="product-opts">\n'
+        f'            <label class="opt">{html.escape(labels["style"])}'
+        f'<select class="opt-style" data-opt="style" aria-label="{html.escape(labels["style"], quote=True)}">{style_opts}</select></label>\n'
+        f'{color_row}{size_row}'
+        f'            </div>\n'
+    )
+
+
 def store_cards_html(items, p, es, buy_label, buy_note, eager_count=0):
     cards = []
     for i, item in enumerate(items):
-        price = STORE_PRICES[item["kind"]]
+        style, color = storecat.product_default(item)
+        price = STORE_PRICES[style if item.get("picker") == "apparel" else item["kind"]]
         name = item["name_es"] if es else item["name"]
-        eyebrow = item["eyebrow_es"] if es else item["eyebrow"]
+        eyebrow = storecat.product_eyebrow(item, style, color["id"], es=es)
         desc = item["desc_es"] if es else item["desc"]
-        pic = store_product_picture(item, p, eager=i < eager_count)
+        alt = color["alt_es"] if es else color["alt"]
+        pic = store_product_picture(color["image"], alt, p, eager=i < eager_count)
+        payload = store_variant_payload(item, p, es)
+        picker = store_picker_html(payload, es)
         cards.append(
-            "        <article class=\"product-card\">\n"
+            "        <article class=\"product-card\""
+            + (f" data-product=\"{html.escape(item['id'], quote=True)}\"" if payload else "")
+            + ">\n"
             f"          <div class=\"media\">{pic}</div>\n"
             "          <div class=\"body\">\n"
             f"            <p class=\"eyebrow\">{eyebrow}</p>\n"
             f"            <h3>{name}</h3>\n"
             f"            <p>{desc}</p>\n"
-            f"            <p class=\"price\">{price}</p>\n"
+            f"{picker}"
+            f"            <p class=\"price\" data-price>{price}</p>\n"
             f"            <button type=\"button\" class=\"btn btn-primary buy-placeholder\" disabled aria-disabled=\"true\">{buy_label}</button>\n"
             f"            <p class=\"buy-note\">{buy_note}</p>\n"
             "          </div>\n"
