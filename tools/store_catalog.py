@@ -324,12 +324,22 @@ PRODUCTS_2026 = [
     {"id": "tonal-hoodie", "picker": "apparel", "default_style": "hoodie", "default_color": "black",
      "sizes": APPAREL_SIZES,
      "name": "Fuel. Freight. Flight.", "name_es": "Fuel. Freight. Flight.",
-     "desc": "A stealth tonal print on heavyweight black fleece: the CMA mark, Copper Mountain Air, and the three words that describe the operation. This design is on the hoodie only.",
-     "desc_es": "Un estampado tonal discreto sobre felpa negra de peso pesado: la marca de CMA, Copper Mountain Air y las tres palabras que describen la operación. Este diseño es solo en sudadera.",
+     "desc": "A stealth tonal print on heavyweight black fleece: the CMA mark, Copper Mountain Air, and the three words that describe the operation. The tee has its own card.",
+     "desc_es": "Un estampado tonal discreto sobre felpa negra de peso pesado: la marca de CMA, Copper Mountain Air y las tres palabras que describen la operación. La camiseta tiene su propia tarjeta.",
      "styles": styles(
          hoodie=[c("black", "v3-monochrome-tonal-hoodie",
                 "Matte black hoodie on a hanger with a subtle tonal Copper Mountain Air mark and the line Fuel. Freight. Flight.",
                 "Sudadera negra mate en una percha, con la marca sutil de Copper Mountain Air y la línea Fuel. Freight. Flight.")],
+     )},
+    {"id": "tonal-tee", "picker": "apparel", "default_style": "tee", "default_color": "black",
+     "sizes": APPAREL_SIZES,
+     "name": "Fuel. Freight. Flight.", "name_es": "Fuel. Freight. Flight.",
+     "desc": "The same stealth tonal print as the hoodie, on a black tee: the CMA mark, Copper Mountain Air, and the three words that describe the operation.",
+     "desc_es": "El mismo estampado tonal discreto de la sudadera, en una camiseta negra: la marca de CMA, Copper Mountain Air y las tres palabras que describen la operación.",
+     "styles": styles(
+         tee=[c("black", "fuel-freight-flight-tee-black",
+                "Black tee with a subtle tonal Copper Mountain Air mark and the line Fuel. Freight. Flight.",
+                "Camiseta negra con la marca sutil de Copper Mountain Air y la línea Fuel. Freight. Flight.")],
      )},
     {"id": "line-crew", "picker": "apparel", "default_style": "quarter-zip", "default_color": "navy",
      "sizes": APPAREL_SIZES, "note": "Line crew", "note_es": "Line crew",
@@ -615,6 +625,9 @@ WY_DESIGNS = {
     "luggage-tag-tee": ("luggage-tag", ("light",),
                         "printed with a vintage Nogales airline luggage tag",
                         "con una etiqueta de equipaje antigua de Nogales"),
+    "tonal-tee": ("fuel-freight-flight", ("dark",),
+                  "printed with a subtle tonal Copper Mountain Air mark and Fuel. Freight. Flight.",
+                  "con la marca sutil de Copper Mountain Air y Fuel. Freight. Flight."),
     "line-crew": ("line-crew", ("dark",),
                   "with a left-chest Copper Mountain Air Line Crew crest",
                   "con el emblema Line Crew de Copper Mountain Air en el pecho izquierdo"),
@@ -634,9 +647,13 @@ def _add_womens_youth(products):
             continue
         slug, sides, en, es = spec
         for sid, (light, dark, sizes, g_en, g_es) in WY_GARMENTS.items():
+            if item["id"] == "tonal-tee" and "hoodie" in sid:
+                continue  # the tee card is tees only; the hoodie has its own card
             colors = []
             for side in sides:
                 col = light if side == "light" else dark
+                if item["id"] == "tonal-tee" and sid == "youth-tee":
+                    col = "black"  # tonal slate on navy would not read; the youth tee comes in black
                 cen, ces = _COLOR_WORDS[col]
                 colors.append(c(col, f"wy-{slug}-{sid}-{col}",
                                 f"{cen} {g_en} {en}",
