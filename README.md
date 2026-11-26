@@ -15,9 +15,10 @@ Static site for Copper Mountain Air, LLC at Nogales International Airport (KOLS)
 | `gallery.html` | Photo gallery (built by `tools/build.py` from `assets/img/gallery/`). |
 | `weather.html` | Live KOLS weather, radar and VFR climatology (built by `tools/build.py`). |
 | `notams.html` | Live KOLS NOTAMs (built by `tools/build.py`). |
+| `store.html` | Merch store and pilot-supplies page (built by `tools/build.py`). Buy buttons are disabled “Coming soon” until checkout is connected. |
 | `assets/css`, `assets/js`, `assets/fonts` | Styles, small script (nav, reveal motion, contact form), self-hosted Archivo + Inter (SIL OFL). |
 | `assets/img/` | Logo variants, favicons, share image, and optimized photos (`photos/`, AVIF/WebP/JPEG, no metadata). Originals stay outside the repo. See `assets/img/README.md`. |
-| `tools/optimize_images.py`, `tools/make_logo.py`, `tools/make_png.py`, `tools/make_art.py` | Rebuild photos, logo SVGs, favicons/OG image, and the remaining fuel placeholder. |
+| `tools/optimize_images.py`, `tools/optimize_store_images.py`, `tools/make_logo.py`, `tools/make_png.py`, `tools/make_art.py` | Rebuild photos, merch mockups, logo SVGs, favicons/OG image, and the remaining fuel placeholder. |
 
 Spanish pages live under `/es/` (for example `_site/es/index.html` and `https://coppermountainair.com/es/`). Every public page has an EN | ES toggle, `hreflang` alternates, and a matching sitemap entry. Page bodies for Spanish are in `tools/pages_es.py`; translated blog posts go in `posts/es/` with the same slug as the English post. Aviation terms that pilots use in both languages (VFR, NOTAM, METAR, 100LL, Jet A, CTAF, ASOS, VOR/DME) are kept as-is. Widgets pick up Spanish UI labels from `document.documentElement.lang`.
 
