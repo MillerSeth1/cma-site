@@ -35,6 +35,7 @@ STORE_PRICES = {
     "dad-hat": 30,
     "structured": 32,
     "polo": 38,
+    "womens-polo": 38,
     "trucker": 30,
     "camp-cap": 36,
     "rope-cap": 34,
@@ -63,6 +64,7 @@ STYLE_LABELS = {
     "quarter-zip": ("Quarter-zip", "Quarter-zip"),
     "jacket": ("Jacket", "Chaqueta"),
     "polo": ("Polo", "Polo"),
+    "womens-polo": ("Women's polo", "Polo de mujer"),
     "snapback": ("Snapback", "Snapback"),
     "dad-hat": ("Dad hat", "Gorra dad"),
     "structured": ("Structured cap", "Gorra estructurada"),
@@ -101,6 +103,9 @@ COLOR_LABELS = {
     "brown-khaki": ("Brown / khaki", "Marrón / khaki"),
     "olive-green": ("Olive", "Olivo"),
     "charcoal": ("Charcoal", "Carbón"),
+    "red": ("Red", "Rojo"),
+    "stone": ("Stone", "Piedra"),
+    "sport-grey": ("Sport grey", "Gris deportivo"),
     "athletic-heather": ("Athletic heather", "Gris jaspeado"),
 }
 
@@ -133,8 +138,8 @@ PRODUCTS_2026 = [
     {"id": "left-chest", "picker": "apparel", "default_style": "tee", "default_color": "navy",
      "sizes": APPAREL_SIZES, "note": "Left chest", "note_es": "Pecho izquierdo",
      "name": "Left-Chest Crest", "name_es": "Emblema al pecho",
-     "desc": "A small CMA mark and stacked wordmark on the left chest — the quiet everyday shirt. On the quarter-zip, jacket, and Port Authority polo the crest is embroidered. Pairs with the runway back print.",
-     "desc_es": "Una marca pequeña de CMA y el nombre apilado en el pecho izquierdo: la camiseta discreta para todos los días. En el quarter-zip, la chaqueta y el polo Port Authority el emblema va bordado. Combina con el estampado de pista en la espalda.",
+     "desc": "A small CMA mark and stacked wordmark on the left chest — the quiet everyday shirt. On the quarter-zip, jacket, and polos (Port Authority for men, Gildan for women) the crest is embroidered. Pairs with the runway back print.",
+     "desc_es": "Una marca pequeña de CMA y el nombre apilado en el pecho izquierdo: la camiseta discreta para todos los días. En el quarter-zip, la chaqueta y los polos (Port Authority para hombre, Gildan para mujer) el emblema va bordado. Combina con el estampado de pista en la espalda.",
      "styles": styles(
          tee=[c("navy", "v2-left-chest-navy-tee",
                 "Navy tee with a small left-chest Copper Mountain Air crest and KOLS wordmark",
@@ -152,21 +157,24 @@ PRODUCTS_2026 = [
                 "Navy SOL'S windbreaker with an embroidered Copper Mountain Air crest on the left chest",
                 "Cortavientos navy SOL'S con un emblema bordado de Copper Mountain Air en el pecho izquierdo")],
          polo=[
-            c("navy", "left-chest-navy-polo",
-              "Navy Port Authority polo hanging on a concrete wall, with an embroidered Copper Mountain Air crest on the left chest",
-              "Polo navy Port Authority colgado en un muro de concreto, con un emblema bordado de Copper Mountain Air en el pecho izquierdo"),
-            c("black", "left-chest-black-polo",
-              "Black Port Authority polo hanging on a concrete wall, with an embroidered Copper Mountain Air crest on the left chest",
-              "Polo negro Port Authority colgado en un muro de concreto, con un emblema bordado de Copper Mountain Air en el pecho izquierdo"),
-            c("white", "left-chest-white-polo",
-              "White Port Authority polo hanging on a concrete wall, with an embroidered Copper Mountain Air crest on the left chest",
-              "Polo blanco Port Authority colgado en un muro de concreto, con un emblema bordado de Copper Mountain Air en el pecho izquierdo"),
-            c("heather", "left-chest-heather-polo",
-              "Heather grey Port Authority polo hanging on a concrete wall, with an embroidered Copper Mountain Air crest on the left chest",
-              "Polo gris heather Port Authority colgado en un muro de concreto, con un emblema bordado de Copper Mountain Air en el pecho izquierdo"),
-            c("steel", "left-chest-steel-polo",
-              "Steel grey Port Authority polo hanging on a concrete wall, with an embroidered Copper Mountain Air crest on the left chest",
-              "Polo gris acero Port Authority colgado en un muro de concreto, con un emblema bordado de Copper Mountain Air en el pecho izquierdo"),
+            c("navy", "left-chest-k500-polo-navy",
+              "Navy Port Authority polo with an embroidered Copper Mountain Air crest on the left chest",
+              "Polo navy Port Authority con un emblema bordado de Copper Mountain Air en el pecho izquierdo"),
+            c("black", "left-chest-k500-polo-black",
+              "Black Port Authority polo with an embroidered Copper Mountain Air crest on the left chest",
+              "Polo negro Port Authority con un emblema bordado de Copper Mountain Air en el pecho izquierdo"),
+            c("white", "left-chest-k500-polo-white",
+              "White Port Authority polo with an embroidered Copper Mountain Air crest on the left chest",
+              "Polo blanco Port Authority con un emblema bordado de Copper Mountain Air en el pecho izquierdo"),
+            c("heather", "left-chest-k500-polo-heather",
+              "Heather grey Port Authority polo with an embroidered Copper Mountain Air crest on the left chest",
+              "Polo gris jaspeado Port Authority con un emblema bordado de Copper Mountain Air en el pecho izquierdo"),
+            c("red", "left-chest-k500-polo-red",
+              "Red Port Authority polo with an embroidered Copper Mountain Air crest on the left chest",
+              "Polo rojo Port Authority con un emblema bordado de Copper Mountain Air en el pecho izquierdo"),
+            c("stone", "left-chest-k500-polo-stone",
+              "Stone Port Authority polo with an embroidered Copper Mountain Air crest on the left chest",
+              "Polo piedra Port Authority con un emblema bordado de Copper Mountain Air en el pecho izquierdo"),
          ],
      )},
     {"id": "runway-approach", "picker": "apparel", "default_style": "tee", "default_color": "navy",
@@ -336,12 +344,12 @@ PRODUCTS_2026 = [
                 "Navy SOL'S windbreaker with an embroidered Copper Mountain Air Line Crew crest on the left chest",
                 "Cortavientos navy SOL'S con un emblema bordado Line Crew de Copper Mountain Air en el pecho izquierdo")],
          polo=[
-            c("navy", "line-crew-navy-polo",
-              "Navy Port Authority polo hanging on a concrete wall, with an embroidered Copper Mountain Air Line Crew crest on the left chest",
-              "Polo navy Port Authority colgado en un muro de concreto, con un emblema bordado Line Crew de Copper Mountain Air en el pecho izquierdo"),
-            c("black", "line-crew-black-polo",
-              "Black Port Authority polo hanging on a concrete wall, with an embroidered Copper Mountain Air Line Crew crest on the left chest",
-              "Polo negro Port Authority colgado en un muro de concreto, con un emblema bordado Line Crew de Copper Mountain Air en el pecho izquierdo"),
+            c("navy", "line-crew-k500-polo-navy",
+              "Navy Port Authority polo with an embroidered Copper Mountain Air Line Crew crest on the left chest",
+              "Polo navy Port Authority con un emblema bordado Line Crew de Copper Mountain Air en el pecho izquierdo"),
+            c("black", "line-crew-k500-polo-black",
+              "Black Port Authority polo with an embroidered Copper Mountain Air Line Crew crest on the left chest",
+              "Polo negro Port Authority con un emblema bordado Line Crew de Copper Mountain Air en el pecho izquierdo"),
          ],
      )},
 
@@ -618,6 +626,29 @@ def _add_womens_youth(products):
                                    "size_labels_en": WY_SIZE_LABELS[sid][0],
                                    "size_labels_es": WY_SIZE_LABELS[sid][1]}
 
+
+WOMENS_POLO_SIZES = ["S", "M", "L", "XL", "2XL"]
+
+
+def _add_womens_polo(products):
+    """Left-chest crest on the Gildan 64800L women's pique polo (embroidered)."""
+    for item in products:
+        if item["id"] != "left-chest":
+            continue
+        cols = []
+        for cid, slug, en, es in [("black", "black", "Black", "negro"), ("navy", "navy", "Navy", "navy"),
+                                  ("white", "white", "White", "blanco"), ("sport-grey", "sport-grey", "Sport grey", "gris deportivo")]:
+            cols.append(c(cid, f"wy-left-chest-womens-polo-{slug}",
+                          f"{en} Gildan women's pique polo with an embroidered Copper Mountain Air crest on the left chest",
+                          f"Polo de mujer Gildan de piqué {es} con un emblema bordado de Copper Mountain Air en el pecho izquierdo"))
+        item["styles"]["womens-polo"] = {
+            "colors": cols, "sizes": WOMENS_POLO_SIZES,
+            "size_labels_en": {s_: f"Women's {s_}" for s_ in WOMENS_POLO_SIZES},
+            "size_labels_es": {s_: f"Mujer {s_}" for s_ in WOMENS_POLO_SIZES},
+        }
+
+
+_add_womens_polo(PRODUCTS_2026)
 
 _add_womens_youth(PRODUCTS_2026)
 

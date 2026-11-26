@@ -2179,6 +2179,7 @@ def store_cards_html(items, p, es, buy_label, buy_note, eager_count=0):
         picker = store_picker_html(payload, es)
         cards.append(
             "        <article class=\"product-card\""
+            + f" id=\"p-{html.escape(item['id'], quote=True)}\""
             + (f" data-product=\"{html.escape(item['id'], quote=True)}\"" if payload else "")
             + ">\n"
             f"          <div class=\"media\">{pic}</div>\n"
