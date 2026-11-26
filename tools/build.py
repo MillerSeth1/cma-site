@@ -4,6 +4,11 @@ so the site works at the domain root on coppermountainair.com."""
 import os, re, json, html, shutil, sys, hashlib
 import markdown
 
+_TOOLS = os.path.dirname(os.path.abspath(__file__))
+if _TOOLS not in sys.path:
+    sys.path.insert(0, _TOOLS)
+import store_catalog as storecat
+
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 OUT = os.path.join(ROOT, "_site")                       # build output (deployed by GitHub Actions)
 
@@ -349,7 +354,7 @@ PAGE_JS = {
   "notams.html": ["assets/js/notams.js"],
   "flight-training.html": ["assets/vendor/leaflet/leaflet.js", "assets/js/kols.js"],
   "weather.html": ["assets/vendor/leaflet/leaflet.js", "assets/js/kols.js"],
-  "gallery.html": ["assets/js/gallery.js"],
+  # gallery lightbox is the shared assets/js/lightbox.js included on every page
 }
 
 JSONLD_BIZ = {
@@ -538,6 +543,7 @@ def footer(p):
   <div class="legal"><span>© 2026 Copper Mountain Air, LLC</span><span>{legal_note}</span><a href="{LP}privacy.html">{privacy}</a></div>
 </div></footer>
 <script src="{asset_href(p, 'assets/js/site.js')}" defer></script>
+<script src="{asset_href(p, 'assets/js/lightbox.js')}" defer></script>
 </body>
 </html>
 """
@@ -2006,158 +2012,10 @@ def load_translated_posts(posts):
             out.append(y)
     return out
 
-# Retail prices set by Seth on Nov 25, 2026. Do not copy Freedom Aviation pricing.
-# Long sleeve is $34 when a design is added; none is in the current 17-piece lineup.
-STORE_IMG_WIDTHS = [640, 1024]
-STORE_PRODUCTS = [
-    {"id": "v2-ridgeline-natural-tee", "kind": "tee",
-     "eyebrow": "Tee · Natural", "eyebrow_es": "Camiseta · Natural",
-     "name": "Ridgeline Wordmark Tee", "name_es": "Camiseta Ridgeline Wordmark",
-     "desc": "A wide horizontal mountain and saguaro line, with the CMA mark as the peak and Copper Mountain Air set cleanly beneath.",
-     "desc_es": "Una línea horizontal de montañas y saguaros, con la marca de CMA en la cumbre y Copper Mountain Air debajo.",
-     "alt": "Natural tee flat-laid on wood, printed with a wide mountain ridgeline and the Copper Mountain Air wordmark",
-     "alt_es": "Camiseta natural extendida sobre madera, con una línea de montañas y el logotipo de Copper Mountain Air"},
-    {"id": "v2-left-chest-navy-tee", "kind": "tee",
-     "eyebrow": "Tee · Navy · Left chest", "eyebrow_es": "Camiseta · Navy · Pecho izquierdo",
-     "name": "Left-Chest Crest Tee", "name_es": "Camiseta con emblema al pecho",
-     "desc": "A small CMA mark and stacked wordmark on the left chest — the quiet everyday shirt. Pairs with the runway back print.",
-     "desc_es": "Una marca pequeña de CMA y el nombre apilado en el pecho izquierdo: la camiseta discreta para todos los días. Combina con el estampado de pista en la espalda.",
-     "alt": "Navy tee with a small left-chest Copper Mountain Air crest and KOLS wordmark",
-     "alt_es": "Camiseta navy con un pequeño emblema de Copper Mountain Air y KOLS en el pecho izquierdo"},
-    {"id": "v2-back-print-navy-tee", "kind": "tee",
-     "eyebrow": "Tee · Navy · Back print", "eyebrow_es": "Camiseta · Navy · Estampado en la espalda",
-     "name": "Runway Approach Back Tee", "name_es": "Camiseta de aproximación a pista",
-     "desc": "A tall desert-sunset poster on the back: a perspective runway aimed at the CMA peak, with “Elevate your approach” at the footer.",
-     "desc_es": "Un cartel alto de atardecer desértico en la espalda: una pista en perspectiva dirigida a la cumbre de CMA, con “Elevate your approach” al pie.",
-     "alt": "Back of a navy tee with a tall framed desert sunset and runway leading toward the Copper Mountain Air mark",
-     "alt_es": "Espalda de una camiseta navy con un atardecer desértico enmarcado y una pista que apunta a la marca de Copper Mountain Air"},
-    {"id": "v2-collegiate-vintage-black-tee", "kind": "tee",
-     "eyebrow": "Tee · Vintage black", "eyebrow_es": "Camiseta · Negro vintage",
-     "name": "Nogales Collegiate Tee", "name_es": "Camiseta collegiate de Nogales",
-     "desc": "Arched NOGALES, straight ARIZONA, and a big athletic KOLS — no enclosing frame, faded three-color ink with a light screen-print distress.",
-     "desc_es": "NOGALES en arco, ARIZONA en línea recta y un KOLS grande de estilo atlético, sin marco, en tres colores desgastados.",
-     "alt": "Washed vintage black tee with arched NOGALES, ARIZONA and a large KOLS in collegiate lettering",
-     "alt_es": "Camiseta negra vintage con NOGALES, ARIZONA en arco y un KOLS grande de estilo universitario"},
-    {"id": "v2-postcard-vintage-bone-tee", "kind": "tee",
-     "eyebrow": "Tee · Bone · Vintage", "eyebrow_es": "Camiseta · Hueso · Vintage",
-     "name": "Greetings from Nogales Tee", "name_es": "Camiseta Greetings from Nogales",
-     "desc": "A rectangular travel postcard in a faded three-color palette, with saguaros, a setting sun, and Greetings from Nogales across the sky.",
-     "desc_es": "Una postal de viaje rectangular en tres colores desgastados, con saguaros, un sol poniente y Greetings from Nogales en el cielo.",
-     "alt": "Bone tee on adobe tile printed with a distressed Greetings from Nogales travel postcard",
-     "alt_es": "Camiseta color hueso sobre loseta de adobe, con una postal desgastada de Greetings from Nogales"},
-    {"id": "v2-lousy-tshirt-sand-tee", "kind": "tee",
-     "eyebrow": "Tee · Sand · Slogan", "eyebrow_es": "Camiseta · Arena · Eslogan",
-     "name": "Lousy T-Shirt", "name_es": "Lousy T-Shirt",
-     "desc": "“I came all the way to Nogales and all I got was this lousy t-shirt.” Classic centered souvenir stack, half-sun and saguaros up top.",
-     "desc_es": "“I came all the way to Nogales and all I got was this lousy t-shirt.” El clásico recuerdito centrado, con un medio sol y saguaros arriba.",
-     "alt": "Sand tee with a souvenir-stack slogan: I came all the way to Nogales and all I got was this lousy t-shirt",
-     "alt_es": "Camiseta color arena con el eslogan de recuerdo: I came all the way to Nogales and all I got was this lousy t-shirt"},
-    {"id": "v2-crosswind-navy-folded", "kind": "tee",
-     "eyebrow": "Tee · Navy · Slogan", "eyebrow_es": "Camiseta · Navy · Eslogan",
-     "name": "Nogales Crosswind Tee", "name_es": "Camiseta del viento cruzado de Nogales",
-     "desc": "“I survived the Nogales crosswind.” Left-aligned field-report layout with a five-band windsock and a dashed runway footer.",
-     "desc_es": "“I survived the Nogales crosswind.” Composición alineada a la izquierda, con una manga de viento de cinco bandas y una pista punteada al pie.",
-     "alt": "Folded navy tee with a left-aligned aviation layout and a windsock, reading I survived the Nogales crosswind",
-     "alt_es": "Camiseta navy doblada con una composición aeronáutica y una manga de viento que dice I survived the Nogales crosswind"},
-    {"id": "v3-runway-04-22-asphalt-tee", "kind": "tee",
-     "eyebrow": "Tee · Asphalt", "eyebrow_es": "Camiseta · Asfalto",
-     "name": "Runway 04/22 Tee", "name_es": "Camiseta Runway 04/22",
-     "desc": "Big runway numerals in asphalt-paint stencil, with threshold stripes and verified KOLS data: 7,200 × 100 ft, elev. 3,955 ft, CTAF 122.8.",
-     "desc_es": "Números grandes de pista en plantilla de pintura de asfalto, con franjas de umbral y datos verificados de KOLS: 7,200 × 100 ft, elev. 3,955 ft, CTAF 122.8.",
-     "alt": "Washed asphalt-grey tee printed with large runway numerals 04/22, threshold stripes, and verified KOLS airfield data",
-     "alt_es": "Camiseta gris asfalto con los números de pista 04/22, franjas de umbral y datos verificados del aeródromo KOLS"},
-    {"id": "v3-sectional-chart-ivory-tee", "kind": "tee",
-     "eyebrow": "Tee · Ivory", "eyebrow_es": "Camiseta · Marfil",
-     "name": "KOLS Sectional Chart Tee", "name_es": "Camiseta de carta seccional de KOLS",
-     "desc": "A stylized Phoenix Sectional of the KOLS area — VOR rose, runway heading, and an FAA-style data block. Not a copy of a real chart, and not for navigation.",
-     "desc_es": "Una seccional estilizada de Phoenix de la zona de KOLS: rosa VOR, rumbo de pista y un bloque de datos al estilo FAA. No es copia de una carta real ni sirve para navegación.",
-     "alt": "Ivory tee on walnut wood printed with a stylized Phoenix sectional chart of the KOLS area",
-     "alt_es": "Camiseta marfil sobre madera de nogal, con una carta seccional estilizada de Phoenix de la zona de KOLS"},
-    {"id": "v3-topo-contours-olive-tee", "kind": "tee",
-     "eyebrow": "Tee · Desert olive", "eyebrow_es": "Camiseta · Olivo desértico",
-     "name": "Patagonia &amp; Santa Rita Topo Tee", "name_es": "Camiseta topo de Patagonia y Santa Rita",
-     "desc": "Unframed topographic contours of the ranges around the field, parting around the CMA peak. Elevation and coordinates underneath.",
-     "desc_es": "Curvas de nivel de las sierras alrededor del campo, abriéndose en la cumbre de CMA, sin marco. Elevación y coordenadas debajo.",
-     "alt": "Desert olive tee on sandstone printed with topographic contour lines parting around the Copper Mountain Air mark",
-     "alt_es": "Camiseta olivo desértico sobre arenisca, con curvas de nivel que se abren alrededor de la marca de Copper Mountain Air"},
-    {"id": "v3-luggage-tag-heather-tee", "kind": "tee",
-     "eyebrow": "Tee · Heather grey", "eyebrow_es": "Camiseta · Gris jaspeado",
-     "name": "Nogales Intl Luggage Tag Tee", "name_es": "Camiseta de etiqueta de equipaje Nogales Intl",
-     "desc": "A vintage airline claim tag for destination Arizona: OLS, Nogales Intl, Runway 04/22, field elev. 3,955 ft MSL, and a barcode stub.",
-     "desc_es": "Una etiqueta vintage de equipaje con destino a Arizona: OLS, Nogales Intl, pista 04/22, elev. 3,955 ft MSL, y un talón con código de barras.",
-     "alt": "Heather grey tee on cedar planks printed with a vintage airline luggage tag reading OLS / Nogales Intl",
-     "alt_es": "Camiseta gris jaspeado sobre tablones de cedro, con una etiqueta vintage de equipaje que dice OLS / Nogales Intl"},
-    {"id": "v2-postcard-sand-hoodie", "kind": "hoodie",
-     "eyebrow": "Hoodie · Sand", "eyebrow_es": "Sudadera · Arena",
-     "name": "Greetings from Nogales Hoodie", "name_es": "Sudadera Greetings from Nogales",
-     "desc": "The full-color travel postcard on a heavyweight sand pullover — saguaros, sunset, and the CMA mark on the horizon.",
-     "desc_es": "La postal de viaje a todo color en una sudadera pesada color arena: saguaros, atardecer y la marca de CMA en el horizonte.",
-     "alt": "Sand hoodie hanging on an adobe wall, printed with a full-color Greetings from Nogales travel postcard",
-     "alt_es": "Sudadera color arena colgada en un muro de adobe, con una postal a color de Greetings from Nogales"},
-    {"id": "v3-monochrome-tonal-hoodie", "kind": "hoodie",
-     "eyebrow": "Hoodie · Matte black", "eyebrow_es": "Sudadera · Negro mate",
-     "name": "Fuel. Freight. Flight. Hoodie", "name_es": "Sudadera Fuel. Freight. Flight.",
-     "desc": "A stealth tonal print on heavyweight black fleece: the CMA mark, Copper Mountain Air, and the three words that describe the operation.",
-     "desc_es": "Un estampado tonal discreto sobre felpa negra de peso pesado: la marca de CMA, Copper Mountain Air y las tres palabras que describen la operación.",
-     "alt": "Matte black hoodie on a hanger with a subtle tonal Copper Mountain Air mark and the line Fuel. Freight. Flight.",
-     "alt_es": "Sudadera negra mate en una percha, con la marca sutil de Copper Mountain Air y la línea Fuel. Freight. Flight."},
-    {"id": "v3-fbo-crew-quarter-zip", "kind": "quarter-zip",
-     "eyebrow": "Quarter-zip · Navy · FBO crew", "eyebrow_es": "Cierre de un cuarto · Navy · Personal de FBO",
-     "name": "Line Crew Quarter-Zip", "name_es": "Quarter-zip de Line Crew",
-     "desc": "A small left-chest embroidered crest — Copper Mountain Air, KOLS, Line Crew — on a navy quarter-zip built for the ramp.",
-     "desc_es": "Un pequeño emblema bordado en el pecho izquierdo — Copper Mountain Air, KOLS, Line Crew — en un quarter-zip navy hecho para la rampa.",
-     "alt": "Navy quarter-zip pullover hanging on a concrete hangar wall, with a small embroidered Copper Mountain Air crest on the left chest",
-     "alt_es": "Sudadera navy con cierre de un cuarto colgada en un muro de hangar, con un pequeño emblema bordado de Copper Mountain Air en el pecho izquierdo"},
-    {"id": "v2-saguaro-trucker-cap", "kind": "cap",
-     "eyebrow": "Trucker cap · Navy / white", "eyebrow_es": "Gorra trucker · Navy / blanca",
-     "name": "Saguaro Patch Cap", "name_es": "Gorra con parche de saguaro",
-     "desc": "The only round design in the lineup: a five-color saguaro and KOLS patch on a white foam front, navy mesh and bill.",
-     "desc_es": "El único diseño redondo de la línea: un parche de saguaro y KOLS en cinco colores sobre un frente de foam blanco, con malla y visera navy.",
-     "alt": "Navy and white trucker cap on a hangar workbench with a circular saguaro and KOLS embroidered-style patch on the front panel",
-     "alt_es": "Gorra trucker navy y blanca sobre un banco de hangar, con un parche circular de saguaro y KOLS en el frente"},
-    {"id": "v2-saguaro-sticker-toolbox", "kind": "sticker",
-     "eyebrow": "Sticker · Die-cut", "eyebrow_es": "Calcomanía · Troquelada",
-     "name": "Saguaro Patch Sticker", "name_es": "Calcomanía del parche de saguaro",
-     "desc": "The same saguaro patch as a kiss-cut vinyl sticker — built to live on a toolbox, a flight bag, or a water bottle.",
-     "desc_es": "El mismo parche de saguaro en una calcomanía de vinilo: pensada para una caja de herramientas, una bolsa de vuelo o una botella.",
-     "alt": "Die-cut saguaro and KOLS sticker applied to the lid of a red hangar toolbox",
-     "alt_es": "Calcomanía troquelada de saguaro y KOLS pegada en la tapa de una caja de herramientas roja de hangar"},
-    {"id": "v2-saguaro-koozie-tailgate", "kind": "koozie",
-     "eyebrow": "Koozie · Navy", "eyebrow_es": "Enfriador · Navy",
-     "name": "Saguaro Patch Koozie", "name_es": "Enfriador del parche de saguaro",
-     "desc": "The saguaro patch wrapped on a navy can cooler. A small, useful piece of the field to throw in a bag.",
-     "desc_es": "El parche de saguaro en un enfriador de lata navy. Una pieza pequeña y útil del campo para llevar en la bolsa.",
-     "alt": "Navy can koozie on a pickup tailgate at golden hour, printed with the circular saguaro and KOLS patch",
-     "alt_es": "Enfriador de lata navy sobre la puerta de una pickup al atardecer, con el parche circular de saguaro y KOLS"},
-]
-
-STORE_PRICES = {
-    "tee": "$28",
-    "hoodie": "$55",
-    "quarter-zip": "$58",
-    "cap": "$28",
-    "sticker": "$4",
-    "koozie": "$10",
-}
-
-STORE_SUPPLIES = [
-    {"icon": "map",
-     "name": "Charts", "name_es": "Cartas",
-     "desc": "Sectional charts and other current paper charts for the field and the surrounding airspace.",
-     "desc_es": "Cartas seccionales y otras cartas actuales en papel para el campo y el espacio aéreo de la zona."},
-    {"icon": "compass",
-     "name": "Plotters &amp; E6Bs", "name_es": "Plotters y E6B",
-     "desc": "Plotters and E6B flight computers for planning and training.",
-     "desc_es": "Plotters y computadoras de vuelo E6B para planificación e instrucción."},
-    {"icon": "book",
-     "name": "Logbooks", "name_es": "Bitácoras",
-     "desc": "Pilot and aircraft logbooks for students and certificated pilots.",
-     "desc_es": "Bitácoras de piloto y de aeronave para estudiantes y pilotos certificados."},
-    {"icon": "headset",
-     "name": "Headsets &amp; accessories", "name_es": "Audífonos y accesorios",
-     "desc": "Headsets and small cockpit accessories when we have them in stock.",
-     "desc_es": "Audífonos y accesorios pequeños de cabina cuando hay existencia."},
-]
+# Merch catalog lives in tools/store_catalog.py so yearly lineups can be swapped in one place.
+STORE_IMG_WIDTHS = storecat.STORE_IMG_WIDTHS
+STORE_PRICES = storecat.STORE_PRICE_LABELS
+STORE_SUPPLIES = storecat.STORE_SUPPLIES
 
 def store_product_picture(item, p, eager=False):
     slug = item["id"]
@@ -2168,61 +2026,31 @@ def store_product_picture(item, p, eager=False):
     mid = widths[-1]
     alt = html.escape(item["alt_es"] if is_es() else item["alt"])
     load = 'loading="eager" fetchpriority="high"' if eager else 'loading="lazy"'
-    return (
+    full = f"{p}assets/img/store/{slug}-{mid}.jpg"
+    zoom = "Ampliar imagen" if is_es() else "Click to enlarge"
+    picture = (
         f'<picture>'
         f'<source type="image/avif" srcset="{ss("avif")}" sizes="{sizes}">'
         f'<source type="image/webp" srcset="{ss("webp")}" sizes="{sizes}">'
-        f'<img src="{p}assets/img/store/{slug}-{mid}.jpg" srcset="{ss("jpg")}" sizes="{sizes}" '
+        f'<img src="{full}" srcset="{ss("jpg")}" sizes="{sizes}" '
         f'alt="{alt}" {load} decoding="async" width="{mid}" height="{mid}">'
         f'</picture>'
     )
+    return (
+        f'<button type="button" class="zoom-media" data-lightbox data-full="{html.escape(full, quote=True)}" '
+        f'data-alt="{alt}" aria-label="{zoom}">'
+        f'{picture}'
+        f'</button>'
+    )
 
-def store(p):
-    es = is_es()
-    if es:
-        hero_eyebrow, hero_h1 = "Mercancía oficial · KOLS", "Lleva KOLS. Representa Nogales."
-        hero_lede = "Equipo de Copper Mountain Air, el FBO y operador de carga en el Aeropuerto Internacional de Nogales. Camisetas suaves, una sudadera pesada, una gorra trucker y esenciales de hangar, impresos bajo pedido. La compra en línea aún no está abierta."
-        hero_note = "El pago en línea estará disponible pronto. Hasta entonces, cada botón dice Próximamente."
-        gear_eyebrow, gear_h2 = "CMA Gear", "Desde la rampa a 3,955 pies."
-        gear_lede = "Diseños inspirados en el campo: la pista 04/22, las sierras de Patagonia y Santa Rita, una etiqueta vintage de equipaje y un par de camisetas con frases que solo tienen sentido si ha aterrizado aquí. Los botones de compra se activarán cuando esté conectado el pago."
-        buy_label, buy_note = "Próximamente", "La compra en línea aún no está abierta."
-        supplies_eyebrow, supplies_h2 = "Artículos para pilotos", "Cartas, plotters y bitácoras en el mostrador."
-        supplies_lede = (
-            f"Cartas, plotters, computadoras de vuelo E6B, bitácoras y otros artículos para pilotos están disponibles en el mostrador del FBO en el Aeropuerto Internacional de Nogales (KOLS). "
-            f"Pase durante el horario de atención o llame al {PHONE_LINK} para ver lo que hay en existencia. También puede <a href=\"{LP}contact.html\">enviarnos un mensaje</a>."
-        )
-        notes_eyebrow, notes_h2 = "En el FBO", "Pase a ver las muestras."
-        notes_lede = (
-            f"Habrá muestras de la mercancía en el FBO de KOLS. Para artículos de piloto, llame al {PHONE_LINK} o deténgase en {STREET}, Nogales, AZ. "
-            f"Horario: {hours_text()}."
-        )
-        lineup_h = "Toda la mercancía"
-    else:
-        hero_eyebrow, hero_h1 = "Official merch · KOLS", "Wear KOLS. Rep Nogales."
-        hero_lede = "Field-ready gear from Copper Mountain Air — the FBO and cargo operator at Nogales International. Soft tees, a heavyweight hoodie, a trucker cap and a few hangar essentials, printed to order. Online checkout is not open yet."
-        hero_note = "Online checkout is coming soon. Until then, items can’t be ordered from this page."
-        gear_eyebrow, gear_h2 = "CMA Gear", "From the ramp at 3,955 feet."
-        gear_lede = "Designs built around the field: Runway 04/22, the Patagonia and Santa Rita ranges, a vintage luggage tag, and a couple of slogan tees that only make sense if you’ve landed here. Buy buttons will go live once checkout is connected."
-        buy_label, buy_note = "Coming soon", "Online checkout is not open yet."
-        supplies_eyebrow, supplies_h2 = "Pilot Supplies", "Charts, plotters and logbooks at the counter."
-        supplies_lede = (
-            f"Charts, plotters, E6B flight computers, logbooks and other pilot supplies are available at the FBO counter at Nogales International Airport (KOLS). "
-            f"Stop by during business hours or call {PHONE_LINK} to see what we have on hand. You can also <a href=\"{LP}contact.html\">send a message</a>."
-        )
-        notes_eyebrow, notes_h2 = "At the FBO", "Come see the samples."
-        notes_lede = (
-            f"Merch samples will be on display at the FBO at KOLS. For pilot supplies, call {PHONE_LINK} or stop by at {STREET}, Nogales, AZ. "
-            f"Hours: {HOURS}."
-        )
-        lineup_h = "All merch"
-
+def store_cards_html(items, p, es, buy_label, buy_note, eager_count=0):
     cards = []
-    for i, item in enumerate(STORE_PRODUCTS):
+    for i, item in enumerate(items):
         price = STORE_PRICES[item["kind"]]
         name = item["name_es"] if es else item["name"]
         eyebrow = item["eyebrow_es"] if es else item["eyebrow"]
         desc = item["desc_es"] if es else item["desc"]
-        pic = store_product_picture(item, p, eager=i < 3)
+        pic = store_product_picture(item, p, eager=i < eager_count)
         cards.append(
             "        <article class=\"product-card\">\n"
             f"          <div class=\"media\">{pic}</div>\n"
@@ -2236,6 +2064,87 @@ def store(p):
             "          </div>\n"
             "        </article>"
         )
+    return "\n".join(cards)
+
+
+def store(p):
+    es = is_es()
+    featured = storecat.featured_collection()
+    past = storecat.past_collections()
+    tagline = storecat.collection_tagline(featured, es=es)
+    if es:
+        hero_eyebrow, hero_h1 = "Mercancía oficial · KOLS", "Lleva KOLS. Representa Nogales."
+        hero_lede = "Equipo de Copper Mountain Air, el FBO y operador de carga en el Aeropuerto Internacional de Nogales. Camisetas suaves, una sudadera pesada, una gorra trucker y esenciales de hangar, impresos bajo pedido. La compra en línea aún no está abierta."
+        hero_note = "El pago en línea estará disponible pronto. Hasta entonces, cada botón dice Próximamente."
+        buy_label, buy_note = "Próximamente", "La compra en línea aún no está abierta."
+        supplies_eyebrow, supplies_h2 = "Artículos para pilotos", "Cartas, plotters y bitácoras en el mostrador."
+        supplies_lede = (
+            f"Cartas, plotters, computadoras de vuelo E6B, bitácoras y otros artículos para pilotos están disponibles en el mostrador del FBO en el Aeropuerto Internacional de Nogales (KOLS). "
+            f"Pase durante el horario de atención o llame al {PHONE_LINK} para ver lo que hay en existencia. También puede <a href=\"{LP}contact.html\">enviarnos un mensaje</a>."
+        )
+        notes_eyebrow, notes_h2 = "En el FBO", "Pase a ver las muestras."
+        notes_lede = (
+            f"Habrá muestras de la mercancía en el FBO de KOLS. Para artículos de piloto, llame al {PHONE_LINK} o deténgase en {STREET}, Nogales, AZ. "
+            f"Horario: {hours_text()}."
+        )
+        lineup_h = f"Toda la mercancía · {featured['title_es']}"
+        past_eyebrow, past_intro_h, past_lede = (
+            "Colecciones anteriores",
+            "Siguen en la tienda.",
+            "Las líneas de años anteriores se pueden seguir pidiendo. No se retiran cuando sale una colección nueva.",
+        )
+    else:
+        hero_eyebrow, hero_h1 = "Official merch · KOLS", "Wear KOLS. Rep Nogales."
+        hero_lede = "Field-ready gear from Copper Mountain Air — the FBO and cargo operator at Nogales International. Soft tees, a heavyweight hoodie, a trucker cap and a few hangar essentials, printed to order. Online checkout is not open yet."
+        hero_note = "Online checkout is coming soon. Until then, items can’t be ordered from this page."
+        buy_label, buy_note = "Coming soon", "Online checkout is not open yet."
+        supplies_eyebrow, supplies_h2 = "Pilot Supplies", "Charts, plotters and logbooks at the counter."
+        supplies_lede = (
+            f"Charts, plotters, E6B flight computers, logbooks and other pilot supplies are available at the FBO counter at Nogales International Airport (KOLS). "
+            f"Stop by during business hours or call {PHONE_LINK} to see what we have on hand. You can also <a href=\"{LP}contact.html\">send a message</a>."
+        )
+        notes_eyebrow, notes_h2 = "At the FBO", "Come see the samples."
+        notes_lede = (
+            f"Merch samples will be on display at the FBO at KOLS. For pilot supplies, call {PHONE_LINK} or stop by at {STREET}, Nogales, AZ. "
+            f"Hours: {HOURS}."
+        )
+        lineup_h = f"All merch · {featured['title']}"
+        past_eyebrow, past_intro_h, past_lede = (
+            "Past Collections",
+            "Still available.",
+            "Earlier lineups stay in the shop — you can still order them when a new collection drops.",
+        )
+
+    gear_eyebrow = featured["title_es"] if es else featured["title"]
+    gear_h2 = featured["h2_es"] if es else featured["h2"]
+    gear_lede = featured["lede_es"] if es else featured["lede"]
+
+    card_html = store_cards_html(featured["products"], p, es, buy_label, buy_note, eager_count=3)
+
+    past_html = ""
+    if past:
+        blocks = []
+        for coll in past:
+            title = coll["title_es"] if es else coll["title"]
+            cards = store_cards_html(coll["products"], p, es, buy_label, buy_note)
+            blocks.append(
+                '      <div class="past-collection" id="collection-' + str(coll["year"]) + '">\n'
+                '        <h3 class="past-collection-title">' + title + '</h3>\n'
+                '        <div class="store-grid">\n' + cards + '\n        </div>\n'
+                '      </div>'
+            )
+        past_html = (
+            '\n  <section class="store-grid-section store-past" id="past-collections" aria-labelledby="past-heading">\n'
+            '    <div class="wrap">\n'
+            '      <div class="section-head">\n'
+            '        <p class="eyebrow">' + past_eyebrow + '</p>\n'
+            '        <h2 id="past-heading">' + past_intro_h + '</h2>\n'
+            '        <p>' + past_lede + '</p>\n'
+            '      </div>\n'
+            + "\n".join(blocks) +
+            '\n    </div>\n'
+            '  </section>\n'
+        )
 
     supplies = []
     for item in STORE_SUPPLIES:
@@ -2248,8 +2157,6 @@ def store(p):
             f"          <p>{desc}</p>\n"
             "        </article>"
         )
-
-    card_html = "\n".join(cards)
     supply_html = "\n".join(supplies)
     return f"""
   <section class="page-hero store-hero">
@@ -2266,6 +2173,7 @@ def store(p):
       <p class="eyebrow">{gear_eyebrow}</p>
       <h2>{gear_h2}</h2>
       <p>{gear_lede}</p>
+      <p class="collection-note">{tagline}</p>
     </div>
   </section>
 
@@ -2277,7 +2185,7 @@ def store(p):
       </div>
     </div>
   </section>
-
+{past_html}
   <section class="store-supplies" id="pilot-supplies" aria-labelledby="supplies-heading">
     <div class="wrap">
       <div class="section-head">
@@ -2301,8 +2209,6 @@ def store(p):
     </div>
   </section>
 """
-
-
 def main():
     global POSTS
     import pages_es

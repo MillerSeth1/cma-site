@@ -38,3 +38,11 @@
 @media (max-width:520px){
   .product-card .body{padding:1.1rem 1.1rem 1.25rem}
 }
+
+.collection-note{margin:.85rem 0 0;max-width:62ch;font-size:1.02rem;color:var(--ink-2,#3a4a53)}
+.store-past{padding-top:2rem}
+.past-collection{margin-top:2rem}
+.past-collection-title{font-size:1.35rem;margin:0 0 1.1rem;text-transform:none;letter-spacing:-.01em}
+.product-card .media .zoom-media{width:100%;height:100%}
+.product-card .media .zoom-media img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease}
+.product-card:hover .media .zoom-media img{transform:scale(1.03)}
