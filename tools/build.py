@@ -2194,7 +2194,7 @@ def store(p):
         notes_eyebrow, notes_h2 = "En el FBO", "Pase a ver las muestras."
         notes_lede = (
             f"Habrá muestras de la mercancía en el FBO de KOLS. Para artículos de piloto, llame al {PHONE_LINK} o deténgase en {STREET}, Nogales, AZ. "
-            f"Horario: {hours_html()}."
+            f"Horario: {hours_text()}."
         )
         lineup_h = "Toda la mercancía"
     else:
@@ -2212,7 +2212,7 @@ def store(p):
         notes_eyebrow, notes_h2 = "At the FBO", "Come see the samples."
         notes_lede = (
             f"Merch samples will be on display at the FBO at KOLS. For pilot supplies, call {PHONE_LINK} or stop by at {STREET}, Nogales, AZ. "
-            f"Hours: {HOURS_HTML}."
+            f"Hours: {HOURS}."
         )
         lineup_h = "All merch"
 
