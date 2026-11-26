@@ -2131,6 +2131,7 @@ def store_variant_payload(item, p, es):
         "id": item["id"],
         "defaultStyle": style,
         "defaultColor": color["id"],
+        "hideColor": bool(item.get("hide_color")),
         "sizes": styles[style]["sizes"],
         "note": item.get("note_es") if es else item.get("note"),
         "styles": styles,
@@ -2173,7 +2174,7 @@ def store_picker_html(payload, es):
             f'<select class="opt-style" data-opt="style" aria-label="{html.escape(labels["style"], quote=True)}">{style_opts}</select></label>\n'
         )
     color_row = ""
-    if len(styles[style0]["colors"]) or any(len(st["colors"]) > 0 for st in styles.values()):
+    if not payload.get("hideColor") and (len(styles[style0]["colors"]) or any(len(st["colors"]) > 0 for st in styles.values())):
         color_row = (
             f'            <label class="opt">{html.escape(labels["color"])}'
             f'<select class="opt-color" data-opt="color" aria-label="{html.escape(labels["color"], quote=True)}">{color_opts}</select></label>\n'
