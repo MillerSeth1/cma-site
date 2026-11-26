@@ -2098,6 +2098,19 @@ def hat_views(sid, col, p, es):
     return out
 
 
+def polo_views(sid, col, p, es):
+    """Full polo (front) plus an embroidery close-up of the crest."""
+    if sid not in ("polo", "womens-polo"):
+        return None
+    base = col["alt_es"] if es else col["alt"]
+    return [
+        {"label": "Polo" if es else "Polo", "alt": base, **store_image_sources(col["image"], p)},
+        {"label": "Bordado" if es else "Embroidery",
+         "alt": base + (" — primer plano del bordado" if es else " — embroidery close-up"),
+         **store_image_sources(col["image"] + "-closeup", p)},
+    ]
+
+
 def store_variant_payload(item, p, es):
     """JSON for the garment picker: every style/color carries its mockup URLs."""
     if item.get("picker") != "apparel":
@@ -2114,7 +2127,7 @@ def store_variant_payload(item, p, es):
                 "alt": col["alt_es"] if es else col["alt"],
                 **src,
             }
-            views = hat_views(sid, col, p, es)
+            views = hat_views(sid, col, p, es) or polo_views(sid, col, p, es)
             if views:
                 entry["views"] = views
             colors.append(entry)
@@ -2207,7 +2220,7 @@ def store_cards_html(items, p, es, buy_label, buy_note, eager_count=0):
         payload = store_variant_payload(item, p, es)
         picker = store_picker_html(payload, es)
         has_views = bool(payload and any(c.get("views") for st in payload["styles"].values() for c in st["colors"]))
-        views_label = "Vistas de la gorra" if es else "Cap views"
+        views_label = ("Vistas del producto" if es else "Product views") if item["id"].endswith("polo") else ("Vistas de la gorra" if es else "Cap views")
         thumbs = (
             f'          <div class="media-thumbs" role="group" aria-label="{views_label}"></div>\n'
             if has_views else ""
@@ -2220,7 +2233,7 @@ def store_cards_html(items, p, es, buy_label, buy_note, eager_count=0):
             f"          <div class=\"media\">{pic}</div>\n"
             f"{thumbs}"
             "          <div class=\"body\">\n"
-            f"            <p class=\"eyebrow\">{eyebrow}</p>\n"
+            + ("" if item.get("no_eyebrow") else f"            <p class=\"eyebrow\">{eyebrow}</p>\n") +
             f"            <h3>{name}</h3>\n"
             f"            <p>{desc}</p>\n"
             f"{picker}"
