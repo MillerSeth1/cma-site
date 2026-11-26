@@ -75,7 +75,7 @@ p{margin:0 0 1em}
   .js .header-tools{margin-left:auto}
   .js .site-nav{margin-left:0;position:absolute;left:0;right:0;top:100%;background:var(--night);border-bottom:1px solid rgba(233,160,106,.25);display:none}
   .js .site-nav.open{display:block;max-height:calc(100dvh - 8rem);overflow-y:auto;-webkit-overflow-scrolling:touch}
-  body.cookie-open .js .site-nav.open{max-height:calc(100dvh - 19.5rem)}
+  body.cookie-open .site-nav.open{max-height:calc(100dvh - 19.5rem)}
   .js .site-nav > ul{flex-direction:column;align-items:stretch;padding:.75rem 1.25rem 1.25rem;gap:.1rem}
   .js .site-nav .nav-item{width:100%}
   .js .site-nav.open .nav-sub{display:block;position:static;min-width:0;padding:0 0 .35rem .15rem;border:0;border-radius:0;box-shadow:none;background:transparent}
