@@ -208,6 +208,7 @@ textarea{min-height:150px;resize:vertical}
 .site-footer a{color:#efe1d0;text-decoration:none}
 .site-footer a:hover{color:#fff;text-decoration:underline}
 .site-footer .legal{border-top:1px solid rgba(244,231,214,.12);margin-top:3rem;padding-top:1.5rem;font-size:.85rem;display:flex;flex-wrap:wrap;gap:.5rem 1.5rem;justify-content:space-between}
+.site-footer .trademark-note{margin:.85rem 0 0;font-size:.8rem;line-height:1.45;color:#cdbba6;max-width:52rem}
 .social,.social-links{display:flex;flex-direction:row;flex-wrap:nowrap;align-items:center;gap:.45rem;margin-top:1rem;line-height:0}
 .social a,.social-links a{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;flex:none;box-sizing:border-box;overflow:hidden;border:1px solid rgba(244,231,214,.28);border-radius:50%;color:#efe1d0;background:transparent}
 .social a:hover,.social a:focus-visible,.social-links a:hover,.social-links a:focus-visible{color:#fff;border-color:#fff;text-decoration:none;background:rgba(244,231,214,.1);outline:none}

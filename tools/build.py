@@ -487,7 +487,12 @@ def social_links():
     return f'<nav class="social social-links" aria-label="{group}">{"".join(items)}</nav>'
 
 
-def footer(p):
+STORE_TRADEMARK_LINE = (
+    "Copper Mountain Air® and the mountain logo are registered trademarks of Copper Mountain Air, LLC."
+)
+
+
+def footer(p, trademark_line=None):
     if is_es():
         blurb = "Combustible, FBO y carga en el Aeropuerto Internacional de Nogales (KOLS), al servicio de Nogales y el condado de Santa Cruz, Arizona."
         visit, contact, explore = "Visítanos", "Contacto", "Explorar"
@@ -531,6 +536,7 @@ def footer(p):
             f'<li><a href="{p}store.html">Store</a></li>'
         )
         send_li = f'<li><a href="{p}contact.html">Send a message</a></li><li><a href="{p}trip-request.html">Request a trip / quote</a></li>'
+    tm = f'\n  <p class="trademark-note">{trademark_line}</p>' if trademark_line else ""
     return f"""</main>
 <footer class="site-footer"><div class="wrap">
   <div class="cols">
@@ -541,7 +547,7 @@ def footer(p):
     <div><h3>{contact}</h3><ul><li>{"Teléfono" if is_es() else "Phone"}: {PHONE_LINK}</li><li><a href="mailto:{CONTACT_TO}">{CONTACT_TO}</a></li><li>{"Horario" if is_es() else "Hours"}: {hours}</li>{send_li}</ul></div>
     <div><h3>{explore}</h3><ul>{links}</ul></div>
   </div>
-  <div class="legal"><span>© 2026 Copper Mountain Air, LLC</span><span>{legal_note}</span><a href="{LP}privacy.html">{privacy}</a></div>
+  <div class="legal"><span>© 2026 Copper Mountain Air, LLC</span><span>{legal_note}</span><a href="{LP}privacy.html">{privacy}</a></div>{tm}
 </div></footer>
 <script src="{asset_href(p, 'assets/js/site.js')}" defer></script>
 <script src="{asset_href(p, 'assets/js/lightbox.js')}" defer></script>
@@ -599,7 +605,8 @@ def page(path, title, desc, body, extra_ld=None, og_type="website", og_img=None,
     p = "../" * path.count("/")
     depth = path.count("/") - (1 if path.startswith("es/") else 0)
     LP = "../" * depth
-    out = head(title, desc, path, p, extra_ld, og_type, og_img, og_w, og_h) + "\n" + header(path, p) + "\n" + body(p) + "\n" + footer(p)
+    store_tm = STORE_TRADEMARK_LINE if path.endswith("store.html") else None
+    out = head(title, desc, path, p, extra_ld, og_type, og_img, og_w, og_h) + "\n" + header(path, p) + "\n" + body(p) + "\n" + footer(p, trademark_line=store_tm)
     site_js_tag = f'<script src="{asset_href(p, "assets/js/site.js")}" defer></script>\n'
     js = "".join(f'<script src="{asset_href(p, s)}" defer></script>\n' for s in PAGE_JS.get(en_path(path), []))
     if js: out = out.replace(site_js_tag, site_js_tag + js, 1)
