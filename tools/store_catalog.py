@@ -43,8 +43,8 @@ STORE_PRICES = {
     "washed-cap": 34,
     "suede-bill": 38,
     "sticker": 4,
-    "ornament-metal": 20,
     "ornament-porcelain": 20,
+    "ornament-glass": 22,
     "koozie": 10,
     "luggage-tag": 14,
     # Women's + youth (Printful base, size M: Bella+Canvas 6110 $17.83, AS Colour 4161 $35.19,
@@ -61,8 +61,8 @@ APPAREL_SIZES = ["S", "M", "L", "XL", "2XL"]
 
 STYLE_LABELS = {
     "tee": ("Tee", "Camiseta"),
-    "ornament-metal": ("Metal ornament", "Adorno de metal"),
-    "ornament-porcelain": ("Porcelain ornament", "Adorno de porcelana"),
+    "ornament-porcelain": ("Porcelain · 2.75 in", "Porcelana · 2.75 pulg"),
+    "ornament-glass": ("Glass · 3.5 in round", "Vidrio · 3.5 pulg redondo"),
     "long-sleeve": ("Long sleeve", "Manga larga"),
     "hoodie": ("Hoodie", "Sudadera"),
     "quarter-zip": ("Quarter-zip", "Quarter-zip"),
@@ -516,18 +516,18 @@ PRODUCTS_2026 = [
      "image": "saguaro-sticker-closeup",
      "alt": "Close-up of the round Copper Mountain Air saguaro patch sticker: two saguaros and the CMA mark on a setting sun, with KOLS and Nogales, Arizona, on a white kiss-cut border",
      "alt_es": "Primer plano de la calcomanía redonda del parche de saguaro de Copper Mountain Air: dos saguaros y la marca de CMA sobre un sol poniente, con KOLS y Nogales, Arizona, en un borde blanco troquelado"},
-    {"id": "kols-aerial-ornament", "picker": "apparel", "default_style": "ornament-metal", "default_color": "full-color",
+    {"id": "kols-aerial-ornament", "picker": "apparel", "default_style": "ornament-porcelain", "default_color": "full-color",
      "hide_color": True, "sizes": [],
      "name": "KOLS Aerial Ornament", "name_es": "Adorno aéreo KOLS",
-     "desc": "Nogales International from above: runway 04/22, the ramp, high-desert grass and oak scrub, and the Patagonia Mountains on the skyline. Copper Mountain Air® and 2026. Choose a full-color metal round or a ceramic porcelain circle, each with a hanging cord.",
-     "desc_es": "Nogales International desde el aire: la pista 04/22, la rampa, pastizal y encinos del desierto alto y las montañas de Patagonia en el horizonte. Copper Mountain Air® y 2026. Elige un círculo de metal a todo color o un círculo de porcelana cerámica, cada uno con cordón para colgar.",
+     "desc": "Nogales International from above: runway 04/22, the ramp, high-desert grass and oak scrub, and the Patagonia Mountains on the skyline. Copper Mountain Air® and 2026. Choose a 2.75-inch porcelain circle with a gold cord, or a 3.5-inch beveled glass round with a gold ribbon.",
+     "desc_es": "Nogales International desde el aire: la pista 04/22, la rampa, pastizal y encinos del desierto alto y las montañas de Patagonia en el horizonte. Copper Mountain Air® y 2026. Elige un círculo de porcelana de 2.75 pulgadas con cordón dorado, o un redondo de vidrio biselado de 3.5 pulgadas con listón dorado.",
      "styles": styles(
-         **{"ornament-metal": [c("full-color", "kols-aerial-ornament-metal",
-              "Round metal Christmas ornament showing an aerial view of Nogales International Airport runway 04/22 with the Patagonia Mountains behind, Copper Mountain Air® and 2026",
-              "Adorno navideño redondo de metal con una vista aérea de la pista 04/22 del Aeropuerto Internacional de Nogales y las montañas de Patagonia al fondo, Copper Mountain Air® y 2026")],
-            "ornament-porcelain": [c("full-color", "kols-aerial-ornament-porcelain",
+         **{"ornament-porcelain": [c("full-color", "kols-aerial-ornament-porcelain",
               "Round porcelain ornament with a medallion aerial view of Nogales International Airport runway 04/22 and the Patagonia Mountains, Copper Mountain Air® and 2026",
-              "Adorno redondo de porcelana con un medallón con vista aérea de la pista 04/22 del Aeropuerto Internacional de Nogales y las montañas de Patagonia, Copper Mountain Air® y 2026")]},
+              "Adorno redondo de porcelana con un medallón con vista aérea de la pista 04/22 del Aeropuerto Internacional de Nogales y las montañas de Patagonia, Copper Mountain Air® y 2026")],
+            "ornament-glass": [c("full-color", "kols-aerial-ornament-glass",
+              "Round beveled glass ornament with a gold ribbon, printed with an aerial view of Nogales International Airport runway 04/22, the Patagonia Mountains, Copper Mountain Air® and 2026",
+              "Adorno redondo de vidrio biselado con listón dorado, impreso con una vista aérea de la pista 04/22 del Aeropuerto Internacional de Nogales, las montañas de Patagonia, Copper Mountain Air® y 2026")]},
      )},
     {"id": "saguaro-koozie", "picker": "simple", "kind": "koozie",
      "eyebrow": "Koozie · Navy", "eyebrow_es": "Enfriador · Navy",
@@ -693,7 +693,7 @@ def product_eyebrow(item, style_id, color_id, es=False):
     style = STYLE_LABELS[style_id][1 if es else 0]
     color = COLOR_LABELS.get(color_id, (color_id, color_id))[1 if es else 0]
     note = item.get("note_es" if es else "note")
-    parts = [style, color] + ([note] if note else [])
+    parts = ([style] if item.get("hide_color") else [style, color]) + ([note] if note else [])
     return " · ".join(parts)
 
 

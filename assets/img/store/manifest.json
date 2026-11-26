@@ -7645,45 +7645,6 @@
    }
   },
   {
-   "id": "kols-aerial-ornament-metal",
-   "widths": [
-    640,
-    1024
-   ],
-   "w": 1024,
-   "h": 1024,
-   "files": {
-    "640": {
-     "jpg": {
-      "q": 78,
-      "bytes": 61661
-     },
-     "webp": {
-      "q": 72,
-      "bytes": 37828
-     },
-     "avif": {
-      "q": 50,
-      "bytes": 23554
-     }
-    },
-    "1024": {
-     "jpg": {
-      "q": 78,
-      "bytes": 124728
-     },
-     "webp": {
-      "q": 72,
-      "bytes": 70908
-     },
-     "avif": {
-      "q": 50,
-      "bytes": 45751
-     }
-    }
-   }
-  },
-  {
    "id": "kols-aerial-ornament-porcelain",
    "widths": [
     640,
@@ -7718,6 +7679,45 @@
      "avif": {
       "q": 50,
       "bytes": 35968
+     }
+    }
+   }
+  },
+  {
+   "id": "kols-aerial-ornament-glass",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 45645
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 27564
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 18161
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 95698
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 53968
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 34953
      }
     }
    }

@@ -76,7 +76,7 @@
 
     var brow = card.querySelector(".eyebrow");
     if (brow) {
-      var parts = [style.label, color.label];
+      var parts = data.hideColor ? [style.label] : [style.label, color.label];
       if (data.note) parts.push(data.note);
       brow.textContent = parts.join(" · ");
     }
