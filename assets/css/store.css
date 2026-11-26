@@ -53,3 +53,12 @@
 .product-opts .opt{display:flex;flex-direction:column;gap:.28rem;margin:0;font-size:.72rem;font-weight:650;letter-spacing:.06em;text-transform:uppercase;color:var(--copper-3)}
 .product-opts select{appearance:none;-webkit-appearance:none;width:100%;margin:0;padding:.45rem 1.7rem .45rem .65rem;border:1px solid rgba(13,27,36,.16);border-radius:8px;background:#fff url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path fill='%231C2F3A' d='M1 1l5 5 5-5'/></svg>") no-repeat right .55rem center/10px;font:650 .92rem/1.2 var(--body);letter-spacing:0;text-transform:none;color:var(--ink);cursor:pointer}
 .product-opts select:focus{outline:2px solid var(--copper-3);outline-offset:1px}
+
+/* Hat angle thumbnails (front / side / back) under the card photo */
+.product-card .media-thumbs{display:flex;gap:.5rem;padding:.6rem .8rem 0;background:#fff}
+.product-card .media-thumbs[hidden]{display:none}
+.product-card .media-thumbs .thumb{flex:1 1 0;min-width:0;max-width:92px;padding:0;border:2px solid transparent;border-radius:10px;background:var(--sand-2);cursor:pointer;overflow:hidden;font:inherit;color:var(--ink);display:flex;flex-direction:column}
+.product-card .media-thumbs .thumb img{display:block;width:100%;height:auto;aspect-ratio:1/1;object-fit:cover}
+.product-card .media-thumbs .thumb span{font-size:.72rem;line-height:1.5;text-align:center;letter-spacing:.02em;background:#fff;padding:.1rem 0}
+.product-card .media-thumbs .thumb.is-active{border-color:var(--copper-3)}
+.product-card .media-thumbs .thumb:focus-visible{outline:2px solid var(--copper-3);outline-offset:2px}

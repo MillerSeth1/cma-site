@@ -2074,6 +2074,30 @@ def store_product_picture(slug, alt, p, eager=False):
     )
 
 
+HAT_VIEW_KEYS = {
+    ("dad-hat", "black"): "dad-black", ("dad-hat", "khaki"): "dad-khaki", ("dad-hat", "navy"): "dad-navy",
+    ("trucker", "black"): "trucker-black", ("trucker", "charcoal"): "trucker-charcoal",
+    ("trucker", "navy-white"): "trucker-navy",
+    ("structured", "black"): "structured-black", ("structured", "white"): "structured-white",
+}
+
+
+def hat_views(sid, col, p, es):
+    """Front (the embroidered design) plus side and back photos of the same blank."""
+    key = HAT_VIEW_KEYS.get((sid, col["id"]))
+    if not key or not col["image"].startswith("hat-pf-"):
+        return None
+    base = col["alt_es"] if es else col["alt"]
+    out = [{"label": "Frente" if es else "Front", "alt": base, **store_image_sources(col["image"], p)}]
+    for view, en, sp in (("side", "Side", "Lado"), ("back", "Back", "Atrás")):
+        out.append({
+            "label": sp if es else en,
+            "alt": f"{base} — {'vista ' + ('lateral' if view == 'side' else 'trasera') if es else view + ' view'}",
+            **store_image_sources(f"hat-view-{key}-{view}", p),
+        })
+    return out
+
+
 def store_variant_payload(item, p, es):
     """JSON for the garment picker: every style/color carries its mockup URLs."""
     if item.get("picker") != "apparel":
@@ -2084,12 +2108,16 @@ def store_variant_payload(item, p, es):
         colors = []
         for col in data["colors"]:
             src = store_image_sources(col["image"], p)
-            colors.append({
+            entry = {
                 "id": col["id"],
                 "label": storecat.COLOR_LABELS.get(col["id"], (col["id"], col["id"]))[1 if es else 0],
                 "alt": col["alt_es"] if es else col["alt"],
                 **src,
-            })
+            }
+            views = hat_views(sid, col, p, es)
+            if views:
+                entry["views"] = views
+            colors.append(entry)
         styles[sid] = {
             "id": sid,
             "label": label,
@@ -2177,12 +2205,19 @@ def store_cards_html(items, p, es, buy_label, buy_note, eager_count=0):
         pic = store_product_picture(color["image"], alt, p, eager=i < eager_count)
         payload = store_variant_payload(item, p, es)
         picker = store_picker_html(payload, es)
+        has_views = bool(payload and any(c.get("views") for st in payload["styles"].values() for c in st["colors"]))
+        views_label = "Vistas de la gorra" if es else "Cap views"
+        thumbs = (
+            f'          <div class="media-thumbs" role="group" aria-label="{views_label}"></div>\n'
+            if has_views else ""
+        )
         cards.append(
             "        <article class=\"product-card\""
             + f" id=\"p-{html.escape(item['id'], quote=True)}\""
             + (f" data-product=\"{html.escape(item['id'], quote=True)}\"" if payload else "")
             + ">\n"
             f"          <div class=\"media\">{pic}</div>\n"
+            f"{thumbs}"
             "          <div class=\"body\">\n"
             f"            <p class=\"eyebrow\">{eyebrow}</p>\n"
             f"            <h3>{name}</h3>\n"
