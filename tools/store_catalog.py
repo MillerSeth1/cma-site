@@ -529,6 +529,33 @@ WY_GARMENTS = {
                      "Comfort Colors 1467Y youth hoodie", "sudadera juvenil Comfort Colors 1467Y"),
 }
 
+# Size menu labels per women's/youth style. Values stay XS..XL (what the picker stores); the
+# visible label says who the size is for. Youth ages are the manufacturers' own size charts:
+# Gildan 64000B spec sheet (XS 4, S 6-8, M 10-12, L 14-16, XL 18-20) and Comfort Colors 1467Y
+# spec sheet (XS 2-4, S 6-8, M 10-12, L 14-16, XL 18-20). Printful's own chart gives inches only.
+WY_SIZE_LABELS = {
+    "womens-tee": (
+        {s: f"Women's {s}" for s in ["XS", "S", "M", "L", "XL", "2XL", "3XL"]},
+        {s: f"Mujer {s}" for s in ["XS", "S", "M", "L", "XL", "2XL", "3XL"]},
+    ),
+    "womens-hoodie": (
+        {s: f"Women's {s}" for s in ["XS", "S", "M", "L", "XL", "2XL"]},
+        {s: f"Mujer {s}" for s in ["XS", "S", "M", "L", "XL", "2XL"]},
+    ),
+    "youth-tee": (
+        {"XS": "Youth XS (4)", "S": "Youth S (6-8)", "M": "Youth M (10-12)",
+         "L": "Youth L (14-16)", "XL": "Youth XL (18-20)"},
+        {"XS": "Juvenil XS (4 años)", "S": "Juvenil S (6-8 años)", "M": "Juvenil M (10-12 años)",
+         "L": "Juvenil L (14-16 años)", "XL": "Juvenil XL (18-20 años)"},
+    ),
+    "youth-hoodie": (
+        {"XS": "Youth XS (2-4)", "S": "Youth S (6-8)", "M": "Youth M (10-12)",
+         "L": "Youth L (14-16)", "XL": "Youth XL (18-20)"},
+        {"XS": "Juvenil XS (2-4 años)", "S": "Juvenil S (6-8 años)", "M": "Juvenil M (10-12 años)",
+         "L": "Juvenil L (14-16 años)", "XL": "Juvenil XL (18-20 años)"},
+    ),
+}
+
 # product id: (image slug, garment sides, EN print phrase, ES print phrase)
 WY_DESIGNS = {
     "ridgeline": ("ridgeline", ("light", "dark"),
@@ -587,7 +614,9 @@ def _add_womens_youth(products):
                 colors.append(c(col, f"wy-{slug}-{sid}-{col}",
                                 f"{cen} {g_en} {en}",
                                 f"{g_es[0].upper()}{g_es[1:]} {ces} {es}"))
-            item["styles"][sid] = {"colors": colors, "sizes": sizes}
+            item["styles"][sid] = {"colors": colors, "sizes": sizes,
+                                   "size_labels_en": WY_SIZE_LABELS[sid][0],
+                                   "size_labels_es": WY_SIZE_LABELS[sid][1]}
 
 
 _add_womens_youth(PRODUCTS_2026)

@@ -82,7 +82,8 @@
         var cur = sizeSel.value;
         var want = style.sizes.indexOf(cur) >= 0 ? cur
           : (style.sizes.indexOf("M") >= 0 ? "M" : style.sizes[Math.min(1, style.sizes.length - 1)]);
-        fillSelect(sizeSel, style.sizes.map(function (s) { return { id: s, label: s }; }), want);
+        var labels = style.sizeLabels || {};
+        fillSelect(sizeSel, style.sizes.map(function (s) { return { id: s, label: labels[s] || s }; }), want);
       }
       apply(card, data, styleId, colorId);
     }

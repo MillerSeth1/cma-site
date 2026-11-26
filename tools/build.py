@@ -2095,6 +2095,7 @@ def store_variant_payload(item, p, es):
             "label": label,
             "price": STORE_PRICES[sid],
             "sizes": data.get("sizes") or item.get("sizes") or [],
+            "sizeLabels": data.get("size_labels_es" if es else "size_labels_en") or {},
             "colors": colors,
         }
     style, color = storecat.product_default(item)
@@ -2135,7 +2136,8 @@ def store_picker_html(payload, es):
         return "".join(out)
     style_opts = opts([(sid, styles[sid]["label"]) for sid in styles], style0)
     color_opts = opts([(c["id"], c["label"]) for c in styles[style0]["colors"]], color0)
-    size_opts = opts([(sz, sz) for sz in payload["sizes"]], default_size(payload["sizes"]))
+    size_labels = styles[style0].get("sizeLabels") or {}
+    size_opts = opts([(sz, size_labels.get(sz, sz)) for sz in payload["sizes"]], default_size(payload["sizes"]))
     style_row = ""
     if len(styles) > 1:
         style_row = (
