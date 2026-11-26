@@ -2076,15 +2076,16 @@ def store_product_picture(slug, alt, p, eager=False):
 
 HAT_VIEW_KEYS = {
     ("dad-hat", "black"): "dad-black", ("dad-hat", "khaki"): "dad-khaki", ("dad-hat", "navy"): "dad-navy",
+    ("dad-hat", "spruce"): "dad-spruce",
     ("trucker", "black"): "trucker-black", ("trucker", "charcoal"): "trucker-charcoal",
     ("trucker", "navy-white"): "trucker-navy",
     ("structured", "black"): "structured-black", ("structured", "white"): "structured-white",
 }
 
 
-def hat_views(sid, col, p, es):
+def hat_views(item, sid, col, p, es):
     """Front (the embroidered design) plus side and back photos of the same blank."""
-    key = HAT_VIEW_KEYS.get((sid, col["id"]))
+    key = HAT_VIEW_KEYS.get((item.get("hat") or sid, col["id"]))
     if not key or not col["image"].startswith("hat-pf-"):
         return None
     base = col["alt_es"] if es else col["alt"]
@@ -2117,7 +2118,7 @@ def store_variant_payload(item, p, es):
         return None
     styles = {}
     for sid, data in item["styles"].items():
-        label = storecat.STYLE_LABELS[sid][1 if es else 0]
+        label = (item.get("style_labels", {}).get(sid) or storecat.STYLE_LABELS[sid])[1 if es else 0]
         colors = []
         for col in data["colors"]:
             src = store_image_sources(col["image"], p)
@@ -2127,14 +2128,14 @@ def store_variant_payload(item, p, es):
                 "alt": col["alt_es"] if es else col["alt"],
                 **src,
             }
-            views = hat_views(sid, col, p, es) or polo_views(sid, col, p, es)
+            views = hat_views(item, sid, col, p, es) or polo_views(sid, col, p, es)
             if views:
                 entry["views"] = views
             colors.append(entry)
         styles[sid] = {
             "id": sid,
             "label": label,
-            "price": STORE_PRICES[sid],
+            "price": f"${item['price']}" if item.get("price") else STORE_PRICES[sid],
             "sizes": data.get("sizes") or item.get("sizes") or [],
             "sizeLabels": data.get("size_labels_es" if es else "size_labels_en") or {},
             "colors": colors,
@@ -2149,7 +2150,7 @@ def store_variant_payload(item, p, es):
         "note": item.get("note_es") if es else item.get("note"),
         "styles": styles,
         "labels": {
-            "style": "Estilo" if es else "Style",
+            "style": (item["style_label"][1 if es else 0] if item.get("style_label") else ("Estilo" if es else "Style")),
             "color": "Color" if es else "Color",
             "size": "Talla" if es else "Size",
         },
@@ -2211,7 +2212,7 @@ def store_cards_html(items, p, es, buy_label, buy_note, eager_count=0):
     cards = []
     for i, item in enumerate(items):
         style, color = storecat.product_default(item)
-        price = STORE_PRICES[style if item.get("picker") == "apparel" else item["kind"]]
+        price = f"${item['price']}" if item.get("price") else STORE_PRICES[style if item.get("picker") == "apparel" else item["kind"]]
         name = item["name_es"] if es else item["name"]
         eyebrow = storecat.product_eyebrow(item, style, color["id"], es=es)
         desc = item["desc_es"] if es else item["desc"]

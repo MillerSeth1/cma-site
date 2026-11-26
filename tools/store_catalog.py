@@ -108,6 +108,7 @@ COLOR_LABELS = {
     "brown-khaki": ("Brown / khaki", "Marrón / khaki"),
     "olive-green": ("Olive", "Olivo"),
     "charcoal": ("Charcoal", "Carbón"),
+    "spruce": ("Spruce", "Verde abeto"),
     "red": ("Red", "Rojo"),
     "stone": ("Stone", "Piedra"),
     "sport-grey": ("Sport grey", "Gris deportivo"),
@@ -688,6 +689,63 @@ def _split_polos(products):
 
 _split_polos(PRODUCTS_2026)
 
+
+HAT_DESIGNS = [  # (old card id, design id, EN label, ES label)
+    ("ridgeline-cap", "ridgeline", "Ridgeline", "Ridgeline"),
+    ("runway-0422-cap", "runway", "Runway 04/22", "Runway 04/22"),
+    ("nogales-kols-cap", "nogales", "Nogales KOLS", "Nogales KOLS"),
+    ("arched-cap", "arched", "Arched", "En arco"),
+]
+
+HAT_STYLES = [  # (style id, card id, EN name, ES name, EN desc, ES desc, color order)
+    ("dad-hat", "dad-hat", "Dad Hat", "Gorra dad",
+     "A soft, low-profile Yupoong dad hat, embroidered with the design you pick. One size, adjustable.",
+     "Una gorra dad Yupoong suave y de perfil bajo, bordada con el diseño que elijas. Talla única, ajustable.",
+     ["black", "navy", "spruce", "khaki"]),
+    ("trucker", "trucker-hat", "Trucker Hat", "Gorra trucker",
+     "A Yupoong mesh-back trucker, embroidered with the design you pick. One size, adjustable.",
+     "Una trucker Yupoong con malla atrás, bordada con el diseño que elijas. Talla única, ajustable.",
+     ["black", "navy-white", "charcoal"]),
+    ("structured", "structured-cap", "Structured Cap", "Gorra estructurada",
+     "A firm-front Otto structured cap, embroidered with the design you pick. One size, adjustable.",
+     "Una gorra estructurada Otto de frente firme, bordada con el diseño que elijas. Talla única, ajustable.",
+     ["black", "white"]),
+]
+
+
+def _hat_cards(products):
+    """One card per hat style (Dad / Trucker / Structured); the Design picker lists the four designs."""
+    by = {p_["id"]: p_ for p_ in products}
+    # Spruce dad hat: same embroidery as the navy hat on the Spruce blank
+    for old, did, den, des in HAT_DESIGNS:
+        dad = by[old]["styles"]["dad-hat"]["colors"]
+        nv = next(c_ for c_ in dad if c_["id"] == "navy")
+        if not any(c_["id"] == "spruce" for c_ in dad):
+            dad.append(c("spruce", f"hat-pf-{did}-dad-spruce",
+                         nv["alt"].replace("Navy", "Spruce"),
+                         nv["alt_es"].replace(" navy,", " verde abeto,")))
+    cards = []
+    for sid, cid, name, name_es, desc, desc_es, order in HAT_STYLES:
+        styles_ = {}
+        for old, did, den, des in HAT_DESIGNS:
+            cols = {c_["id"]: c_ for c_ in by[old]["styles"][sid]["colors"]}
+            styles_[did] = {"colors": [cols[k] for k in order]}
+        cards.append({
+            "id": cid, "picker": "apparel", "default_style": "ridgeline", "default_color": "black",
+            "no_eyebrow": True, "sizes": [], "hat": sid, "price": STORE_PRICES[sid],
+            "style_label": ("Design", "Diseño"),
+            "style_labels": {did: (den, des) for _, did, den, des in HAT_DESIGNS},
+            "name": name, "name_es": name_es, "desc": desc, "desc_es": desc_es,
+            "styles": styles_,
+        })
+    idx = [p_["id"] for p_ in products].index("ridgeline-cap")
+    drop = {o for o, *_ in HAT_DESIGNS}
+    products[:] = [p_ for p_ in products if p_["id"] not in drop]
+    products[idx:idx] = cards
+
+
+_hat_cards(PRODUCTS_2026)
+
 _add_womens_youth(PRODUCTS_2026)
 
 
@@ -710,7 +768,7 @@ def product_default(item):
 def product_eyebrow(item, style_id, color_id, es=False):
     if item.get("picker") != "apparel":
         return item["eyebrow_es"] if es else item["eyebrow"]
-    style = STYLE_LABELS[style_id][1 if es else 0]
+    style = (item.get("style_labels", {}).get(style_id) or STYLE_LABELS[style_id])[1 if es else 0]
     color = COLOR_LABELS.get(color_id, (color_id, color_id))[1 if es else 0]
     note = item.get("note_es" if es else "note")
     parts = ([style] if item.get("hide_color") else [style, color]) + ([note] if note else [])
