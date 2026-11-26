@@ -2018,13 +2018,20 @@ STORE_IMG_WIDTHS = storecat.STORE_IMG_WIDTHS
 STORE_PRICES = storecat.STORE_PRICE_LABELS
 STORE_SUPPLIES = storecat.STORE_SUPPLIES
 
+def store_image_rel(slug, w, ext):
+    """Versioned filename: slug-width.<contenthash>.ext — a new file when the mockup changes."""
+    src = f"assets/img/store/{slug}-{w}.{ext}"
+    ver = asset_ver(src)
+    return f"assets/img/store/{slug}-{w}.{ver}.{ext}"
+
+
 def store_image_sources(slug, p):
-    """Store image URLs include a content hash so updated mockups are not served from cache."""
+    """Store image URLs use a content-hash filename so caches cannot keep an old mockup."""
     widths = STORE_IMG_WIDTHS
     sizes = "(max-width: 640px) 100vw, (max-width: 980px) 45vw, 30vw"
     mid = widths[-1]
     def href(w, ext):
-        return asset_href(p, f"assets/img/store/{slug}-{w}.{ext}")
+        return f"{p}{store_image_rel(slug, w, ext)}"
     def ss(ext):
         return ", ".join(f"{href(w, ext)} {w}w" for w in widths)
     return {
@@ -2114,6 +2121,12 @@ def store_picker_html(payload, es):
     style_opts = opts([(sid, styles[sid]["label"]) for sid in styles], style0)
     color_opts = opts([(c["id"], c["label"]) for c in styles[style0]["colors"]], color0)
     size_opts = opts([(sz, sz) for sz in payload["sizes"]], payload["sizes"][1] if len(payload["sizes"]) > 1 else (payload["sizes"][0] if payload["sizes"] else ""))
+    style_row = ""
+    if len(styles) > 1:
+        style_row = (
+            f'            <label class="opt">{html.escape(labels["style"])}'
+            f'<select class="opt-style" data-opt="style" aria-label="{html.escape(labels["style"], quote=True)}">{style_opts}</select></label>\n'
+        )
     color_row = ""
     if len(styles[style0]["colors"]) or any(len(st["colors"]) > 0 for st in styles.values()):
         color_row = (
@@ -2130,9 +2143,7 @@ def store_picker_html(payload, es):
     return (
         f'            <script type="application/json" class="product-data">{data}</script>\n'
         f'            <div class="product-opts">\n'
-        f'            <label class="opt">{html.escape(labels["style"])}'
-        f'<select class="opt-style" data-opt="style" aria-label="{html.escape(labels["style"], quote=True)}">{style_opts}</select></label>\n'
-        f'{color_row}{size_row}'
+        f'{style_row}{color_row}{size_row}'
         f'            </div>\n'
     )
 
@@ -2316,6 +2327,20 @@ def main():
     if os.path.isdir(OUT): shutil.rmtree(OUT)
     os.makedirs(OUT)
     shutil.copytree(os.path.join(ROOT, "assets"), os.path.join(OUT, "assets"), ignore=shutil.ignore_patterns("README.md", "manifest.json"))
+    # Publish content-hashed filenames for every Store mockup (jpg/webp/avif).
+    store_out = os.path.join(OUT, "assets", "img", "store")
+    if os.path.isdir(store_out):
+        for fn in os.listdir(store_out):
+            if not fn.endswith((".jpg", ".jpeg", ".webp", ".avif", ".png")):
+                continue
+            if re.search(r"\.[0-9a-f]{10}\.(jpg|jpeg|webp|avif|png)$", fn, re.I):
+                continue
+            src = os.path.join(store_out, fn)
+            ver = hashlib.sha256(open(src, "rb").read()).hexdigest()[:10]
+            base, ext = fn.rsplit(".", 1)
+            dest = os.path.join(store_out, f"{base}.{ver}.{ext}")
+            if not os.path.exists(dest):
+                shutil.copy2(src, dest)
     open(os.path.join(OUT, ".nojekyll"), "w").close()
     POSTS = load_posts()
     page("index.html", "Copper Mountain Air | Fuel, FBO, Flight Training & Cargo at Nogales International Airport (KOLS)",
