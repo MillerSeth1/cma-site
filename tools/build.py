@@ -2153,7 +2153,7 @@ def store_picker_html(payload, es):
     size_row = ""
     if payload["sizes"]:
         size_row = (
-            f'            <label class="opt">{html.escape(labels["size"])}'
+            f'            <label class="opt{" opt-wide" if size_labels and max(len(v) for v in size_labels.values()) > 14 else ""}">{html.escape(labels["size"])}'
             f'<select class="opt-size" data-opt="size" aria-label="{html.escape(labels["size"], quote=True)}">{size_opts}</select></label>\n'
         )
     data = json.dumps(payload, ensure_ascii=False).replace("<", "\\u003c")

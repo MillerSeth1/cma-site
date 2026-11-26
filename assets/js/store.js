@@ -84,6 +84,9 @@
           : (style.sizes.indexOf("M") >= 0 ? "M" : style.sizes[Math.min(1, style.sizes.length - 1)]);
         var labels = style.sizeLabels || {};
         fillSelect(sizeSel, style.sizes.map(function (s) { return { id: s, label: labels[s] || s }; }), want);
+        var longest = 0;
+        style.sizes.forEach(function (s) { longest = Math.max(longest, (labels[s] || s).length); });
+        if (sizeSel.parentNode) sizeSel.parentNode.classList.toggle("opt-wide", longest > 14);
       }
       apply(card, data, styleId, colorId);
     }

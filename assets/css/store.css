@@ -49,6 +49,7 @@
 
 .product-opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.55rem .6rem;margin:0 0 .95rem}
 .product-opts .opt:has(.opt-style){grid-column:1/-1}
+.product-opts .opt.opt-wide{grid-column:1/-1}
 .product-opts .opt{display:flex;flex-direction:column;gap:.28rem;margin:0;font-size:.72rem;font-weight:650;letter-spacing:.06em;text-transform:uppercase;color:var(--copper-3)}
 .product-opts select{appearance:none;-webkit-appearance:none;width:100%;margin:0;padding:.45rem 1.7rem .45rem .65rem;border:1px solid rgba(13,27,36,.16);border-radius:8px;background:#fff url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path fill='%231C2F3A' d='M1 1l5 5 5-5'/></svg>") no-repeat right .55rem center/10px;font:650 .92rem/1.2 var(--body);letter-spacing:0;text-transform:none;color:var(--ink);cursor:pointer}
 .product-opts select:focus{outline:2px solid var(--copper-3);outline-offset:1px}
