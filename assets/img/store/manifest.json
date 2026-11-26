@@ -3158,6 +3158,1254 @@
      }
     }
    }
+  },
+  {
+   "id": "hat-pf-arched-dad-black",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 18510
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 7378
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 6698
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 42079
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 14642
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 14049
+     }
+    }
+   }
+  },
+  {
+   "id": "hat-pf-arched-dad-khaki",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 22197
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 7600
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 7473
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 57047
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 16048
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 18614
+     }
+    }
+   }
+  },
+  {
+   "id": "hat-pf-arched-dad-navy",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 19600
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 7818
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 6985
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 45120
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 15514
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 14541
+     }
+    }
+   }
+  },
+  {
+   "id": "hat-pf-arched-structured-black",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 27243
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 9990
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 8928
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 70127
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 26046
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 24242
+     }
+    }
+   }
+  },
+  {
+   "id": "hat-pf-arched-structured-white",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 17170
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 6208
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 5964
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 42577
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 12018
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 14596
+     }
+    }
+   }
+  },
+  {
+   "id": "hat-pf-arched-trucker-black",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 21777
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 9070
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 8356
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 49249
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 17824
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 17681
+     }
+    }
+   }
+  },
+  {
+   "id": "hat-pf-arched-trucker-charcoal",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 33392
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 13298
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 13174
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 79326
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 30448
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 32055
+     }
+    }
+   }
+  },
+  {
+   "id": "hat-pf-arched-trucker-navy",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 25158
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 10962
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 9635
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 54886
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 20040
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 18981
+     }
+    }
+   }
+  },
+  {
+   "id": "hat-pf-nogales-dad-black",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 20002
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 8618
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 7199
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 44747
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 16388
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 14984
+     }
+    }
+   }
+  },
+  {
+   "id": "hat-pf-nogales-dad-khaki",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 23464
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 9212
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 8233
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 59903
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 19648
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 20924
+     }
+    }
+   }
+  },
+  {
+   "id": "hat-pf-nogales-dad-navy",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 21108
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 9016
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 7482
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 47707
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 17264
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 15499
+     }
+    }
+   }
+  },
+  {
+   "id": "hat-pf-nogales-structured-black",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 28106
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 10558
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 9330
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 71282
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 26168
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 24289
+     }
+    }
+   }
+  },
+  {
+   "id": "hat-pf-nogales-structured-white",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 18739
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 7542
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 6847
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 45307
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 14814
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 15388
+     }
+    }
+   }
+  },
+  {
+   "id": "hat-pf-nogales-trucker-black",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 23586
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 10254
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 9095
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 52126
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 19724
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 18673
+     }
+    }
+   }
+  },
+  {
+   "id": "hat-pf-nogales-trucker-charcoal",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 34792
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 14596
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 13692
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 81381
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 31704
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 32624
+     }
+    }
+   }
+  },
+  {
+   "id": "hat-pf-nogales-trucker-navy",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 27048
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 12302
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 10429
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 57787
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 22192
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 19945
+     }
+    }
+   }
+  },
+  {
+   "id": "hat-pf-ridgeline-dad-black",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 21734
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 10116
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 7991
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 48063
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 19862
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 16628
+     }
+    }
+   }
+  },
+  {
+   "id": "hat-pf-ridgeline-dad-khaki",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 24373
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 10156
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 8804
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 62019
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 21888
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 21770
+     }
+    }
+   }
+  },
+  {
+   "id": "hat-pf-ridgeline-dad-navy",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 22719
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 10666
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 8331
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 50608
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 20564
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 17061
+     }
+    }
+   }
+  },
+  {
+   "id": "hat-pf-ridgeline-structured-black",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 29144
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 12276
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 10178
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 73759
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 29384
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 25893
+     }
+    }
+   }
+  },
+  {
+   "id": "hat-pf-ridgeline-structured-white",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 19485
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 8660
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 7609
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 47742
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 17326
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 16860
+     }
+    }
+   }
+  },
+  {
+   "id": "hat-pf-ridgeline-trucker-black",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 24628
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 11128
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 9485
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 54310
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 21094
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 18962
+     }
+    }
+   }
+  },
+  {
+   "id": "hat-pf-ridgeline-trucker-charcoal",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 36359
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 16196
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 14871
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 84598
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 34436
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 34204
+     }
+    }
+   }
+  },
+  {
+   "id": "hat-pf-ridgeline-trucker-navy",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 28412
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 13810
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 11605
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 61039
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 25810
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 21678
+     }
+    }
+   }
+  },
+  {
+   "id": "hat-pf-runway-dad-black",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 21388
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 9104
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 7487
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 48046
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 18394
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 16266
+     }
+    }
+   }
+  },
+  {
+   "id": "hat-pf-runway-dad-khaki",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 24722
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 9082
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 7936
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 61925
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 19628
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 20660
+     }
+    }
+   }
+  },
+  {
+   "id": "hat-pf-runway-dad-navy",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 22591
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 9642
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 7714
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 51225
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 19352
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 16908
+     }
+    }
+   }
+  },
+  {
+   "id": "hat-pf-runway-structured-black",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 29091
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 10772
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 9413
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 71942
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 25896
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 23735
+     }
+    }
+   }
+  },
+  {
+   "id": "hat-pf-runway-structured-white",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 19390
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 7236
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 6890
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 46738
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 14038
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 15312
+     }
+    }
+   }
+  },
+  {
+   "id": "hat-pf-runway-trucker-black",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 24587
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 10606
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 9500
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 54603
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 21388
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 19778
+     }
+    }
+   }
+  },
+  {
+   "id": "hat-pf-runway-trucker-charcoal",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 35361
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 14638
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 13881
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 82804
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 33144
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 33009
+     }
+    }
+   }
+  },
+  {
+   "id": "hat-pf-runway-trucker-navy",
+   "widths": [
+    640,
+    1024
+   ],
+   "w": 1024,
+   "h": 1024,
+   "files": {
+    "640": {
+     "jpg": {
+      "q": 78,
+      "bytes": 28198
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 12422
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 10861
+     }
+    },
+    "1024": {
+     "jpg": {
+      "q": 78,
+      "bytes": 60291
+     },
+     "webp": {
+      "q": 72,
+      "bytes": 23548
+     },
+     "avif": {
+      "q": 50,
+      "bytes": 21068
+     }
+    }
+   }
   }
  ]
 }
