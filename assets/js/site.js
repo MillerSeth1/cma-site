@@ -335,25 +335,3 @@
 })();
 
 
-(function(){
-  // Thanksgiving 2026 hours notice. Hide at midnight Fri Nov 27 in America/Phoenix (UTC-7 year-round).
-  if (Date.now() >= Date.parse("2026-11-27T07:00:00.000Z")) return;
-  var es = document.documentElement.lang === "es";
-  var contact = document.querySelector('a[href$="contact.html"]');
-  var href = contact
-    ? contact.getAttribute("href").replace(/contact\.html$/, "blog/thanksgiving-hours-2026.html")
-    : "blog/thanksgiving-hours-2026.html";
-  var html = es
-    ? '<div class="wrap"><strong>Horario de Acción de Gracias (jueves 26 de noviembre):</strong> abiertos de 7:00 a.m. a 12:00 p.m. Después del mediodía, llame al <a href="tel:+15206044020">520-604-4020</a>. <a href="'+href+'">Detalles</a></div>'
-    : '<div class="wrap"><strong>Thanksgiving hours (Thursday, November 26):</strong> open 7:00 a.m. to 12:00 p.m. After noon, call <a href="tel:+15206044020">520-604-4020</a>. <a href="'+href+'">Details</a></div>';
-  var bar = document.createElement("div");
-  bar.className = "holiday-hours-banner";
-  bar.setAttribute("role", "region");
-  bar.setAttribute("aria-label", es ? "Horario de Acción de Gracias" : "Thanksgiving hours");
-  bar.innerHTML = html;
-  var header = document.querySelector(".site-header");
-  var preview = document.querySelector(".preview-bar");
-  if (preview && preview.parentNode) preview.parentNode.insertBefore(bar, preview.nextSibling);
-  else if (header && header.parentNode) header.parentNode.insertBefore(bar, header);
-  else document.body.insertBefore(bar, document.body.firstChild);
-})();
