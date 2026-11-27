@@ -107,8 +107,27 @@
     }
 
     renderThumbs(card, color);
+    updateBuy(card, style, color.id);
     card.setAttribute("data-style", styleId);
     card.setAttribute("data-color", color.id);
+  }
+
+  /* Checkout flag on: point the Buy link at the checkout for the chosen color + size. */
+  function updateBuy(card, style, colorId) {
+    var a = card.querySelector("a[data-buy]");
+    if (!a || !style.links) return;
+    var sizeSel = card.querySelector("[data-opt=size]");
+    var size = sizeSel ? sizeSel.value : "";
+    var url = style.links[colorId + "|" + size];
+    if (url) {
+      a.href = url;
+      a.removeAttribute("aria-disabled");
+      a.classList.remove("is-unavailable");
+    } else {
+      a.removeAttribute("href");
+      a.setAttribute("aria-disabled", "true");
+      a.classList.add("is-unavailable");
+    }
   }
 
   function fillSelect(sel, items, selected) {
@@ -157,6 +176,7 @@
 
     if (styleSel) styleSel.addEventListener("change", onStyle);
     if (colorSel) colorSel.addEventListener("change", onColor);
+    if (sizeSel) sizeSel.addEventListener("change", function () { apply(card, data, styleId, colorId); });
     apply(card, data, styleId, colorId);
   }
 

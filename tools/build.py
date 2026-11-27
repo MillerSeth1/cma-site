@@ -39,6 +39,11 @@ NAV_CRITICAL_CSS = (
 )
 # --drafts renders unpublished posts too, for LOCAL review only. The deploy workflow never passes it.
 SHOW_DRAFTS = "--drafts" in sys.argv
+# Store checkout (Printful Quick Store). ON: each card's button becomes "Buy now" and opens the matching Quick Store
+# product in a new tab when tools/checkout_links.json has a URL for it; items without a link keep "Coming soon".
+# Turn off with `--no-checkout` or CMA_CHECKOUT=0.
+CHECKOUT_ENABLED = "--no-checkout" not in sys.argv and os.environ.get("CMA_CHECKOUT") != "0"
+CHECKOUT_LINKS_FILE = os.path.join(ROOT, "tools", "checkout_links.json")
 SITE_URL = "https://coppermountainair.com/"
 PREVIEW = False                                         # True = noindex + preview banner
 CONTACT_TO = "operations@coppermountainair.com"
@@ -2112,6 +2117,21 @@ def polo_views(sid, col, p, es):
     ]
 
 
+def checkout_links():
+    """{ "product|style|color|size": url } from tools/checkout_links.json (empty when missing)."""
+    if not CHECKOUT_ENABLED:
+        return {}
+    try:
+        with open(CHECKOUT_LINKS_FILE, encoding="utf-8") as fh:
+            return {k: v for k, v in json.load(fh).items() if v and not k.startswith("_")}
+    except (OSError, ValueError):
+        return {}
+
+
+def checkout_key(product, style, color, size=""):
+    return "|".join([product, style, color, size or ""])
+
+
 def store_variant_payload(item, p, es):
     """JSON for the garment picker: every style/color carries its mockup URLs."""
     if item.get("picker") != "apparel":
@@ -2132,14 +2152,22 @@ def store_variant_payload(item, p, es):
             if views:
                 entry["views"] = views
             colors.append(entry)
+        sizes = data.get("sizes") or item.get("sizes") or []
         styles[sid] = {
             "id": sid,
             "label": label,
             "price": f"${item['price']}" if item.get("price") else STORE_PRICES[sid],
-            "sizes": data.get("sizes") or item.get("sizes") or [],
+            "sizes": sizes,
             "sizeLabels": data.get("size_labels_es" if es else "size_labels_en") or {},
             "colors": colors,
         }
+        if CHECKOUT_ENABLED:
+            links = checkout_links()
+            styles[sid]["links"] = {
+                f"{col['id']}|{sz}": links[checkout_key(item["id"], sid, col["id"], sz)]
+                for col in data["colors"] for sz in (sizes or [""])
+                if checkout_key(item["id"], sid, col["id"], sz) in links
+            }
     style, color = storecat.product_default(item)
     return {
         "id": item["id"],
@@ -2208,6 +2236,32 @@ def store_picker_html(payload, es):
     )
 
 
+def store_buy_html(item, style, color, payload, buy_label, buy_note, es):
+    """Buy control. Flag off: the disabled placeholder. Flag on: a link to the checkout for the selection."""
+    placeholder = (
+        f"            <button type=\"button\" class=\"btn btn-primary buy-placeholder\" disabled aria-disabled=\"true\">{buy_label}</button>\n"
+        f"            <p class=\"buy-note\">{buy_note}</p>\n"
+    )
+    if not CHECKOUT_ENABLED:
+        return placeholder
+    links = checkout_links()
+    if payload:
+        sizes = payload["styles"][style]["sizes"]
+        key = checkout_key(item["id"], style, color["id"], default_size(sizes))
+    else:
+        key = checkout_key(item["id"], item["kind"], "", "")
+    url = links.get(key)
+    if not url:   # no checkout link configured for this item yet: keep it honest
+        return placeholder
+    label = "Comprar" if es else "Buy now"
+    note = ("Se imprime bajo pedido. Solo envíos en EE. UU.; el envío y el impuesto se suman en la caja segura de Printful."
+            if es else "Printed to order. US shipping only; shipping and tax are added at Printful’s secure checkout.")
+    return (
+        f"            <a class=\"btn btn-primary buy-link\" data-buy href=\"{html.escape(url, quote=True)}\" target=\"_blank\" rel=\"noopener\">{label}</a>\n"
+        f"            <p class=\"buy-note\">{note}</p>\n"
+    )
+
+
 def store_cards_html(items, p, es, buy_label, buy_note, eager_count=0):
     cards = []
     for i, item in enumerate(items):
@@ -2239,8 +2293,7 @@ def store_cards_html(items, p, es, buy_label, buy_note, eager_count=0):
             f"            <p>{desc}</p>\n"
             f"{picker}"
             f"            <p class=\"price\" data-price>{price}</p>\n"
-            f"            <button type=\"button\" class=\"btn btn-primary buy-placeholder\" disabled aria-disabled=\"true\">{buy_label}</button>\n"
-            f"            <p class=\"buy-note\">{buy_note}</p>\n"
+            f"{store_buy_html(item, style, color, payload, buy_label, buy_note, es)}"
             "          </div>\n"
             "        </article>"
         )
@@ -2295,9 +2348,19 @@ def store(p):
             "Earlier lineups stay in the shop — you can still order them when a new collection drops.",
         )
 
+    if CHECKOUT_ENABLED:
+        if es:
+            hero_lede = hero_lede.replace(" La compra en línea aún no está abierta.", " Pida en línea.")
+            hero_note = "Se imprime bajo pedido. Elija estilo, color y talla y pague en un pago seguro."
+        else:
+            hero_lede = hero_lede.replace(" Online checkout is not open yet.", " Order online.")
+            hero_note = "Printed to order. Choose a style, color and size, then check out securely."
     gear_eyebrow = featured["title_es"] if es else featured["title"]
     gear_h2 = featured["h2_es"] if es else featured["h2"]
     gear_lede = featured["lede_es"] if es else featured["lede"]
+    if CHECKOUT_ENABLED:
+        gear_lede = (gear_lede.replace(" Los botones de compra se activarán cuando esté conectado el pago.", "")
+                     if es else gear_lede.replace(" Buy buttons will go live once checkout is connected.", ""))
 
     card_html = store_cards_html(featured["products"], p, es, buy_label, buy_note, eager_count=3)
 

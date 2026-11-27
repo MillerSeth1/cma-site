@@ -19,6 +19,8 @@
 .product-card .price{margin:.15rem 0 1rem;font-family:var(--display);font-stretch:118%;font-weight:800;font-size:1.35rem;color:var(--ink);letter-spacing:-.01em}
 .product-card .buy-placeholder{align-self:flex-start;margin-top:auto;opacity:.72;cursor:not-allowed}
 .product-card .buy-placeholder[disabled]{pointer-events:none}
+.product-card .buy-link{align-self:flex-start;margin-top:auto;text-decoration:none}
+.product-card .buy-link.is-unavailable{opacity:.55;pointer-events:none;cursor:not-allowed}
 .product-card .buy-note{margin:.55rem 0 0;font-size:.8rem;color:var(--muted)}
 .store-supplies{padding:1rem 0 4.5rem}
 .supply-grid{display:grid;gap:1.25rem;grid-template-columns:repeat(4,1fr)}
