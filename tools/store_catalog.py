@@ -520,10 +520,10 @@ PRODUCTS_2026 = [
      )},
 
     {"id": "saguaro-sticker", "picker": "simple", "kind": "sticker",
-     "eyebrow": "Sticker · Die-cut", "eyebrow_es": "Calcomanía · Troquelada",
+     "eyebrow": "Sticker · Kiss-cut · 4 × 4 in", "eyebrow_es": "Calcomanía · Corte kiss-cut · 4 × 4 pulg",
      "name": "Saguaro Patch Sticker", "name_es": "Calcomanía del parche de saguaro",
-     "desc": "The same saguaro patch as a kiss-cut vinyl sticker — built to live on a toolbox, a flight bag, or a water bottle.",
-     "desc_es": "El mismo parche de saguaro en una calcomanía de vinilo: pensada para una caja de herramientas, una bolsa de vuelo o una botella.",
+     "desc": "The same saguaro patch as a 4 × 4 in kiss-cut vinyl sticker — built to live on a toolbox, a flight bag, or a water bottle.",
+     "desc_es": "El mismo parche de saguaro en una calcomanía de vinilo con corte kiss-cut de 4 × 4 pulgadas: pensada para una caja de herramientas, una bolsa de vuelo o una botella.",
      "image": "saguaro-sticker-closeup",
      "alt": "Close-up of the round Copper Mountain Air saguaro patch sticker: two saguaros and the CMA mark on a setting sun, with KOLS and Nogales, Arizona, on a white kiss-cut border",
      "alt_es": "Primer plano de la calcomanía redonda del parche de saguaro de Copper Mountain Air: dos saguaros y la marca de CMA sobre un sol poniente, con KOLS y Nogales, Arizona, en un borde blanco troquelado"},
